@@ -92,9 +92,9 @@
     },
     {
         "titulo": "Fase 14: Calculadora de Materiais de Construção",
-        "descricao": "<b>🏢 Contexto:</b> Um pedreiro precisa calcular a quantidade de caixas de piso para uma sala. Cada caixa cobre 2 metros quadrados. É regra de segurança comprar 10% a mais para recortes.<br><br><b>🧮 Fórmula:</b> Metragem com sobra = Metragem + 10%. Caixas = Metragem com sobra dividida por 2.<br><br><b>🎯 Missão:</b> A sala tem <code>metragem = 20</code>. Calcule o total de caixas necessárias (use divisão inteira <code>//</code> para não comprar caixa quebrada) e printe o número final.<br><br><b>🖨️ Saída Esperada:</b><br><code>11.0</code>",
+        "descricao": "<b>🏢 Contexto:</b> Um pedreiro precisa calcular a quantidade de caixas de piso para uma sala. Cada caixa cobre 2 metros quadrados. É regra de segurança comprar 10% a mais para recortes.<br><br><b>🧮 Fórmula:</b> Metragem com sobra = Metragem + 10%. Caixas = Metragem com sobra dividida por 2.<br><br><b>🎯 Missão:</b> A sala tem <code>metragem = 20</code>. Calcule o total de caixas necessárias (use divisão inteira <code>//</code> para não comprar caixa quebrada) e printe o número final.<br><br><b>🖨️ Saída Esperada:</b><br><code>11</code>",
         "codigoInicial": "metragem = 20\n# Lógica de cálculo",
-        "gabarito": "11.0",
+        "gabarito": "11",
         "modulos": false
     },
     {

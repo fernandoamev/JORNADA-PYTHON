@@ -4,21 +4,19 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Python Play – Turmas</title>
+    <title>Python Play – Google Sheets</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700&display=swap"
         rel="stylesheet" />
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
 
     <style>
-        /* ===== RESET & GLOBAL ===== */
+        /* ===== ESTILOS (mantidos exatamente como estavam) ===== */
         * {
             margin: 0;
             padding: 0;
@@ -38,17 +36,17 @@
         .container {
             max-width: 960px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, .06);
             backdrop-filter: blur(12px);
             border-radius: 40px;
             padding: 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .6);
+            border: 1px solid rgba(255, 255, 255, .05);
         }
 
         .tela {
             display: none;
-            animation: fadeIn 0.4s ease;
+            animation: fadeIn .4s ease;
         }
 
         .tela.ativa {
@@ -67,7 +65,6 @@
             }
         }
 
-        /* ===== LOGIN ===== */
         .tela-login {
             text-align: center;
             padding: 30px 10px 40px;
@@ -76,7 +73,7 @@
         .logo-python {
             font-size: 5rem;
             display: inline-block;
-            filter: drop-shadow(0 8px 20px rgba(255, 215, 0, 0.3));
+            filter: drop-shadow(0 8px 20px rgba(255, 215, 0, .3));
             animation: flutuar 3s ease-in-out infinite;
         }
 
@@ -84,11 +81,11 @@
 
             0%,
             100% {
-                transform: translateY(0);
+                transform: translateY(0)
             }
 
             50% {
-                transform: translateY(-12px);
+                transform: translateY(-12px)
             }
         }
 
@@ -105,9 +102,17 @@
             margin-bottom: 28px;
         }
 
+        .caixa-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
         .input-nome {
             padding: 14px 20px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             width: 100%;
             max-width: 360px;
             border: 2px solid #2c4055;
@@ -121,70 +126,9 @@
 
         .input-nome:focus {
             border-color: #f7c948;
-            box-shadow: 0 0 0 4px rgba(247, 201, 72, 0.15);
+            box-shadow: 0 0 0 4px rgba(247, 201, 72, .15);
         }
 
-        .linha-botoes {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 14px;
-            margin-top: 20px;
-        }
-
-        /* ===== SELEÇÃO DE TURMA ===== */
-        .tela-escolher-turma {
-            text-align: center;
-            padding: 20px 10px 30px;
-        }
-
-        .tela-escolher-turma h2 {
-            color: #f0f4fa;
-            font-size: 1.8rem;
-            margin-bottom: 8px;
-        }
-
-        .tela-escolher-turma p {
-            color: #a0b9d4;
-            margin-bottom: 20px;
-        }
-
-        .lista-turmas {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 14px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .btn-turma {
-            background: rgba(255, 255, 255, 0.06);
-            border: 2px solid #2c4055;
-            color: #d0dcec;
-            padding: 14px 28px;
-            border-radius: 40px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .btn-turma:hover {
-            background: rgba(247, 201, 72, 0.12);
-            border-color: #f7c948;
-            color: #f7c948;
-            transform: scale(1.03);
-        }
-
-        .sem-turmas {
-            color: #6a7f94;
-            font-size: 1.1rem;
-            padding: 20px;
-        }
-
-        /* ===== BOTÕES GERAIS ===== */
         .btn {
             background: #f7c948;
             color: #0b1a2e;
@@ -194,22 +138,21 @@
             font-weight: 700;
             border-radius: 40px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: 'Inter', sans-serif;
-            box-shadow: 0 4px 14px rgba(247, 201, 72, 0.25);
+            transition: all .2s ease;
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            box-shadow: 0 4px 14px rgba(247, 201, 72, .25);
         }
 
         .btn:hover {
             transform: translateY(-3px) scale(1.02);
             background: #fada5e;
-            box-shadow: 0 8px 25px rgba(247, 201, 72, 0.4);
+            box-shadow: 0 8px 25px rgba(247, 201, 72, .4);
         }
 
         .btn:active {
-            transform: scale(0.97);
+            transform: scale(.97);
         }
 
         .btn-secundario {
@@ -218,11 +161,11 @@
             box-shadow: none;
             border: 2px solid #2c4055;
             padding: 10px 24px;
-            font-size: 0.95rem;
+            font-size: .95rem;
         }
 
         .btn-secundario:hover {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, .05);
             color: #fff;
             border-color: #f7c948;
         }
@@ -230,49 +173,78 @@
         .btn-perigo {
             background: #e74c3c;
             color: #fff;
-            box-shadow: 0 4px 14px rgba(231, 76, 60, 0.25);
+            box-shadow: 0 4px 14px rgba(231, 76, 60, .25);
         }
 
         .btn-perigo:hover {
             background: #c0392b;
         }
 
-        .btn-validar {
+        .btn-sair {
+            background: transparent;
+            color: #b0c9e0;
+            border: 1px solid #3a4f64;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: .9rem;
+            font-weight: 600;
+            transition: .2s;
+            cursor: pointer;
+        }
+
+        .btn-sair:hover {
+            background: rgba(255, 255, 255, .05);
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        .btn-pequeno {
+            background: transparent;
+            color: #b0c9e0;
+            border: 1px solid #2c4055;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: .8rem;
+            cursor: pointer;
+            transition: .2s;
+            font-weight: 600;
+        }
+
+        .btn-pequeno:hover {
+            background: rgba(247, 201, 72, .12);
+            border-color: #f7c948;
+            color: #f7c948;
+        }
+
+        .btn-pequeno.validar {
             background: #2ecc71;
             color: #0b1a2e;
+            border-color: #2ecc71;
         }
 
-        .btn-validar:hover {
+        .btn-pequeno.validar:hover {
             background: #27ae60;
+            border-color: #27ae60;
         }
 
-        .btn-massa {
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: #fff;
-            font-size: 1.15rem;
-            padding: 16px 44px;
-            border-radius: 50px;
-            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.35);
-            transition: all 0.25s ease;
+        .btn-criar {
+            background: #f7c948;
+            color: #0b1a2e;
             border: none;
-            cursor: pointer;
+            padding: 10px 22px;
             font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: .2s;
+            white-space: nowrap;
         }
 
-        .btn-massa:hover {
-            transform: translateY(-3px) scale(1.02);
-            background: linear-gradient(135deg, #5dade2, #3498db);
-            box-shadow: 0 10px 30px rgba(52, 152, 219, 0.5);
+        .btn-criar:hover {
+            transform: scale(1.03);
+            background: #fada5e;
         }
 
-        .btn-massa:active {
-            transform: scale(0.97);
-        }
-
-        /* ===== CABEÇALHO DO JOGO ===== */
+        /* CABEÇALHO DO JOGO */
         .cabecalho-jogo {
             display: flex;
             flex-wrap: wrap;
@@ -281,7 +253,7 @@
             gap: 12px;
             margin-bottom: 22px;
             padding-bottom: 16px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.06);
+            border-bottom: 2px solid rgba(255, 255, 255, .06);
         }
 
         .status-aluno {
@@ -295,9 +267,19 @@
             padding: 4px 14px;
             border-radius: 40px;
             font-weight: 700;
-            font-size: 0.8rem;
+            font-size: .8rem;
             margin-left: 8px;
             text-transform: uppercase;
+        }
+
+        .badge-turma {
+            background: #3498db;
+            color: #fff;
+            padding: 2px 12px;
+            border-radius: 40px;
+            font-size: .75rem;
+            margin-left: 8px;
+            font-weight: 600;
         }
 
         .placar {
@@ -313,36 +295,17 @@
         }
 
         .contador-fase {
-            font-size: 0.95rem;
+            font-size: .95rem;
             color: #a0b9d4;
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, .06);
             padding: 6px 18px;
             border-radius: 40px;
             font-weight: 600;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, .05);
         }
 
-        .btn-sair {
-            background: transparent;
-            color: #b0c9e0;
-            border: 1px solid #3a4f64;
-            padding: 6px 18px;
-            border-radius: 40px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-left: 8px;
-            transition: 0.2s;
-        }
-
-        .btn-sair:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: #e74c3c;
-            color: #e74c3c;
-        }
-
-        /* ===== ÁREA DO DESAFIO ===== */
         .area-desafio {
-            background: rgba(0, 0, 0, 0.25);
+            background: rgba(0, 0, 0, .25);
             border-radius: 20px;
             padding: 18px 22px;
             margin-bottom: 20px;
@@ -361,7 +324,6 @@
             line-height: 1.6;
         }
 
-        /* ===== EDITORES ===== */
         .editor-wrapper {
             margin-bottom: 12px;
         }
@@ -369,7 +331,7 @@
         .editor-wrapper label {
             color: #a0b9d4;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: .9rem;
             display: block;
             margin-bottom: 4px;
         }
@@ -389,14 +351,6 @@
             justify-content: center;
         }
 
-        .editor-duplo {
-            display: none;
-        }
-
-        .editor-unico {
-            display: block;
-        }
-
         #status-container {
             margin-top: 15px;
             display: flex;
@@ -411,76 +365,25 @@
             font-size: 1rem;
         }
 
-        #btn-atualizar {
-            background: transparent;
-            color: #b0c9e0;
-            border: 1px solid #2c4055;
-            padding: 6px 18px;
-            border-radius: 40px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        #btn-atualizar:hover {
-            background: rgba(247, 201, 72, 0.15);
-            border-color: #f7c948;
-            color: #f7c948;
-        }
-
-        /* ===== TELA DE VITÓRIA ===== */
-        .tela-vitoria {
-            text-align: center;
-            padding: 30px 10px;
-        }
-
-        .tela-vitoria .trofeu {
-            font-size: 5rem;
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        .tela-vitoria h1 {
-            color: #f0f4fa;
-            font-size: 2.4rem;
-        }
-
-        .tela-vitoria p {
-            color: #b8cee4;
-            font-size: 1.2rem;
-            margin: 10px 0 20px;
-        }
-
-        .tela-vitoria .dados-finais {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 20px;
-            padding: 20px;
-            max-width: 400px;
-            margin: 0 auto 25px;
-        }
-
-        .tela-vitoria .dados-finais div {
-            color: #d0dcec;
-            font-size: 1.1rem;
-            margin: 6px 0;
-        }
-
-        .tela-vitoria .dados-finais strong {
-            color: #f7c948;
-        }
-
-        /* ===== PAINEL ADMIN ===== */
-        .painel-admin {
-            padding: 6px 0;
-        }
-
+        /* PAINEL ADMIN */
         .painel-admin .topo-admin {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
             gap: 10px;
             margin-bottom: 16px;
+        }
+
+        .painel-admin .topo-admin .titulo-area {
+            flex: 1 1 auto;
+        }
+
+        .painel-admin .topo-admin .botoes-topo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
         }
 
         .painel-admin h2 {
@@ -489,11 +392,6 @@
             margin-bottom: 4px;
         }
 
-        .painel-admin .sub {
-            color: #a0b9d4;
-        }
-
-        /* Área de turmas */
         .area-turmas {
             display: flex;
             flex-wrap: wrap;
@@ -503,12 +401,11 @@
             border-radius: 20px;
             padding: 18px 20px;
             border: 1px solid rgba(255, 255, 255, 0.04);
-            align-items: center;
+            align-items: flex-start;
         }
 
         .area-turmas .criar-turma {
-            flex: 1;
-            min-width: 220px;
+            flex: 0 0 250px;
             display: flex;
             gap: 12px;
             align-items: center;
@@ -521,37 +418,16 @@
             padding: 10px 16px;
             color: #e8edf3;
             font-size: 1rem;
-            font-family: 'Inter', sans-serif;
             outline: none;
             flex: 1;
-            min-width: 120px;
         }
 
         .area-turmas .criar-turma input:focus {
             border-color: #f7c948;
         }
 
-        .area-turmas .criar-turma .btn-criar {
-            background: #f7c948;
-            color: #0b1a2e;
-            border: none;
-            padding: 10px 22px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            border-radius: 40px;
-            cursor: pointer;
-            transition: 0.2s;
-            white-space: nowrap;
-            box-shadow: 0 4px 12px rgba(247, 201, 72, 0.25);
-        }
-
-        .area-turmas .criar-turma .btn-criar:hover {
-            transform: scale(1.03);
-            background: #fada5e;
-        }
-
-        .area-turmas .lista-turmas-admin {
-            flex: 2;
+        .lista-turmas-admin {
+            flex: 1;
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
@@ -559,32 +435,26 @@
         }
 
         .btn-turma-admin {
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, .04);
             border: 1px solid #2c4055;
             color: #b0c9e0;
             padding: 8px 18px;
             border-radius: 30px;
-            font-size: 0.9rem;
+            font-size: .9rem;
             cursor: pointer;
-            transition: 0.2s;
+            transition: .2s;
             font-weight: 600;
         }
 
-        .btn-turma-admin:hover {
-            background: rgba(247, 201, 72, 0.1);
-            border-color: #f7c948;
-            color: #f7c948;
-        }
-
+        .btn-turma-admin:hover,
         .btn-turma-admin.ativo {
-            background: rgba(247, 201, 72, 0.15);
+            background: rgba(247, 201, 72, .15);
             border-color: #f7c948;
             color: #f7c948;
         }
 
-        /* Alunos da turma selecionada */
         .detalhes-turma {
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, .2);
             border-radius: 24px;
             padding: 24px;
             margin-top: 10px;
@@ -594,14 +464,101 @@
             color: #f0f4fa;
             font-size: 1.4rem;
             margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        /* ÁREA DE CADASTRO RESTAURADA */
+        .area-cadastro-aluno {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .area-cadastro-aluno input {
+            background: #0f1e2b;
+            border: 2px solid #2c4055;
+            border-radius: 12px;
+            padding: 8px 14px;
+            color: #e8edf3;
+            font-size: 1rem;
+            outline: none;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .area-cadastro-aluno input:focus {
+            border-color: #f7c948;
+        }
+
+        .lista-alunos-admin {
+            background: rgba(0, 0, 0, .15);
+            border-radius: 18px;
+            padding: 6px;
+            max-height: 280px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .lista-alunos-admin::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .lista-alunos-admin::-webkit-scrollbar-thumb {
+            background: #f7c948;
+            border-radius: 10px;
+        }
+
+        .aluno-item-admin {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 18px;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: .2s;
+            color: #d0dcec;
+            border-bottom: 1px solid rgba(255, 255, 255, .03);
+        }
+
+        .aluno-item-admin:hover {
+            background: rgba(247, 201, 72, .08);
+        }
+
+        .aluno-item-admin.selecionado {
+            background: rgba(247, 201, 72, .15);
+            border-left: 4px solid #f7c948;
+        }
+
+        .aluno-item-admin .nome {
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+
+        .aluno-item-admin .acoes {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .detalhes-aluno {
+            background: rgba(0, 0, 0, .15);
+            border-radius: 18px;
+            padding: 16px 18px;
+            margin-top: 10px;
         }
 
         .card-controles {
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, .04);
             border-radius: 18px;
             padding: 20px 22px;
             margin-bottom: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, .06);
         }
 
         .card-controles .campo {
@@ -610,10 +567,6 @@
             align-items: center;
             gap: 12px 20px;
             margin-bottom: 14px;
-        }
-
-        .card-controles .campo:last-child {
-            margin-bottom: 0;
         }
 
         .card-controles label {
@@ -629,18 +582,15 @@
             border-radius: 12px;
             padding: 10px 16px;
             color: #e8edf3;
-            font-size: 1rem;
-            font-family: 'Inter', sans-serif;
-            outline: none;
-            transition: 0.2s;
             flex: 1;
             min-width: 140px;
+            outline: none;
         }
 
         .card-controles input:focus,
         .card-controles select:focus {
             border-color: #f7c948;
-            box-shadow: 0 0 0 3px rgba(247, 201, 72, 0.15);
+            box-shadow: 0 0 0 3px rgba(247, 201, 72, .15);
         }
 
         .botoes-acao {
@@ -648,97 +598,6 @@
             flex-wrap: wrap;
             gap: 12px;
             margin-top: 16px;
-        }
-
-        .card-massa {
-            background: rgba(52, 152, 219, 0.06);
-            border: 1px solid rgba(52, 152, 219, 0.2);
-            border-radius: 18px;
-            padding: 20px 22px;
-            margin-bottom: 24px;
-            text-align: center;
-        }
-
-        .card-massa h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #d0dcec;
-            margin-bottom: 4px;
-        }
-
-        .card-massa p {
-            color: #6a7f94;
-            font-size: 0.9rem;
-            margin-bottom: 16px;
-        }
-
-        .lista-alunos-admin {
-            background: rgba(0, 0, 0, 0.15);
-            border-radius: 18px;
-            padding: 6px;
-            max-height: 280px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-        }
-
-        .lista-alunos-admin::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .lista-alunos-admin::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 10px;
-        }
-
-        .lista-alunos-admin::-webkit-scrollbar-thumb {
-            background: #f7c948;
-            border-radius: 10px;
-        }
-
-        .aluno-item-admin {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 18px;
-            border-radius: 14px;
-            cursor: pointer;
-            transition: 0.2s;
-            color: #d0dcec;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-        }
-
-        .aluno-item-admin:hover {
-            background: rgba(247, 201, 72, 0.08);
-        }
-
-        .aluno-item-admin.selecionado {
-            background: rgba(247, 201, 72, 0.15);
-            border-left: 4px solid #f7c948;
-        }
-
-        .aluno-item-admin .nome {
-            font-weight: 600;
-            font-size: 1.05rem;
-        }
-
-        .aluno-item-admin .info {
-            font-size: 0.9rem;
-            color: #a0b9d4;
-        }
-
-        .aluno-item-admin .info span {
-            margin: 0 6px;
-        }
-
-        .detalhes-aluno {
-            background: rgba(0, 0, 0, 0.15);
-            border-radius: 18px;
-            padding: 16px 18px;
-            margin-top: 10px;
-        }
-
-        .lista-fases-container {
-            margin-top: 20px;
         }
 
         .lista-fases-container h4 {
@@ -752,7 +611,7 @@
             max-height: 200px;
             overflow-y: auto;
             border-radius: 14px;
-            background: rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, .1);
             padding: 4px 6px;
         }
 
@@ -761,59 +620,26 @@
             justify-content: space-between;
             align-items: center;
             padding: 8px 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            border-bottom: 1px solid rgba(255, 255, 255, .04);
             border-radius: 10px;
-            transition: 0.15s;
+            transition: .15s;
         }
 
         .fase-item:hover {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, .02);
         }
 
         .fase-item .status {
             color: #d0dcec;
-            font-size: 0.95rem;
+            font-size: .95rem;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .fase-item .status .icone {
-            font-size: 1.1rem;
-        }
-
         .fase-item .acoes {
             display: flex;
             gap: 6px;
-        }
-
-        .btn-pequeno {
-            background: transparent;
-            color: #b0c9e0;
-            border: 1px solid #2c4055;
-            padding: 4px 14px;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: 0.2s;
-            font-weight: 600;
-        }
-
-        .btn-pequeno:hover {
-            background: rgba(247, 201, 72, 0.12);
-            border-color: #f7c948;
-            color: #f7c948;
-        }
-
-        .btn-pequeno.validar {
-            background: #2ecc71;
-            color: #0b1a2e;
-            border-color: #2ecc71;
-        }
-
-        .btn-pequeno.validar:hover {
-            background: #27ae60;
-            border-color: #27ae60;
         }
 
         .mensagem-admin {
@@ -822,203 +648,98 @@
             margin-top: 12px;
         }
 
-        /* ===== OVERLAY PROMOÇÃO ===== */
-        .overlay-promocao {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .overlay-promocao.ativo {
-            display: flex;
-        }
-
-        .modal-promocao {
-            background: #1a2a3a;
-            padding: 40px 30px;
-            border-radius: 32px;
-            text-align: center;
-            max-width: 440px;
-            width: 90%;
-            animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-promocao .selo-gigante {
-            font-size: 4.5rem;
-            display: block;
-            margin-bottom: 6px;
-        }
-
-        .modal-promocao h1 {
-            color: #f7c948;
-            font-size: 2rem;
-        }
-
-        .modal-promocao p {
-            color: #b8cee4;
-            font-size: 1.1rem;
-        }
-
-        .modal-promocao h2 {
-            font-size: 1.8rem;
-            margin: 10px 0 18px;
-        }
-
-        @keyframes popIn {
-            0% {
-                transform: scale(0.7);
-                opacity: 0;
-            }
-
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        /* ===== RESPONSIVIDADE ===== */
-        @media (max-width: 640px) {
+        @media(max-width:640px) {
             .container {
-                padding: 20px 14px;
+                padding: 20px 14px
             }
 
             .tela-login h1 {
-                font-size: 1.8rem;
-            }
-
-            .logo-python {
-                font-size: 4rem;
+                font-size: 1.8rem
             }
 
             .cabecalho-jogo {
                 flex-direction: column;
-                align-items: stretch;
-            }
-
-            .status-aluno {
-                font-size: 1rem;
-            }
-
-            .area-desafio h2 {
-                font-size: 1.3rem;
+                align-items: stretch
             }
 
             .area-turmas {
                 flex-direction: column;
-                align-items: stretch;
+                align-items: stretch
             }
 
-            .area-turmas .criar-turma {
-                flex-wrap: wrap;
-            }
-
-            .card-controles .campo {
+            .topo-admin {
                 flex-direction: column;
-                align-items: stretch;
+                align-items: stretch
             }
 
-            .card-controles label {
-                min-width: unset;
+            .topo-admin .botoes-topo {
+                justify-content: flex-start
             }
 
-            .btn-massa {
-                min-width: 100%;
-                padding: 14px 20px;
-                font-size: 1rem;
+            .detalhes-turma h3 {
+                flex-direction: column;
+                align-items: stretch
             }
 
-            .card-massa {
-                padding: 14px 12px;
-            }
-
-            .fase-item {
-                flex-wrap: wrap;
-                gap: 6px;
-            }
-
-            .fase-item .status {
-                font-size: 0.85rem;
-            }
-
-            .aluno-item-admin {
-                flex-wrap: wrap;
-                gap: 4px;
-            }
-
-            .aluno-item-admin .info {
-                font-size: 0.8rem;
+            .area-cadastro-aluno {
+                flex-direction: column;
+                align-items: stretch
             }
         }
     </style>
 </head>
 
 <body>
-
     <div class="container">
 
         <div class="tela tela-login ativa" id="tela-login">
             <div class="logo-python">🐍</div>
             <h1>Jornada do Mestre Python</h1>
-            <p>Aprenda resolvendo desafios na prática</p>
-            <input type="text" id="nome-aluno" class="input-nome" placeholder="Digite seu nome" autofocus />
-            <div class="linha-botoes">
-                <button class="btn" onclick="prosseguirParaTurmas()">▶ Continuar</button>
-                <button class="btn btn-secundario" onclick="mostrarPainelAdmin()">👨‍🏫 Professor</button>
-            </div>
-        </div>
+            <p>Selecione a sua turma e insira o seu nome para aceder ao progresso</p>
 
-        <div class="tela tela-escolher-turma" id="tela-escolher-turma">
-            <h2>📚 Escolha sua turma</h2>
-            <p id="msg-turmas" style="color:#a0b9d4;">Olá, <span id="nome-turma-exibicao"></span>! Selecione a turma:
-            </p>
-            <div class="lista-turmas" id="lista-turmas-aluno"></div>
-            <div style="margin-top: 20px;">
-                <button class="btn btn-secundario" onclick="voltarLogin()">↩ Voltar</button>
+            <div class="caixa-inputs">
+                <input type="text" id="nome-aluno" class="input-nome" placeholder="Seu nome (ex: João)" />
+
+                <select id="select-turma-aluno" class="input-nome">
+                    <option value="">A carregar turmas...</option>
+                </select>
+
+                <button class="btn" onclick="entrarComNomeTurma()" id="btn-login-principal">▶ Entrar</button>
+
+                <hr style="width:80%;max-width:420px;border:none;border-top:2px solid #2c4055;margin:10px auto;" />
+
+                <button class="btn btn-secundario" onclick="mostrarPainelAdmin()">👨‍🏫 Professor</button>
             </div>
         </div>
 
         <div class="tela" id="tela-jogo">
             <div class="cabecalho-jogo">
                 <div>
-                    <div class="status-aluno">
-                        👤 <span id="nome-exibicao" style="font-weight:700;color:#f0f4fa;">Aluno</span>
-                        <span class="badge-cargo" id="cargo-aluno">Estagiário</span>
-                        <span style="color:#6a7f94;font-size:0.9rem;margin-left:12px;" id="turma-exibicao"></span>
-                        <span id="badge-visualizacao"
-                            style="display:none; background:#3498db; color:#fff; padding:2px 12px; border-radius:40px; font-size:0.75rem; margin-left:8px; font-weight:600;">👁️
-                            VISUALIZAÇÃO</span>
-                    </div>
+                    <div class="status-aluno">👤 <span id="nome-exibicao"
+                            style="font-weight:700;color:#f0f4fa;">Aluno</span> <span class="badge-cargo"
+                            id="cargo-aluno">Estagiário</span> <span class="badge-turma"
+                            id="turma-exibicao">Turma</span> <span id="badge-visualizacao"
+                            style="display:none;background:#3498db;color:#fff;padding:2px 12px;border-radius:40px;font-size:.75rem;margin-left:8px;font-weight:600;">👁️
+                            VISUALIZAÇÃO</span></div>
                     <span class="placar">🏆 <span id="pontos">0</span> XP</span>
                 </div>
                 <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
                     <span class="contador-fase" id="contador-fase">Fase 1 de ?</span>
-                    <button class="btn" style="padding: 6px 12px; font-size: 0.9rem;" onclick="exportarProgresso()">📤
-                        Exportar</button>
                     <button class="btn btn-sair" id="botao-sair" onclick="sairDoJogo()">✕ Sair</button>
                 </div>
             </div>
 
             <div class="area-desafio" id="area-desafio">
-                <h2 id="titulo-desafio">Carregando...</h2>
+                <h2 id="titulo-desafio">A carregar...</h2>
                 <p id="descricao-desafio">Aguarde.</p>
             </div>
 
             <div class="editor-wrapper editor-unico" id="wrapper-unico">
-                <label>📝 Código (digite sua solução para testar)</label>
+                <label>📝 Código</label>
                 <textarea id="editor-codigo"></textarea>
             </div>
 
-            <div class="editor-wrapper editor-duplo" id="wrapper-duplo">
+            <div class="editor-wrapper editor-duplo" id="wrapper-duplo" style="display:none;">
                 <label>📦 Módulo (célula 1)</label>
                 <textarea id="editor-modulo"></textarea>
                 <label style="margin-top:10px;">🚀 Programa principal (célula 2)</label>
@@ -1028,36 +749,28 @@
             <button class="btn btn-enviar" onclick="verificarCodigo()" id="btn-enviar">⚡ Executar código</button>
 
             <div id="status-container">
-                <span id="status-fase" style="color:#f39c12;">⏳ Aguardando validação do professor</span>
-                <button id="btn-atualizar" onclick="atualizarProgresso()">🔄 Atualizar progresso</button>
+                <span id="status-fase" style="color:#f39c12;">⏳ A aguardar...</span>
             </div>
         </div>
 
-        <div class="tela tela-vitoria" id="tela-vitoria">
-            <span class="trofeu">🏆</span>
-            <h1>Você é um Mestre Python!</h1>
-            <p><span id="nome-vitoria"></span>, você completou todos os desafios.</p>
-            <div class="dados-finais">
-                <div>Pontuação final: <strong id="pontos-finais">0</strong> XP</div>
-                <div>Cargo final: <strong id="cargo-final" style="color:#f7c948;">Mestre Python</strong></div>
+        <div class="tela tela-login" id="tela-vitoria">
+            <div class="logo-python" style="font-size: 5rem; text-align: center; width: 100%;">🏆</div>
+            <h1 style="color:#f7c948; text-align: center;">Parabéns, Mestre Python!</h1>
+            <p style="text-align: center; color: #a0b9d4;">Completou todos os desafios liberados.</p>
+            <div style="text-align: center;">
+                <button class="btn btn-secundario" style="margin-top: 10px;" onclick="sairDoJogo()">↩ Voltar ao
+                    Início</button>
             </div>
-            <button class="btn" style="margin-bottom: 10px;" onclick="exportarProgresso()">📤 Exportar Entrega
-                Final</button>
-            <br>
-            <button class="btn btn-secundario" style="margin-top: 10px;" onclick="sairDoJogo()">🔄 Voltar ao
-                início</button>
         </div>
 
         <div class="tela painel-admin" id="tela-admin">
             <div class="topo-admin">
-                <div>
+                <div class="titulo-area">
                     <h2>👨‍🏫 Painel do Professor</h2>
-                    <div class="sub">Gerencie turmas e alunos</div>
+                    <div style="color: #a0b9d4;">Gerencie as turmas sincronizadas com a nuvem</div>
                 </div>
-                <div style="display:flex; gap: 10px; flex-wrap:wrap;">
-                    <button class="btn btn-secundario" onclick="fecharPainelAdmin()">↩ Voltar</button>
-                    <button class="btn" onclick="importarCodigoAdmin()"
-                        style="background: #2ecc71; color: #0b1a2e; padding: 10px 24px;">📥 Importar Progresso</button>
+                <div class="botoes-topo">
+                    <button class="btn btn-secundario" onclick="fecharPainelAdmin()">↩ Sair</button>
                 </div>
             </div>
 
@@ -1066,19 +779,29 @@
                     <input type="text" id="input-nova-turma" placeholder="Nome da nova turma" />
                     <button class="btn-criar" onclick="criarTurma()">➕ Criar</button>
                 </div>
-                <div class="lista-turmas-admin" id="lista-turmas-admin">
-                </div>
+                <div class="lista-turmas-admin" id="lista-turmas-admin"></div>
             </div>
 
             <div class="detalhes-turma" id="detalhes-turma" style="display:none;">
-                <h3 id="turma-selecionada-nome">📚 Turma</h3>
+                <h3>
+                    <span id="turma-selecionada-nome">📚 Turma</span>
+                </h3>
+
+                <div class="area-cadastro-aluno">
+                    <input type="text" id="input-novo-aluno" placeholder="Nome do aluno para cadastrar" />
+                    <button class="btn-criar" onclick="cadastrarAluno()">➕ Adicionar Aluno</button>
+                    <span style="color:#6a7f94;font-size:.85rem;">(Obriga a turma a surgir na planilha e no
+                        login)</span>
+                </div>
 
                 <div class="lista-alunos-admin" id="lista-alunos-turma">
-                    <div style="padding:16px;color:#6a7f94;text-align:center;">Nenhum aluno nesta turma.</div>
+                    <div style="padding:16px;color:#6a7f94;text-align:center;">Nenhum aluno cadastrado.</div>
                 </div>
 
                 <div class="detalhes-aluno" id="detalhes-aluno-admin" style="display:none;">
-                    <h4 id="detalhe-nome-admin" style="color:#f0f4fa;margin-bottom:12px;">👤 Aluno</h4>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                        <h4 id="detalhe-nome-admin" style="color:#f0f4fa; font-size:1.2rem; margin:0;">👤 Aluno</h4>
+                    </div>
 
                     <div class="card-controles">
                         <div class="campo">
@@ -1092,60 +815,51 @@
                         <div class="campo">
                             <label>🔒 Limite</label>
                             <select id="select-limite-admin"></select>
-                            <span style="color:#6a7f94;font-size:0.85rem;margin-left:6px;">(0 = primeira)</span>
+                            <span style="color:#6a7f94;font-size:.85rem;margin-left:6px;">(Até onde o aluno
+                                avança)</span>
                         </div>
                         <div class="botoes-acao">
-                            <button class="btn" onclick="aplicarAlteracoesAdmin()">💾 Atualizar</button>
-                            <button class="btn btn-perigo" onclick="removerPontosAdmin()">➖ Remover 100 XP</button>
-                            <button class="btn" style="background:#6a7f94;box-shadow:none;color:#fff;"
+                            <button class="btn" style="padding:10px 20px; font-size:.95rem;"
+                                onclick="aplicarAlteracoesAdmin()">💾 Atualizar Aluno na Nuvem</button>
+                            <button class="btn btn-perigo" style="padding:10px 20px; font-size:.95rem;"
+                                onclick="removerPontosAdmin()">➖ Remover 100 XP</button>
+                            <button class="btn"
+                                style="background:#6a7f94;box-shadow:none;color:#fff;padding:10px 20px; font-size:.95rem;"
                                 onclick="removerAlunoAdmin()">🗑 Remover aluno</button>
                         </div>
-                    </div>
-
-                    <div class="card-massa">
-                        <h4>👥 Ações para toda a turma</h4>
-                        <p>Aumenta o limite de fases em <strong>1</strong> para todos os alunos desta turma.</p>
-                        <button class="btn-massa" onclick="liberarProximaFaseTurma()">
-                            🚀 Liberar próxima fase para TODOS
-                        </button>
                     </div>
 
                     <div id="mensagem-admin" class="mensagem-admin"></div>
 
                     <div class="lista-fases-container">
-                        <h4>📋 Fases do aluno</h4>
+                        <h4>📋 Fases do aluno (Auditoria de Código)</h4>
                         <div class="lista-fases" id="lista-fases-aluno-admin"></div>
                     </div>
                 </div>
             </div>
-        </div>
-
-    </div>
-
-    <div class="overlay-promocao" id="animacao-promocao">
-        <div class="modal-promocao">
-            <span class="selo-gigante">🎖️</span>
-            <h1>Parabéns!</h1>
-            <p>Você foi promovido a</p>
-            <h2 id="nome-novo-cargo" style="color:#f7c948;">Dev Júnior</h2>
-            <button class="btn" onclick="fecharAnimacao()">Continuar</button>
         </div>
     </div>
 
     <pre id="output-oculto" style="display:none;"></pre>
 
     <script>
-        // ===== VARIÁVEIS GLOBAIS =====
-        let listaDesafios = [];
-        let turmaAtual = null;
-        let alunoAtual = null;
-        let adminTurmaSelecionada = null;
-        let adminAlunoSelecionado = null;
-        let pontuacaoTotal = 0;
-        let indiceFaseAtual = 0;
-        let cargoAtual = "";
-        let progresso = [];
-        let modoVisualizacao = false;
+        // ==========================================
+        // CONFIGURAÇÃO DA API 
+        // ==========================================
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwYxSBIAjqC2gywYV4Fv5oQDpksh93Qqe0ZqKy55St0zrZrvlOjFPB2su5z6JveO42l/exec';
+
+        // ==========================================
+        // LISTA DE DESAFIOS (CARREGADA DO JSON)
+        // ==========================================
+        let listaDesafios = []; // Será preenchida com o fetch
+
+        // ==========================================
+        // VARIÁVEIS GLOBAIS
+        // ==========================================
+        let turmaAtual = null, alunoAtual = null;
+        let progresso = [], indiceFaseAtual = 0, modoVisualizacao = false;
+        let adminTurmaSelecionada = null, adminAlunoSelecionado = null;
+        let pontuacaoTotal = 0, cargoAtual = "", professorLogado = false;
 
         const tabelaCargos = [
             { xp: 0, nome: "Estagiário", cor: "#7f8c8d" },
@@ -1156,82 +870,19 @@
             { xp: 12000, nome: "Mestre Python", cor: "#e74c3c" }
         ];
 
-        // ===== EDITORES CODEMIRROR =====
-        const editorUnico = CodeMirror.fromTextArea(document.getElementById("editor-codigo"), {
-            mode: "python",
-            theme: "dracula",
-            lineNumbers: true,
-            indentUnit: 4,
-            tabSize: 4
-        });
-        const editorModulo = CodeMirror.fromTextArea(document.getElementById("editor-modulo"), {
-            mode: "python",
-            theme: "dracula",
-            lineNumbers: true,
-            indentUnit: 4,
-            tabSize: 4
-        });
-        const editorPrincipal = CodeMirror.fromTextArea(document.getElementById("editor-principal"), {
-            mode: "python",
-            theme: "dracula",
-            lineNumbers: true,
-            indentUnit: 4,
-            tabSize: 4
-        });
+        const configCM = { mode: "python", theme: "dracula", lineNumbers: true, indentUnit: 4, tabSize: 4 };
+        const editorUnico = CodeMirror.fromTextArea(document.getElementById("editor-codigo"), configCM);
+        const editorModulo = CodeMirror.fromTextArea(document.getElementById("editor-modulo"), configCM);
+        const editorPrincipal = CodeMirror.fromTextArea(document.getElementById("editor-principal"), configCM);
 
-        // ===== FUNÇÕES AUXILIARES =====
         function mostrarTela(id) {
-            document.querySelectorAll('.tela').forEach(el => el.classList.remove('ativa'));
+            document.querySelectorAll('.tela').forEach(e => e.classList.remove('ativa'));
             document.getElementById(id).classList.add('ativa');
-        }
-
-        // ===== BANCO DE DADOS (localStorage) =====
-        function lerBanco() {
-            try {
-                const data = JSON.parse(localStorage.getItem("bancoTurmaPython"));
-                if (data && typeof data === 'object') {
-                    if (!data.turmas) data.turmas = {};
-                    return data;
-                }
-            } catch { }
-            return { turmas: {} };
-        }
-
-        function salvarBanco(banco) {
-            localStorage.setItem("bancoTurmaPython", JSON.stringify(banco));
-        }
-
-        function obterDadosAluno(turma, chave) {
-            const banco = lerBanco();
-            if (!banco.turmas[turma]) return null;
-            if (!banco.turmas[turma].alunos) banco.turmas[turma].alunos = {};
-            return banco.turmas[turma].alunos[chave] || null;
-        }
-
-        function salvarAluno(turma, chave, dados) {
-            const banco = lerBanco();
-            if (!banco.turmas[turma]) banco.turmas[turma] = { alunos: {} };
-            if (!banco.turmas[turma].alunos) banco.turmas[turma].alunos = {};
-            banco.turmas[turma].alunos[chave] = dados;
-            salvarBanco(banco);
-        }
-
-        function listarTurmas() {
-            const banco = lerBanco();
-            return Object.keys(banco.turmas || {});
-        }
-
-        function listarAlunos(turma) {
-            const banco = lerBanco();
-            if (!banco.turmas[turma]) return [];
-            return Object.keys(banco.turmas[turma].alunos || {});
         }
 
         function obterCargo(xp) {
             let c = tabelaCargos[0];
-            for (const item of tabelaCargos) {
-                if (xp >= item.xp) c = item;
-            }
+            for (const item of tabelaCargos) { if (xp >= item.xp) c = item; }
             return c;
         }
 
@@ -1241,834 +892,469 @@
             const el = document.getElementById("cargo-aluno");
             el.textContent = cargo.nome;
             el.style.background = cargo.cor;
-            if (cargoAtual && cargoAtual !== cargo.nome && pontuacaoTotal > 0) {
-                dispararPromocao(cargo.nome, cargo.cor);
-            }
             cargoAtual = cargo.nome;
         }
 
-        function dispararPromocao(nome, cor) {
-            const overlay = document.getElementById("animacao-promocao");
-            document.getElementById("nome-novo-cargo").textContent = nome;
-            document.getElementById("nome-novo-cargo").style.color = cor;
-            overlay.classList.add("ativo");
-        }
+        // ==========================================
+        // BANCO LOCAL DE SINCRONIA
+        // ==========================================
+        function lerBancoLocal() { try { return JSON.parse(localStorage.getItem("bancoTurmaPython")) || { turmas: {} }; } catch { return { turmas: {} }; } }
+        function salvarBancoLocal(banco) { localStorage.setItem("bancoTurmaPython", JSON.stringify(banco)); }
+        function obterDadosAlunoLocal(turma, chave) { const b = lerBancoLocal(); if (!b.turmas[turma] || !b.turmas[turma].alunos[chave]) return null; return b.turmas[turma].alunos[chave]; }
+        function salvarAlunoLocal(turma, chave, dados) { const b = lerBancoLocal(); if (!b.turmas[turma]) b.turmas[turma] = { alunos: {} }; b.turmas[turma].alunos[chave] = dados; salvarBancoLocal(b); }
+        function listarAlunosLocal(turma) { const b = lerBancoLocal(); if (!b.turmas[turma]) return []; return Object.keys(b.turmas[turma].alunos || {}); }
+        function listarTurmasLocal() { return Object.keys(lerBancoLocal().turmas || {}); }
 
-        function fecharAnimacao() {
-            document.getElementById("animacao-promocao").classList.remove("ativo");
-        }
-
-        // ================================================================
-        // CARREGAR DESAFIOS
-        // ================================================================
-        async function carregarDesafios() {
-            if (listaDesafios.length > 0) return;
+        async function salvarProgressoCloud(dadosAluno) {
             try {
-                const response = await fetch('desafios.json');
-                listaDesafios = await response.json();
-            } catch (erro) {
-                alert("Erro ao carregar desafios.json. Use o Live Server.");
-                console.error(erro);
-            }
-        }
-
-        // ================================================================
-        // FLUXO DO ALUNO
-        // ================================================================
-        function prosseguirParaTurmas() {
-            const input = document.getElementById("nome-aluno");
-            const nome = input.value.trim();
-            if (!nome) {
-                alert("Digite seu nome.");
-                return;
-            }
-            const turmas = listarTurmas();
-            if (turmas.length === 0) {
-                alert("Nenhuma turma disponível. Contate o professor.");
-                return;
-            }
-            document.getElementById("nome-turma-exibicao").textContent = nome;
-            const container = document.getElementById("lista-turmas-aluno");
-            container.innerHTML = "";
-            for (const t of turmas) {
-                const btn = document.createElement("button");
-                btn.className = "btn-turma";
-                btn.textContent = t;
-                btn.onclick = function () { entrarNaTurma(t, nome, false); };
-                container.appendChild(btn);
-            }
-            mostrarTela("tela-escolher-turma");
-        }
-
-        async function entrarNaTurma(turma, nome, visualizacao = false) {
-            await carregarDesafios();
-            if (listaDesafios.length === 0) return;
-
-            turmaAtual = turma;
-            alunoAtual = nome.toUpperCase();
-            modoVisualizacao = visualizacao;
-
-            // Atualizar interface
-            const botaoSair = document.getElementById("botao-sair");
-            if (visualizacao) {
-                botaoSair.textContent = "↩ Voltar";
-                document.getElementById("badge-visualizacao").style.display = "inline-block";
-            } else {
-                botaoSair.textContent = "✕ Sair";
-                document.getElementById("badge-visualizacao").style.display = "none";
-            }
-
-            const dados = obterDadosAluno(turmaAtual, alunoAtual);
-            if (dados) {
-                pontuacaoTotal = dados.pontuacao || 0;
-                const progressoSalvo = dados.progresso || [];
-                progresso = listaDesafios.map((_, i) => {
-                    return progressoSalvo[i] || { xp: false, validado: false, codigo: "" };
+                await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(dadosAluno)
                 });
-            } else {
-                pontuacaoTotal = 0;
-                progresso = listaDesafios.map(() => ({ xp: false, validado: false, codigo: "" }));
+                console.log("Progresso guardado na nuvem!");
+            } catch (e) {
+                console.error("Erro ao guardar na nuvem:", e);
             }
+        }
 
-            indiceFaseAtual = calcularFaseAtual();
+        // ==========================================
+        // CARREGAR TURMAS NO LOGIN
+        // ==========================================
+        async function carregarTurmasParaLogin() {
+            const select = document.getElementById("select-turma-aluno");
+            try {
+                const response = await fetch(API_URL + "?action=getTurmas");
+                const turmas = await response.json();
 
-            if (indiceFaseAtual >= listaDesafios.length) {
-                cargoAtual = obterCargo(pontuacaoTotal).nome;
-                document.getElementById("nome-exibicao").textContent = nome;
-                document.getElementById("turma-exibicao").textContent = `(${turma})`;
-                atualizarStatus();
-                mostrarTelaVitoria();
-                return;
+                select.innerHTML = '<option value="">Selecione a sua Turma</option>';
+                if (turmas && turmas.length > 0) {
+                    turmas.forEach(t => {
+                        let opt = document.createElement("option");
+                        opt.value = t; opt.textContent = t;
+                        select.appendChild(opt);
+                    });
+                } else {
+                    select.innerHTML = '<option value="">Nenhuma turma cadastrada</option>';
+                }
+            } catch (e) {
+                select.innerHTML = '<option value="">Erro ao carregar turmas</option>';
             }
+        }
 
-            cargoAtual = obterCargo(pontuacaoTotal).nome;
+        // ==========================================
+        // LOGIN DO ALUNO
+        // ==========================================
+        async function entrarComNomeTurma() {
+            const nome = document.getElementById("nome-aluno").value.trim().toUpperCase();
+            const turmaInput = document.getElementById("select-turma-aluno").value.toUpperCase();
+
+            if (!nome) { alert("Por favor, digite o seu nome."); return; }
+            if (!turmaInput) { alert("Por favor, selecione a sua turma."); return; }
+
+            const btnEntrar = document.getElementById("btn-login-principal");
+            const textoOriginal = btnEntrar.innerHTML;
+            btnEntrar.innerHTML = "⏳ A conectar à Nuvem...";
+            btnEntrar.disabled = true;
+
+            try {
+                const res = await fetch(`${API_URL}?nome=${encodeURIComponent(nome)}&turma=${encodeURIComponent(turmaInput)}`);
+                const dadosServer = await res.json();
+
+                if (dadosServer.erro && dadosServer.erro !== "Nao encontrado") {
+                    alert("Erro no servidor: " + dadosServer.erro);
+                    btnEntrar.innerHTML = textoOriginal; btnEntrar.disabled = false; return;
+                }
+
+                const b = lerBancoLocal();
+                if (!b.turmas[turmaInput]) b.turmas[turmaInput] = { alunos: {} };
+                b.turmas[turmaInput].alunos[nome] = dadosServer;
+                salvarBancoLocal(b);
+
+                entrarNaTurma(turmaInput, nome, false);
+            } catch (e) {
+                alert("Erro ao conectar à nuvem. Verifique a sua internet.");
+                console.error(e);
+            } finally {
+                btnEntrar.innerHTML = textoOriginal;
+                btnEntrar.disabled = false;
+            }
+        }
+
+        function entrarNaTurma(turma, nome, vis) {
+            turmaAtual = turma; alunoAtual = nome; modoVisualizacao = vis;
+
+            const btnSair = document.getElementById("botao-sair");
+            if (vis) { btnSair.textContent = "↩ Voltar ao Painel"; document.getElementById("badge-visualizacao").style.display = "inline-block"; }
+            else { btnSair.textContent = "✕ Sair"; document.getElementById("badge-visualizacao").style.display = "none"; }
+
+            const dados = obterDadosAlunoLocal(turma, nome);
+            pontuacaoTotal = dados?.pontuacao || 0;
+            const progSalvo = dados?.progresso || [];
+            progresso = listaDesafios.map((_, i) => progSalvo[i] || { xp: false, validado: false, codigo: "" });
+
+            if (!vis) { indiceFaseAtual = calcularFaseAtual(); }
+            else { if (indiceFaseAtual >= listaDesafios.length) indiceFaseAtual = listaDesafios.length - 1; }
+
             document.getElementById("nome-exibicao").textContent = nome;
-            document.getElementById("turma-exibicao").textContent = `(${turma})`;
+            document.getElementById("turma-exibicao").textContent = turma;
             atualizarStatus();
-            mostrarTela("tela-jogo");
-            carregarFase();
+
+            if (indiceFaseAtual >= listaDesafios.length && !vis) { mostrarTela("tela-vitoria"); return; }
+            mostrarTela("tela-jogo"); carregarFase();
         }
 
         function calcularFaseAtual() {
-            const dados = obterDadosAluno(turmaAtual, alunoAtual);
-            let limite = dados ? dados.faseMaximaLiberada : null;
-            if (limite === undefined || limite === null || limite === -1) {
-                limite = listaDesafios.length - 1;
-            }
-            limite = Math.min(limite, listaDesafios.length - 1);
-
-            for (let i = 0; i <= limite; i++) {
-                if (!progresso[i] || !progresso[i].xp) {
-                    return i;
-                }
-            }
-            if (limite + 1 < listaDesafios.length) {
-                return limite + 1;
-            } else {
-                return listaDesafios.length;
-            }
+            if (modoVisualizacao) return indiceFaseAtual;
+            const dados = obterDadosAlunoLocal(turmaAtual, alunoAtual);
+            let limite = dados?.faseMaximaLiberada;
+            if (limite === undefined || limite === null || limite === -1) { limite = listaDesafios.length - 1; }
+            else { limite = Math.min(limite, listaDesafios.length - 1); }
+            for (let i = 0; i <= limite; i++) { if (!progresso[i] || !progresso[i].xp) return i; }
+            return limite + 1 < listaDesafios.length ? limite + 1 : listaDesafios.length;
         }
 
-        function salvarProgressoAluno() {
-            if (modoVisualizacao) return; // Não salva em modo visualização
-            const dados = {
-                nomeExibicao: document.getElementById("nome-exibicao").textContent,
-                pontuacao: pontuacaoTotal,
-                progresso: progresso,
-                faseMaximaLiberada: (obterDadosAluno(turmaAtual, alunoAtual) || {}).faseMaximaLiberada || null
-            };
-            salvarAluno(turmaAtual, alunoAtual, dados);
-        }
-
-        function atualizarProgresso() {
-            if (!turmaAtual || !alunoAtual) return;
-            const dados = obterDadosAluno(turmaAtual, alunoAtual);
-            if (dados) {
-                pontuacaoTotal = dados.pontuacao || 0;
-                const progressoSalvo = dados.progresso || [];
-                progresso = listaDesafios.map((_, i) => {
-                    return progressoSalvo[i] || { xp: false, validado: false, codigo: "" };
-                });
-                const novaFase = calcularFaseAtual();
-                if (novaFase >= listaDesafios.length) {
-                    mostrarTelaVitoria();
-                    return;
-                }
-                if (novaFase !== indiceFaseAtual) {
-                    indiceFaseAtual = novaFase;
-                    carregarFase();
-                } else {
-                    carregarFase();
-                }
-                atualizarStatus();
-                alert("Progresso atualizado!");
-            } else {
-                alert("Aluno não encontrado.");
-            }
-        }
-
-        // ===== CARREGAR FASE (MODIFICADO PARA VISUALIZAÇÃO) =====
         function carregarFase() {
-            if (indiceFaseAtual === undefined || indiceFaseAtual < 0 || indiceFaseAtual >= listaDesafios.length) {
+            if (indiceFaseAtual >= listaDesafios.length && !modoVisualizacao) { mostrarTela("tela-vitoria"); return; }
+            if (indiceFaseAtual < 0 || indiceFaseAtual >= listaDesafios.length) {
                 indiceFaseAtual = calcularFaseAtual();
-                if (indiceFaseAtual >= listaDesafios.length) {
-                    mostrarTelaVitoria();
-                    return;
-                }
+                if (indiceFaseAtual >= listaDesafios.length) { if (!modoVisualizacao) { mostrarTela("tela-vitoria"); return; } else { indiceFaseAtual = listaDesafios.length - 1; } }
             }
 
-            const dados = obterDadosAluno(turmaAtual, alunoAtual);
-            let limite = dados ? dados.faseMaximaLiberada : null;
+            const dados = obterDadosAlunoLocal(turmaAtual, alunoAtual);
+            let limite = dados?.faseMaximaLiberada;
             if (limite === undefined || limite === null || limite === -1) limite = listaDesafios.length - 1;
-            if (indiceFaseAtual > limite) {
-                indiceFaseAtual = calcularFaseAtual();
-                if (indiceFaseAtual >= listaDesafios.length) {
-                    mostrarTelaVitoria();
-                    return;
-                }
+
+            if (indiceFaseAtual > limite && !modoVisualizacao) {
+                alert("Aguarde que o professor libere a próxima fase!");
+                document.getElementById("btn-enviar").disabled = true;
+                return;
             }
 
             const fase = listaDesafios[indiceFaseAtual];
+            const p = progresso[indiceFaseAtual] || {};
+
             document.getElementById("titulo-desafio").textContent = fase.titulo;
             document.getElementById("descricao-desafio").innerHTML = fase.descricao;
 
-            const totalLiberadas = (limite === -1 || limite === null) ? listaDesafios.length : limite + 1;
-            document.getElementById("contador-fase").textContent = `Fase ${indiceFaseAtual + 1} de ${totalLiberadas}`;
+            const totalLib = (limite === -1 || limite === null) ? listaDesafios.length : limite + 1;
+            document.getElementById("contador-fase").textContent = modoVisualizacao ? `A visualizar Fase ${indiceFaseAtual + 1}` : `Fase ${indiceFaseAtual + 1} de ${totalLib}`;
 
             const statusEl = document.getElementById("status-fase");
-            const progressoFase = progresso[indiceFaseAtual] || { xp: false, validado: false, codigo: "" };
+            if (modoVisualizacao) { statusEl.textContent = "👁️ Apenas Leitura"; statusEl.style.color = "#3498db"; }
+            else if (p.validado) { statusEl.textContent = "✅ Validado!"; statusEl.style.color = "#27ae60"; }
+            else if (p.xp) { statusEl.textContent = "⏳ A aguardar validação"; statusEl.style.color = "#f39c12"; }
+            else { statusEl.textContent = "⬜ Não resolvido"; statusEl.style.color = "#a0b9d4"; }
 
-            if (modoVisualizacao) {
-                statusEl.textContent = "👁️ Modo visualização – teste sua solução (não altera o aluno)";
-                statusEl.style.color = "#3498db";
-            } else if (progressoFase.validado) {
-                statusEl.textContent = "✅ Validado!";
-                statusEl.style.color = "#27ae60";
-            } else if (progressoFase.xp) {
-                statusEl.textContent = "⏳ Aguardando validação";
-                statusEl.style.color = "#f39c12";
-            } else {
-                statusEl.textContent = "⬜ Não resolvido";
-                statusEl.style.color = "#a0b9d4";
-            }
+            let codParaMostrar = "";
+            if (modoVisualizacao) { codParaMostrar = p.codigo || fase.codigoInicial || ""; }
+            else { codParaMostrar = p.xp ? p.codigo : (fase.codigoInicial || ""); }
 
-            const wrapperUnico = document.getElementById("wrapper-unico");
-            const wrapperDuplo = document.getElementById("wrapper-duplo");
             if (fase.modulos) {
-                wrapperUnico.style.display = "none";
-                wrapperDuplo.style.display = "block";
-                // Em modo visualização, carrega o código inicial, NÃO o do aluno
-                const codigoInicialModulo = fase.codigoModulo || "# Defina seu módulo aqui";
-                const codigoInicialPrincipal = fase.codigoPrincipal || "# Use o módulo aqui";
-                editorModulo.setValue(codigoInicialModulo);
-                editorPrincipal.setValue(codigoInicialPrincipal);
-                editorModulo.refresh();
-                editorPrincipal.refresh();
+                let codigos = { modulo: fase.codigoModulo || "", principal: fase.codigoPrincipal || "" };
+                if (p.xp || modoVisualizacao) { try { if (p.codigo) { const parsed = JSON.parse(p.codigo); if (parsed.modulo !== undefined) codigos = parsed; } } catch (e) { } }
+                editorModulo.setValue(codigos.modulo); editorPrincipal.setValue(codigos.principal);
+                document.getElementById("wrapper-unico").style.display = "none"; document.getElementById("wrapper-duplo").style.display = "block";
             } else {
-                wrapperUnico.style.display = "block";
-                wrapperDuplo.style.display = "none";
-                // Em modo visualização, carrega o código inicial, NÃO o do aluno
-                const codigoInicial = fase.codigoInicial || "# Escreva seu código aqui";
-                editorUnico.setValue(codigoInicial);
-                editorUnico.refresh();
+                editorUnico.setValue(codParaMostrar);
+                document.getElementById("wrapper-unico").style.display = "block"; document.getElementById("wrapper-duplo").style.display = "none";
             }
+            setTimeout(() => { editorUnico.refresh(); editorModulo.refresh(); editorPrincipal.refresh(); }, 50);
             document.getElementById("btn-enviar").disabled = false;
-            document.getElementById("btn-enviar").textContent = "⚡ Executar código";
-        }
-
-        function exportarProgresso() {
-            const dados = {
-                nomeExibicao: document.getElementById("nome-exibicao").textContent,
-                pontuacao: pontuacaoTotal,
-                progresso: progresso,
-                turma: turmaAtual
-            };
-            const codigoEntrega = btoa(JSON.stringify(dados));
-            navigator.clipboard.writeText(codigoEntrega).then(() => {
-                alert("✅ Código copiado com sucesso! Cole no WhatsApp do professor.");
-            }).catch(err => {
-                prompt("Copie manualmente:", codigoEntrega);
-            });
-        }
-
-        // ===== FUNÇÃO SAIR DO JOGO =====
-        function sairDoJogo() {
-            if (modoVisualizacao) {
-                modoVisualizacao = false;
-                document.getElementById("badge-visualizacao").style.display = "none";
-                document.getElementById("botao-sair").textContent = "✕ Sair";
-                mostrarTela("tela-admin");
-                if (adminTurmaSelecionada) {
-                    selecionarTurmaAdmin(adminTurmaSelecionada);
-                    if (adminAlunoSelecionado) {
-                        selecionarAlunoAdmin(adminAlunoSelecionado);
-                    }
-                }
-                turmaAtual = null;
-                alunoAtual = null;
-                return;
-            }
-            turmaAtual = null;
-            alunoAtual = null;
-            cargoAtual = "";
-            document.getElementById("nome-aluno").value = "";
-            mostrarTela("tela-login");
-        }
-
-        function voltarLogin() {
-            mostrarTela("tela-login");
-        }
-
-        function mostrarTelaVitoria() {
-            mostrarTela("tela-vitoria");
-            document.getElementById("nome-vitoria").textContent = document.getElementById("nome-exibicao").textContent;
-            document.getElementById("pontos-finais").textContent = pontuacaoTotal;
-            const cargo = obterCargo(pontuacaoTotal);
-            const el = document.getElementById("cargo-final");
-            el.textContent = cargo.nome;
-            el.style.color = cargo.cor;
-        }
-
-        // ================================================================
-        // EXECUÇÃO DE CÓDIGO (SKULPT) – COM SUPORTE AO MODO VISUALIZAÇÃO
-        // ================================================================
-        let outputConsole = "";
-
-        function funcaoOutput(texto) {
-            outputConsole += texto;
-            document.getElementById("output-oculto").innerHTML += texto;
-        }
-
-        function normalizarResposta(texto) {
-            if (!texto) return "";
-            return texto.trim().replace(/\r\n/g, "\n").replace(/[ \t]+$/gm, "").replace(/\n{2,}/g, "\n");
         }
 
         function verificarCodigo() {
             const btn = document.getElementById("btn-enviar");
-            btn.disabled = true;
-            btn.textContent = "⏳ Processando...";
+            btn.disabled = true; btn.textContent = "⏳ A processar..."; document.getElementById("output-oculto").innerHTML = "";
 
-            if (typeof Sk === 'undefined') {
-                alert("❌ Skulpt não carregado.");
-                btn.disabled = false;
-                btn.textContent = "⚡ Executar código";
-                return;
-            }
-            if (indiceFaseAtual === undefined || indiceFaseAtual < 0 || indiceFaseAtual >= listaDesafios.length) {
-                alert("❌ Índice de fase inválido.");
-                btn.disabled = false;
-                btn.textContent = "⚡ Executar código";
-                return;
-            }
+            if (typeof Sk === 'undefined') { alert("❌ Skulpt não carregado."); btn.disabled = false; btn.textContent = "⚡ Executar código"; return; }
 
             const fase = listaDesafios[indiceFaseAtual];
-            let codigoCompleto = "";
-            let codigoModulo = "",
-                codigoPrincipal = "";
+            const cod = fase.modulos ? (editorModulo.getValue() + "\n" + editorPrincipal.getValue()) : editorUnico.getValue();
 
-            if (fase.modulos) {
-                codigoModulo = editorModulo.getValue();
-                codigoPrincipal = editorPrincipal.getValue();
-                codigoCompleto = codigoModulo + "\n\n" + codigoPrincipal;
-            } else {
-                codigoCompleto = editorUnico.getValue();
-            }
-
-            outputConsole = "";
-            document.getElementById("output-oculto").innerHTML = "";
-
-            // NOVO Sk.configure COM PROTEÇÃO E INPUT
-            Sk.configure({
-                output: funcaoOutput,
-                read: function (x) {
-                    if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined) {
-                        throw "File not found: '" + x + "'";
-                    }
-                    return Sk.builtinFiles["files"][x];
-                },
-                execLimit: 3000, // Limita o processamento a 3 segundos (impede loop infinito de travar a aba)
-                inputfun: function (promptText) {
-                    return new Promise(function (resolve, reject) {
-                        let userInput = prompt(promptText || "");
-                        resolve(userInput || "");
-                    });
-                }
-            });
-
-            Sk.misceval.asyncToPromise(function () {
-                return Sk.importMainWithBody("<stdin>", false, codigoCompleto, true);
-            }).then(function () {
-                btn.disabled = false;
-                btn.textContent = "⚡ Executar código";
-                const resultadoFinal = normalizarResposta(outputConsole);
-                const gabaritoFinal = normalizarResposta(fase.gabarito);
-                const acertou = resultadoFinal === gabaritoFinal;
-
-                // ===== MODO VISUALIZAÇÃO =====
-                if (modoVisualizacao) {
-                    if (acertou) {
-                        alert(`✅ Correto! (Visualização)\n\nSua solução gerou:\n"${resultadoFinal}"\n\nO gabarito é:\n"${gabaritoFinal}"\n\n(O progresso do aluno NÃO foi alterado.)`);
-                    } else {
-                        alert(`❌ Resposta incorreta.\n\nSua solução gerou:\n"${resultadoFinal}"\n\nEsperado:\n"${gabaritoFinal}"\n\nRevise e tente novamente.`);
-                    }
-                    // Não altera progresso
-                    return;
-                }
-
-                // ===== MODO NORMAL (ALUNO) =====
-                if (acertou) {
-                    const idx = indiceFaseAtual;
-                    if (!progresso[idx].xp) {
-                        progresso[idx].xp = true;
-                        if (fase.modulos) {
-                            progresso[idx].codigo = JSON.stringify({ modulo: codigoModulo, principal: codigoPrincipal });
-                        } else {
-                            progresso[idx].codigo = codigoCompleto;
-                        }
-                        pontuacaoTotal += 100;
-                        atualizarStatus();
-                        salvarProgressoAluno();
-                        alert(`🎉 Correto! +100 XP (Total: ${pontuacaoTotal} XP)`);
-                        const novaFase = calcularFaseAtual();
-                        if (novaFase >= listaDesafios.length) {
-                            mostrarTelaVitoria();
-                        } else {
-                            indiceFaseAtual = novaFase;
-                            carregarFase();
-                        }
-                    } else {
-                        alert(`✅ Você já resolveu esta fase. Aguarde a validação.`);
-                    }
-                } else {
-                    alert(`❌ Resposta incorreta.\n\nSeu código gerou:\n"${resultadoFinal}"\n\nEsperado:\n"${gabaritoFinal}"`);
-                }
-            }).catch(function (err) {
-                btn.disabled = false;
-                btn.textContent = "⚡ Executar código";
-                let msg = err.toString();
-
-                // Tratamento especial para Loop Infinito
-                if (msg.includes("TimeLimitError")) {
-                    alert("⏳ Erro: Tempo limite excedido.\n\nParece que seu código entrou em um Loop Infinito! Verifique se você não esqueceu de atualizar a variável dentro do laço 'while' ou se a condição de saída está correta.");
-                    return;
-                }
-
-                if (err.stack) {
-                    msg = err.stack.split("\n")[0];
-                }
-                alert("⚠️ Erro no seu código Python:\n" + msg);
-            });
+            Sk.configure({ output: (txt) => { document.getElementById("output-oculto").innerHTML += txt; }, execLimit: 3000, inputfun: (promptText) => new Promise(res => res(prompt(promptText))) });
+            Sk.misceval.asyncToPromise(() => Sk.importMainWithBody("<stdin>", false, cod, true))
+                .then(() => {
+                    const res = document.getElementById("output-oculto").innerText.trim();
+                    if (res === fase.gabarito.trim()) {
+                        if (!modoVisualizacao) {
+                            if (!progresso[indiceFaseAtual].xp) {
+                                progresso[indiceFaseAtual] = { xp: true, validado: false, codigo: cod };
+                                pontuacaoTotal += 100;
+                                const limiteAtual = obterDadosAlunoLocal(turmaAtual, alunoAtual)?.faseMaximaLiberada;
+                                const dadosCloud = { nomeExibicao: alunoAtual, progresso, pontuacao: pontuacaoTotal, turma: turmaAtual, faseMaximaLiberada: limiteAtual };
+                                salvarAlunoLocal(turmaAtual, alunoAtual, dadosCloud);
+                                salvarProgressoCloud(dadosCloud);
+                                alert("🎉 Correto! +100 XP.");
+                            }
+                            indiceFaseAtual = calcularFaseAtual(); carregarFase(); atualizarStatus();
+                        } else { alert("✅ O código do aluno está correto!"); }
+                    } else { alert(`❌ Incorreto.\nGerou:\n"${res}"\n\nEsperado:\n"${fase.gabarito}"`); }
+                })
+                .catch(e => { const msg = e.toString().includes("TimeLimitError") ? "⏳ Erro: Loop Infinito!" : "⚠️ Erro: " + e.toString(); alert(msg); console.error(e); })
+                .finally(() => { btn.disabled = false; btn.textContent = "⚡ Executar código"; document.getElementById("output-oculto").innerHTML = ""; });
         }
 
-        // ================================================================
+        function sairDoJogo() {
+            if (modoVisualizacao) {
+                professorLogado = true; mostrarTela("tela-admin"); carregarListaTurmasAdmin();
+                if (adminTurmaSelecionada) selecionarTurmaAdmin(adminTurmaSelecionada);
+                if (adminAlunoSelecionado) selecionarAlunoAdmin(adminAlunoSelecionado);
+                modoVisualizacao = false; turmaAtual = null; alunoAtual = null; document.getElementById("badge-visualizacao").style.display = "none"; return;
+            }
+            turmaAtual = null; alunoAtual = null; modoVisualizacao = false; document.getElementById("badge-visualizacao").style.display = "none";
+            document.getElementById("nome-aluno").value = "";
+            mostrarTela("tela-login");
+            carregarTurmasParaLogin(); // Refresh nas turmas ao voltar ao login
+        }
+
+        // ==========================================
         // PAINEL DO PROFESSOR
-        // ================================================================
+        // ==========================================
         async function mostrarPainelAdmin() {
-            const senha = prompt("Digite a senha do professor:");
-            if (senha !== "admin123") {
-                alert("Senha incorreta.");
-                return;
+            if (!professorLogado) {
+                const senha = prompt("Senha do professor:");
+                if (senha === "Gilvana_Python2026") { professorLogado = true; } else { alert("Senha incorreta."); return; }
             }
-            await carregarDesafios();
-            modoVisualizacao = false;
-            mostrarTela("tela-admin");
-            carregarListaTurmasAdmin();
-            if (adminTurmaSelecionada) {
-                selecionarTurmaAdmin(adminTurmaSelecionada);
-            }
+            if (!adminTurmaSelecionada && turmaAtual) { adminTurmaSelecionada = turmaAtual; }
+            mostrarTela("tela-admin"); carregarListaTurmasAdmin();
+            if (adminTurmaSelecionada) selecionarTurmaAdmin(adminTurmaSelecionada);
         }
 
         function fecharPainelAdmin() {
-            adminTurmaSelecionada = null;
-            adminAlunoSelecionado = null;
-            document.getElementById("detalhes-turma").style.display = "none";
+            adminTurmaSelecionada = null; adminAlunoSelecionado = null; document.getElementById("detalhes-turma").style.display = "none"; professorLogado = false;
+            if (modoVisualizacao) { modoVisualizacao = false; turmaAtual = null; alunoAtual = null; }
             mostrarTela("tela-login");
-        }
-
-        // NOVA FUNÇÃO: IMPORTAR CÓDIGO DO ALUNO
-        function importarCodigoAdmin() {
-            const codigoBase64 = prompt("Cole aqui o código de entrega gerado pelo aluno:");
-            if (!codigoBase64) return;
-            try {
-                const dadosAluno = JSON.parse(atob(codigoBase64));
-                const turma = dadosAluno.turma;
-                const chave = dadosAluno.nomeExibicao.toUpperCase();
-                const banco = lerBanco();
-
-                if (!banco.turmas[turma]) {
-                    alert("A turma do aluno (" + turma + ") não existe no seu painel. Crie a turma primeiro.");
-                    return;
-                }
-
-                if (!banco.turmas[turma].alunos) banco.turmas[turma].alunos = {};
-
-                const alunoExistente = banco.turmas[turma].alunos[chave];
-                if (alunoExistente) {
-                    // Fusão segura: mantém as validações do professor intactas
-                    dadosAluno.progresso = dadosAluno.progresso.map((progressoNovo, index) => {
-                        const progressoAtual = alunoExistente.progresso ? alunoExistente.progresso[index] : null;
-                        if (progressoAtual && progressoAtual.validado) {
-                            return { ...progressoNovo, validado: true };
-                        }
-                        return progressoNovo;
-                    });
-                }
-
-                banco.turmas[turma].alunos[chave] = dadosAluno;
-                salvarBanco(banco);
-                alert(`✅ Dados de ${dadosAluno.nomeExibicao} importados com sucesso!`);
-                carregarListaTurmasAdmin();
-                selecionarTurmaAdmin(turma);
-                selecionarAlunoAdmin(chave);
-
-            } catch (e) {
-                alert("❌ Código inválido ou corrompido.");
-            }
+            carregarTurmasParaLogin();
         }
 
         function criarTurma() {
-            const input = document.getElementById("input-nova-turma");
-            const nome = input.value.trim();
-            if (!nome) {
-                alert("Digite um nome para a turma.");
-                return;
+            const nome = document.getElementById("input-nova-turma").value.trim().toUpperCase();
+            if (!nome) { alert("Digite o nome da turma."); return; }
+            const b = lerBancoLocal(); if (b.turmas[nome]) { alert("A Turma já existe."); return; }
+            b.turmas[nome] = { alunos: {} }; salvarBancoLocal(b); document.getElementById("input-nova-turma").value = "";
+            carregarListaTurmasAdmin(); selecionarTurmaAdmin(nome);
+            alert(`Turma ${nome} criada!\n\nNOTA: Para que ela apareça no login dos alunos, cadastre um aluno (mesmo que seja de teste) utilizando o botão "Adicionar Aluno" na área da turma.`);
+        }
+
+        function cadastrarAluno() {
+            if (!adminTurmaSelecionada) { alert("Selecione uma turma."); return; }
+            const nome = document.getElementById("input-novo-aluno").value.trim().toUpperCase();
+            if (!nome) { alert("Digite o nome do aluno."); return; }
+            const turma = adminTurmaSelecionada;
+
+            const b = lerBancoLocal();
+            if (!b.turmas[turma]) b.turmas[turma] = { alunos: {} };
+            if (b.turmas[turma].alunos[nome]) { alert(`O aluno ${nome} já existe nesta turma.`); return; }
+
+            const novo = {
+                nomeExibicao: nome,
+                pontuacao: 0,
+                progresso: listaDesafios.map(() => ({ xp: false, validado: false, codigo: "" })),
+                turma: turma,
+                faseMaximaLiberada: null
+            };
+
+            b.turmas[turma].alunos[nome] = novo;
+            salvarBancoLocal(b);
+
+            salvarProgressoCloud(novo);
+
+            document.getElementById("input-novo-aluno").value = "";
+            alert(`Aluno ${nome} cadastrado! A turma foi sincronizada com a nuvem e aparecerá no menu de login.`);
+            selecionarTurmaAdmin(turma);
+        }
+
+        function excluirTurma() {
+            if (!adminTurmaSelecionada) return;
+            if (confirm(`🚨 Deseja mesmo EXCLUIR a turma "${adminTurmaSelecionada}" e APAGAR todos os seus alunos?`)) {
+                const b = lerBancoLocal();
+                delete b.turmas[adminTurmaSelecionada];
+                salvarBancoLocal(b);
+
+                fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'deleteTurma', turma: adminTurmaSelecionada })
+                });
+
+                adminTurmaSelecionada = null;
+                document.getElementById("detalhes-turma").style.display = "none";
+                carregarListaTurmasAdmin();
+                alert("Turma excluída com sucesso.");
             }
-            const banco = lerBanco();
-            if (!banco.turmas) banco.turmas = {};
-            if (banco.turmas[nome]) {
-                alert("Turma já existe.");
-                return;
-            }
-            banco.turmas[nome] = { alunos: {}, criadaEm: new Date().toISOString() };
-            salvarBanco(banco);
-            input.value = "";
-            carregarListaTurmasAdmin();
-            selecionarTurmaAdmin(nome);
-            alert(`Turma "${nome}" criada com sucesso!`);
         }
 
         function carregarListaTurmasAdmin() {
-            const turmas = listarTurmas();
-            const container = document.getElementById("lista-turmas-admin");
-            container.innerHTML = "";
-            for (const t of turmas) {
-                const btn = document.createElement("button");
-                btn.className = "btn-turma-admin";
-                if (t === adminTurmaSelecionada) btn.classList.add("ativo");
-                btn.textContent = t;
-                btn.onclick = function () { selecionarTurmaAdmin(t); };
-                container.appendChild(btn);
-            }
+            const turmas = listarTurmasLocal(); const container = document.getElementById("lista-turmas-admin"); container.innerHTML = "";
+            turmas.forEach(t => {
+                const btn = document.createElement("button"); btn.className = "btn-turma-admin"; if (t === adminTurmaSelecionada) btn.classList.add("ativo");
+                btn.textContent = `📚 ${t}`; btn.onclick = () => selecionarTurmaAdmin(t); container.appendChild(btn);
+            });
         }
 
         function selecionarTurmaAdmin(turma) {
-            adminTurmaSelecionada = turma;
-            adminAlunoSelecionado = null;
-            carregarListaTurmasAdmin();
+            adminTurmaSelecionada = turma; adminAlunoSelecionado = null; carregarListaTurmasAdmin();
+            document.getElementById("detalhes-turma").style.display = "block";
 
-            const detalhes = document.getElementById("detalhes-turma");
-            detalhes.style.display = "block";
-            document.getElementById("turma-selecionada-nome").textContent = `📚 ${turma}`;
+            document.getElementById("turma-selecionada-nome").innerHTML = `📚 ${turma} 
+                <div style="display:inline-flex; gap: 8px; margin-left: 15px; flex-wrap:wrap;">
+                    <button class="btn-pequeno" style="background:#3498db; color:#fff; border-color:#3498db; font-size:0.9rem; padding: 6px 14px;" onclick="liberarFaseTurmaInteiraCloud()">🚀 Liberar Fase para Toda Turma</button>
+                    <button class="btn-pequeno" style="background:#e74c3c; color:#fff; border-color:#e74c3c; font-size:0.9rem; padding: 6px 14px;" onclick="excluirTurma()">🗑 Excluir Turma</button>
+                </div>`;
 
-            const alunos = listarAlunos(turma);
-            const container = document.getElementById("lista-alunos-turma");
-            container.innerHTML = "";
-            if (alunos.length === 0) {
-                container.innerHTML =
-                    `<div style="padding:16px;color:#6a7f94;text-align:center;">Nenhum aluno nesta turma.</div>`;
-                document.getElementById("detalhes-aluno-admin").style.display = "none";
-                return;
-            }
-            for (const chave of alunos) {
-                const dados = obterDadosAluno(turma, chave);
-                if (!dados) continue;
-                const div = document.createElement("div");
-                div.className = "aluno-item-admin";
-                div.dataset.chave = chave;
+            const alunos = listarAlunosLocal(turma); const container = document.getElementById("lista-alunos-turma"); container.innerHTML = "";
+            if (alunos.length === 0) { container.innerHTML = "<div style='padding:16px;color:#6a7f94;text-align:center;'>Nenhum aluno cadastrado. Adicione o primeiro aluno acima.</div>"; document.getElementById("detalhes-aluno-admin").style.display = "none"; return; }
+
+            alunos.forEach(chave => {
+                const dados = obterDadosAlunoLocal(turma, chave); if (!dados) return;
                 const validados = (dados.progresso || []).filter(p => p.validado).length;
-                div.innerHTML = `
-                        <span class="nome">${dados.nomeExibicao || chave}</span>
-                        <span class="info">🏆 ${dados.pontuacao || 0} XP • ${validados}/${listaDesafios.length} validados</span>
-                    `;
-                div.addEventListener("click", () => selecionarAlunoAdmin(chave));
-                container.appendChild(div);
-            }
-            if (adminAlunoSelecionado && alunos.includes(adminAlunoSelecionado)) {
-                selecionarAlunoAdmin(adminAlunoSelecionado);
-            } else {
-                document.getElementById("detalhes-aluno-admin").style.display = "none";
-            }
+                const div = document.createElement("div"); div.className = "aluno-item-admin"; div.dataset.chave = chave;
+                div.innerHTML = ` <span class="nome">${dados.nomeExibicao || chave}</span> <span class="info">🏆 ${dados.pontuacao || 0} XP • ${validados}/${listaDesafios.length} valid.</span> <div class="acoes"> <button class="btn-pequeno" onclick="selecionarAlunoAdmin('${chave}')">Detalhes</button> </div> `;
+                div.addEventListener("click", () => selecionarAlunoAdmin(chave)); container.appendChild(div);
+            });
+            document.getElementById("detalhes-aluno-admin").style.display = "none";
         }
 
         function selecionarAlunoAdmin(chave) {
-            if (!adminTurmaSelecionada) return;
-            adminAlunoSelecionado = chave;
+            if (!adminTurmaSelecionada) return; adminAlunoSelecionado = chave;
+            document.querySelectorAll(".aluno-item-admin").forEach(el => el.classList.toggle("selecionado", el.dataset.chave === chave));
+            const dados = obterDadosAlunoLocal(adminTurmaSelecionada, chave); if (!dados) return;
 
-            const todosAlunos = document.querySelectorAll(".aluno-item-admin");
-            todosAlunos.forEach(el => {
-                el.classList.toggle("selecionado", el.dataset.chave === chave);
-            });
-
-            const dados = obterDadosAluno(adminTurmaSelecionada, chave);
-            if (!dados) return;
-
-            const detalhes = document.getElementById("detalhes-aluno-admin");
-            detalhes.style.display = "block";
+            document.getElementById("detalhes-aluno-admin").style.display = "block";
             document.getElementById("detalhe-nome-admin").textContent = `👤 ${dados.nomeExibicao || chave}`;
-            document.getElementById("input-xp-admin").value = dados.pontuacao || 0;
+            document.getElementById("input-xp-admin").value = dados.pontuacao || 0; document.getElementById("mensagem-admin").textContent = "";
 
-            const selectFase = document.getElementById("select-fase-admin");
-            selectFase.innerHTML = "";
-            for (let i = 0; i < listaDesafios.length; i++) {
-                const opt = document.createElement("option");
-                opt.value = i;
-                opt.textContent = `Fase ${i + 1}: ${listaDesafios[i].titulo.substring(0, 30)}...`;
-                if (i === (dados.fase || 0)) opt.selected = true;
-                selectFase.appendChild(opt);
-            }
+            const selectFase = document.getElementById("select-fase-admin"), selectLimite = document.getElementById("select-limite-admin");
+            selectFase.innerHTML = ""; selectLimite.innerHTML = "";
 
-            const selectLimite = document.getElementById("select-limite-admin");
-            selectLimite.innerHTML = "";
             for (let i = 0; i < listaDesafios.length; i++) {
-                const opt = document.createElement("option");
-                opt.value = i;
-                opt.textContent = `Até fase ${i + 1}`;
-                if (dados.faseMaximaLiberada === i) opt.selected = true;
-                selectLimite.appendChild(opt);
+                const optFase = document.createElement("option"); optFase.value = i; optFase.textContent = `Fase ${i + 1}: ${listaDesafios[i].titulo.substring(0, 30)}...`;
+                if (i === (dados.fase || 0)) optFase.selected = true; selectFase.appendChild(optFase);
+                const optLim = document.createElement("option"); optLim.value = i; optLim.textContent = `Até fase ${i + 1}`;
+                if (dados.faseMaximaLiberada === i) optLim.selected = true; selectLimite.appendChild(optLim);
             }
-            const optTodas = document.createElement("option");
-            optTodas.value = -1;
-            optTodas.textContent = "Todas (sem limite)";
-            if (dados.faseMaximaLiberada === undefined || dados.faseMaximaLiberada === null || dados.faseMaximaLiberada ===
-                -1) {
-                optTodas.selected = true;
-            }
+            const optTodas = document.createElement("option"); optTodas.value = -1; optTodas.textContent = "Todas (sem limite)";
+            if (dados.faseMaximaLiberada === undefined || dados.faseMaximaLiberada === null || dados.faseMaximaLiberada === -1) optTodas.selected = true;
             selectLimite.appendChild(optTodas);
 
-            document.getElementById("mensagem-admin").textContent = "";
-
-            const progressoAluno = dados.progresso || listaDesafios.map(() => ({ xp: false, validado: false, codigo: "" }));
-            const container = document.getElementById("lista-fases-aluno-admin");
-            container.innerHTML = "";
+            const progAluno = dados.progresso || []; const containerFases = document.getElementById("lista-fases-aluno-admin"); containerFases.innerHTML = "";
             for (let i = 0; i < listaDesafios.length; i++) {
-                const p = progressoAluno[i] || { xp: false, validado: false, codigo: "" };
-                const div = document.createElement("div");
-                div.className = "fase-item";
-                let icone = p.validado ? '✅' : (p.xp ? '⏳' : '❌');
-                const label = `Fase ${i + 1}: ${listaDesafios[i].titulo.substring(0, 35)}...`;
-                const span = document.createElement("span");
-                span.className = "status";
-                span.innerHTML = `<span class="icone">${icone}</span> ${label}`;
-                div.appendChild(span);
-
-                const acoes = document.createElement("div");
-                acoes.className = "acoes";
-
-                const btnAbrir = document.createElement("button");
-                btnAbrir.textContent = "Abrir";
-                btnAbrir.className = "btn-pequeno";
-                btnAbrir.onclick = function () { abrirFaseAlunoAdmin(chave, i); };
-                acoes.appendChild(btnAbrir);
-
-                if (p.xp && !p.validado) {
-                    const btnValidar = document.createElement("button");
-                    btnValidar.textContent = "Validar";
-                    btnValidar.className = "btn-pequeno validar";
-                    btnValidar.onclick = function () { validarFaseAdmin(chave, i); };
-                    acoes.appendChild(btnValidar);
-                }
-
-                div.appendChild(acoes);
-                container.appendChild(div);
+                const p = progAluno[i] || { xp: false, validado: false }; const div = document.createElement("div"); div.className = "fase-item";
+                let icone = p.validado ? '✅' : (p.xp ? '⏳' : '❌'); div.innerHTML = `<span class="status"><span class="icone">${icone}</span> Fase ${i + 1}: ${listaDesafios[i].titulo.substring(0, 30)}...</span>`;
+                const acoes = document.createElement("div"); acoes.className = "acoes";
+                const btnAbrir = document.createElement("button"); btnAbrir.textContent = "Abrir Código"; btnAbrir.className = "btn-pequeno"; btnAbrir.onclick = () => abrirFaseAlunoAdmin(chave, i); acoes.appendChild(btnAbrir);
+                if (p.xp && !p.validado) { const btnValidar = document.createElement("button"); btnValidar.textContent = "Validar"; btnValidar.className = "btn-pequeno validar"; btnValidar.onclick = () => validarFaseAdmin(chave, i); acoes.appendChild(btnValidar); }
+                div.appendChild(acoes); containerFases.appendChild(div);
             }
         }
 
-        // ===== ABRIR FASE DO ALUNO (MODO VISUALIZAÇÃO – SEM O CÓDIGO DO ALUNO) =====
-        function abrirFaseAlunoAdmin(chave, faseIndex) {
-            if (turmaAtual && alunoAtual === chave && turmaAtual === adminTurmaSelecionada) {
-                indiceFaseAtual = faseIndex;
-                const dados = obterDadosAluno(turmaAtual, chave);
-                if (dados) {
-                    const progressoSalvo = dados.progresso || [];
-                    progresso = listaDesafios.map((_, i) => {
-                        return progressoSalvo[i] || { xp: false, validado: false, codigo: "" };
-                    });
-                    pontuacaoTotal = dados.pontuacao || 0;
-                    atualizarStatus();
-                }
-                // Não salva, pois está em visualização
-                carregarFase(); // Isso vai carregar o código inicial, NÃO o do aluno
-                mostrarTela("tela-jogo");
-                modoVisualizacao = true;
-                document.getElementById("badge-visualizacao").style.display = "inline-block";
-                document.getElementById("botao-sair").textContent = "↩ Voltar";
-            } else {
-                const nome = chave;
-                entrarNaTurma(adminTurmaSelecionada, nome, true);
-                setTimeout(() => {
-                    if (turmaAtual === adminTurmaSelecionada && alunoAtual === chave) {
-                        indiceFaseAtual = faseIndex;
-                        const dados = obterDadosAluno(turmaAtual, chave);
-                        if (dados) {
-                            const progressoSalvo = dados.progresso || [];
-                            progresso = listaDesafios.map((_, i) => {
-                                return progressoSalvo[i] || { xp: false, validado: false, codigo: "" };
-                            });
-                            pontuacaoTotal = dados.pontuacao || 0;
-                            atualizarStatus();
-                        }
-                        carregarFase(); // código inicial
+        async function liberarFaseTurmaInteiraCloud() {
+            if (!adminTurmaSelecionada) return;
+            const maxFase = listaDesafios.length;
+            const novaFaseStr = prompt(`A turma "${adminTurmaSelecionada}" possui ${maxFase} fases.\nDigite o NÚMERO DA FASE até à qual deseja liberar para TODOS os alunos desta turma (ex: 5):`);
+
+            if (!novaFaseStr) return;
+            const novaFase = parseInt(novaFaseStr) - 1;
+
+            if (isNaN(novaFase) || novaFase < 0 || novaFase >= maxFase) {
+                alert("Número de fase inválido. Digite um número de 1 a " + maxFase);
+                return;
+            }
+
+            if (!confirm(`Confirma a liberação até à FASE ${novaFase + 1} para todos os alunos da turma ${adminTurmaSelecionada}?`)) return;
+
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'updateTurmaLimit', turma: adminTurmaSelecionada, limite: novaFase })
+                });
+                const retorno = await res.json();
+
+                if (retorno.sucesso) {
+                    const b = lerBancoLocal();
+                    const t = b.turmas[adminTurmaSelecionada];
+                    if (t && t.alunos) {
+                        Object.keys(t.alunos).forEach(chave => { t.alunos[chave].faseMaximaLiberada = novaFase; });
+                        salvarBancoLocal(b);
                     }
-                }, 300);
+                    alert(`✅ Sucesso! Fases liberadas na nuvem para ${retorno.atualizados} alunos da turma.`);
+                    selecionarTurmaAdmin(adminTurmaSelecionada);
+                } else {
+                    alert("❌ Erro ao atualizar na planilha: " + retorno.erro);
+                }
+            } catch (e) {
+                alert("❌ Erro de conexão com a planilha de dados.");
+                console.error(e);
             }
         }
+
+        function abrirFaseAlunoAdmin(chave, faseIndex) { if (!adminTurmaSelecionada) return; indiceFaseAtual = faseIndex; entrarNaTurma(adminTurmaSelecionada, chave, true); }
 
         function validarFaseAdmin(chave, faseIndex) {
-            if (!adminTurmaSelecionada) return;
-            const dados = obterDadosAluno(adminTurmaSelecionada, chave);
-            if (!dados) return;
+            const dados = obterDadosAlunoLocal(adminTurmaSelecionada, chave); if (!dados) return;
             if (!dados.progresso) dados.progresso = listaDesafios.map(() => ({ xp: false, validado: false, codigo: "" }));
-            const p = dados.progresso[faseIndex];
-            if (!p) return;
-            if (p.validado) {
-                alert("Já validada.");
-                return;
-            }
-            if (!p.xp) {
-                alert("Aluno ainda não resolveu.");
-                return;
-            }
-            if (confirm(`Validar fase ${faseIndex + 1} de ${dados.nomeExibicao}?`)) {
-                p.validado = true;
-                salvarAluno(adminTurmaSelecionada, chave, dados);
-                selecionarAlunoAdmin(chave);
-                alert("Fase validada!");
-            }
+            const p = dados.progresso[faseIndex]; if (!p || p.validado || !p.xp) return;
+            if (confirm(`Validar a fase ${faseIndex + 1}?`)) { p.validado = true; salvarAlunoLocal(adminTurmaSelecionada, chave, dados); salvarProgressoCloud(dados); selecionarAlunoAdmin(chave); }
         }
 
         function aplicarAlteracoesAdmin() {
-            if (!adminTurmaSelecionada || !adminAlunoSelecionado) {
-                alert("Selecione um aluno.");
-                return;
-            }
-            const dados = obterDadosAluno(adminTurmaSelecionada, adminAlunoSelecionado);
-            if (!dados) return;
+            if (!adminTurmaSelecionada || !adminAlunoSelecionado) return;
+            const dados = obterDadosAlunoLocal(adminTurmaSelecionada, adminAlunoSelecionado); if (!dados) return;
             dados.pontuacao = Math.max(0, parseInt(document.getElementById("input-xp-admin").value) || 0);
-            const faseMaxima = parseInt(document.getElementById("select-limite-admin").value);
-            dados.faseMaximaLiberada = (faseMaxima === -1) ? null : faseMaxima;
-            salvarAluno(adminTurmaSelecionada, adminAlunoSelecionado, dados);
-            document.getElementById("mensagem-admin").textContent = "✅ Atualizado!";
-            selecionarAlunoAdmin(adminAlunoSelecionado);
-            carregarListaTurmasAdmin();
-            if (turmaAtual === adminTurmaSelecionada && alunoAtual === adminAlunoSelecionado) {
-                pontuacaoTotal = dados.pontuacao;
-                const progressoSalvo = dados.progresso || [];
-                progresso = listaDesafios.map((_, i) => {
-                    return progressoSalvo[i] || { xp: false, validado: false, codigo: "" };
-                });
-                atualizarStatus();
-                carregarFase();
-            }
+            const lim = parseInt(document.getElementById("select-limite-admin").value); dados.faseMaximaLiberada = (lim === -1) ? null : lim;
+            salvarAlunoLocal(adminTurmaSelecionada, adminAlunoSelecionado, dados); salvarProgressoCloud(dados);
+            document.getElementById("mensagem-admin").textContent = "✅ Limites e XP atualizados na Nuvem!"; selecionarAlunoAdmin(adminAlunoSelecionado);
         }
 
         function removerPontosAdmin() {
-            if (!adminTurmaSelecionada || !adminAlunoSelecionado) {
-                alert("Selecione um aluno.");
-                return;
-            }
-            const dados = obterDadosAluno(adminTurmaSelecionada, adminAlunoSelecionado);
-            if (!dados) return;
+            if (!adminTurmaSelecionada || !adminAlunoSelecionado) return;
+            const dados = obterDadosAlunoLocal(adminTurmaSelecionada, adminAlunoSelecionado); if (!dados) return;
             dados.pontuacao = Math.max(0, (dados.pontuacao || 0) - 100);
-            salvarAluno(adminTurmaSelecionada, adminAlunoSelecionado, dados);
-            document.getElementById("input-xp-admin").value = dados.pontuacao;
-            document.getElementById("mensagem-admin").textContent = `➖ Removidos 100 XP. Novo total: ${dados.pontuacao}`;
+            salvarAlunoLocal(adminTurmaSelecionada, adminAlunoSelecionado, dados);
+            salvarProgressoCloud(dados);
             selecionarAlunoAdmin(adminAlunoSelecionado);
-            if (turmaAtual === adminTurmaSelecionada && alunoAtual === adminAlunoSelecionado) {
-                pontuacaoTotal = dados.pontuacao;
-                atualizarStatus();
-            }
         }
 
         function removerAlunoAdmin() {
-            if (!adminTurmaSelecionada || !adminAlunoSelecionado) {
-                alert("Selecione um aluno.");
-                return;
-            }
+            if (!adminTurmaSelecionada || !adminAlunoSelecionado) return;
             if (!confirm(`Remover permanentemente "${adminAlunoSelecionado}" da turma?`)) return;
-            const banco = lerBanco();
-            if (banco.turmas[adminTurmaSelecionada] && banco.turmas[adminTurmaSelecionada].alunos) {
-                delete banco.turmas[adminTurmaSelecionada].alunos[adminAlunoSelecionado];
-                salvarBanco(banco);
-                adminAlunoSelecionado = null;
-                document.getElementById("detalhes-aluno-admin").style.display = "none";
-                selecionarTurmaAdmin(adminTurmaSelecionada);
-                document.getElementById("mensagem-admin").textContent = "🗑 Aluno removido.";
-                if (turmaAtual === adminTurmaSelecionada && alunoAtual === adminAlunoSelecionado) {
-                    sairDoJogo();
-                }
-            }
+            const b = lerBancoLocal(); delete b.turmas[adminTurmaSelecionada].alunos[adminAlunoSelecionado]; salvarBancoLocal(b);
+            fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'delete', nomeExibicao: adminAlunoSelecionado, turma: adminTurmaSelecionada }) });
+            adminAlunoSelecionado = null; selecionarTurmaAdmin(adminTurmaSelecionada);
         }
 
-        function liberarProximaFaseTurma() {
-            if (!adminTurmaSelecionada) {
-                alert("Selecione uma turma.");
-                return;
+        // ==========================================
+        // CARREGAR DESAFIOS DO JSON EXTERNO
+        // ==========================================
+        async function carregarDesafios() {
+            try {
+                const response = await fetch('desafios.json');
+                if (!response.ok) throw new Error('Falha ao carregar desafios.json');
+                const dados = await response.json();
+                listaDesafios = dados;
+                console.log(`✅ ${listaDesafios.length} desafios carregados.`);
+            } catch (error) {
+                console.error('Erro ao carregar desafios:', error);
+                alert('Não foi possível carregar os desafios. Verifique se o arquivo desafios.json está na mesma pasta.');
+                // Fallback: usar uma lista vazia ou tentar novamente
+                listaDesafios = [];
             }
-            if (!confirm(`Avançar o limite de fase para TODOS os alunos da turma "${adminTurmaSelecionada}"?`)) return;
-
-            const banco = lerBanco();
-            const turma = banco.turmas[adminTurmaSelecionada];
-            if (!turma || !turma.alunos) {
-                alert("Nenhum aluno nesta turma.");
-                return;
-            }
-            const chaves = Object.keys(turma.alunos);
-            if (chaves.length === 0) {
-                alert("Nenhum aluno nesta turma.");
-                return;
-            }
-
-            let contador = 0;
-            for (const chave of chaves) {
-                const dados = turma.alunos[chave];
-                let limiteAtual = dados.faseMaximaLiberada;
-                if (limiteAtual === undefined || limiteAtual === null || limiteAtual === -1) {
-                    continue;
-                }
-                let novoLimite = Math.min(limiteAtual + 1, listaDesafios.length - 1);
-                dados.faseMaximaLiberada = novoLimite;
-                turma.alunos[chave] = dados;
-                contador++;
-            }
-            banco.turmas[adminTurmaSelecionada] = turma;
-            salvarBanco(banco);
-            alert(`✅ Limite avançado para ${contador} alunos!`);
-            selecionarTurmaAdmin(adminTurmaSelecionada);
-            if (turmaAtual === adminTurmaSelecionada && alunoAtual) {
-                const dadosAluno = obterDadosAluno(turmaAtual, alunoAtual);
-                if (dadosAluno) {
-                    const progressoSalvo = dadosAluno.progresso || [];
-                    progresso = listaDesafios.map((_, i) => {
-                        return progressoSalvo[i] || { xp: false, validado: false, codigo: "" };
-                    });
-                    pontuacaoTotal = dadosAluno.pontuacao || 0;
-                    atualizarStatus();
-                    indiceFaseAtual = calcularFaseAtual();
-                    carregarFase();
-                }
-            }
+            // Inicializar a aplicação após carregar os desafios
+            iniciarAplicacao();
         }
 
-        // ===== INICIALIZAÇÃO =====
-        mostrarTela("tela-login");
-        setTimeout(() => {
-            editorUnico.refresh();
-            editorModulo.refresh();
-            editorPrincipal.refresh();
-        }, 100);
+        function iniciarAplicacao() {
+            mostrarTela("tela-login");
+            carregarTurmasParaLogin();
+        }
+
+        // ==========================================
+        // INICIALIZAÇÃO
+        // ==========================================
+        // Aguarda o DOM estar pronto e então carrega os desafios
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarDesafios();
+        });
     </script>
-
 </body>
 
 </html>
