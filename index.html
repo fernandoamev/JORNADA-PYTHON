@@ -19,7 +19,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        /* CSS e Design visuais 100% mantidos do original */
         * {
             margin: 0;
             padding: 0;
@@ -797,9 +796,11 @@
         // ====================================================================
         // 1. CREDENCIAIS DO SUPABASE (COLE AS SUAS AQUI ABAIXO)
         // ====================================================================
-        const supabaseUrl = 'https://sua-url-do-supabase.supabase.co';
-        const supabaseKey = 'sua-chave-anon-publica-aqui';
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        const supabaseUrl = 'COLE_SUA_URL_DO_SUPABASE_AQUI';
+        const supabaseKey = 'COLE_SUA_CHAVE_ANON_PUBLIC_AQUI';
+
+        // MUDANÇA VITAL: Batizamos a instância de "db", protegendo a palavra "supabase"
+        const db = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         let listaDesafios = [];
         let turmaAtual = null, alunoAtual = null, progresso = [], indiceFaseAtual = 0, modoVisualizacao = false;
@@ -820,7 +821,6 @@
         function obterCargo(xp) { let c = tabelaCargos[0]; for (const item of tabelaCargos) { if (xp >= item.xp) c = item; } return c; }
         function atualizarStatus() { document.getElementById("pontos").textContent = pontuacaoTotal; const cargo = obterCargo(pontuacaoTotal); const el = document.getElementById("cargo-aluno"); el.textContent = cargo.nome; el.style.background = cargo.cor; cargoAtual = cargo.nome; }
 
-        // Espelho local apenas para consulta rápida de memória (A gravação real é 100% Supabase)
         function lerBancoLocal() { try { return JSON.parse(localStorage.getItem("bancoTurmaPython")) || { turmas: {} }; } catch { return { turmas: {} }; } }
         function salvarBancoLocal(b) { localStorage.setItem("bancoTurmaPython", JSON.stringify(b)); }
         function obterDadosAlunoLocal(t, c) { return lerBancoLocal().turmas[t]?.alunos[c] || null; }
@@ -832,7 +832,7 @@
 
         async function carregarTurmasParaLogin() {
             const select = document.getElementById("select-turma-aluno");
-            const { data, error } = await supabase.from('turmas').select('nome');
+            const { data, error } = await db.from('turmas').select('nome');
 
             if (error) {
                 console.error(error);
@@ -855,7 +855,7 @@
             const btn = document.getElementById("btn-login-principal"); const txtOrig = btn.innerHTML;
             btn.innerHTML = "⏳ Buscando no Supabase..."; btn.disabled = true;
 
-            const { data, error } = await supabase.from('alunos').select('*').eq('nome_exibicao', nome).eq('turma', turmaInput).maybeSingle();
+            const { data, error } = await db.from('alunos').select('*').eq('nome_exibicao', nome).eq('turma', turmaInput).maybeSingle();
 
             btn.innerHTML = txtOrig; btn.disabled = false;
 
@@ -863,7 +863,6 @@
 
             let dadosAluno;
             if (!data) {
-                // Aluno não existe, vamos avisar
                 alert(`O aluno "${nome}" não foi encontrado na turma "${turmaInput}". Peça ao professor para cadastrá-lo.`);
                 return;
             } else {
@@ -885,12 +884,12 @@
                 pontuacao: dadosAluno.pontuacao, fase_maxima_liberada: dadosAluno.faseMaximaLiberada || 0,
                 progresso: dadosAluno.progresso
             };
-            const { error } = await supabase.from('alunos').upsert([payload]);
+            const { error } = await db.from('alunos').upsert([payload]);
             if (error) alert("❌ Supabase recusou salvar seu XP: " + error.message);
         }
 
         // ====================================================================
-        // PAINEL DO PROFESSOR (100% NUVEM / ZERO LOCALSTORAGE)
+        // PAINEL DO PROFESSOR
         // ====================================================================
 
         async function mostrarPainelAdmin() {
@@ -904,16 +903,14 @@
         async function carregarListaTurmasAdmin() {
             const container = document.getElementById("lista-turmas-admin");
 
-            // Busca turmas e alunos reais do Supabase
-            const { data: turmasData, error: errT } = await supabase.from('turmas').select('nome');
+            const { data: turmasData, error: errT } = await db.from('turmas').select('nome');
             if (errT) {
                 alert("🚨 SUPABASE BLOQUEOU A LEITURA!\nMotivo: Você não executou o comando SQL do Passo 1 para desativar o RLS.\nErro técnico: " + errT.message);
                 container.innerHTML = "<span style='color:#e74c3c;'>Bloqueado pelo Supabase.</span>"; return;
             }
 
-            const { data: alunosData } = await supabase.from('alunos').select('*');
+            const { data: alunosData } = await db.from('alunos').select('*');
 
-            // Reconstrói a memória estritamente baseada no que veio do banco
             let bancoNuvem = { turmas: {} };
             (turmasData || []).forEach(t => bancoNuvem.turmas[t.nome] = { alunos: {} });
             (alunosData || []).forEach(a => {
@@ -941,14 +938,13 @@
             const nome = document.getElementById("input-nova-turma").value.trim().toUpperCase(); if (!nome) return;
             const btn = document.querySelector(".area-turmas .btn-criar"); const txt = btn.innerText; btn.innerText = "⏳ Gravando..."; btn.disabled = true;
 
-            // Ordem direta para o Supabase
-            const { error } = await supabase.from('turmas').insert([{ nome: nome }]);
+            const { error } = await db.from('turmas').insert([{ nome: nome }]);
             btn.innerText = txt; btn.disabled = false;
 
             if (error) {
                 if (error.code === '23505') alert("⚠️ Esta turma já existe no Supabase.");
                 else alert("❌ Supabase rejeitou criar a turma: " + error.message);
-                return; // ESTA LINHA SALVA SUA VIDA: impede de gravar no localStorage se a nuvem falhou!
+                return;
             }
 
             document.getElementById("input-nova-turma").value = ""; alert(`✅ Turma "${nome}" criada no Supabase!`);
@@ -964,7 +960,7 @@
                 progresso: listaDesafios.map(() => ({ xp: false, validado: false, codigo: "" }))
             };
 
-            const { error } = await supabase.from('alunos').upsert([novoReg]);
+            const { error } = await db.from('alunos').upsert([novoReg]);
             btn.innerText = txt; btn.disabled = false;
 
             if (error) { alert("❌ Supabase rejeitou o aluno: " + error.message); return; }
@@ -977,8 +973,8 @@
             if (!adminTurmaSelecionada) return;
             if (confirm(`🚨 Excluir a turma "${adminTurmaSelecionada}" e todos os alunos no Supabase?`)) {
                 const t = adminTurmaSelecionada; adminTurmaSelecionada = null; document.getElementById("detalhes-turma").style.display = "none";
-                await supabase.from('alunos').delete().match({ turma: t });
-                const { error } = await supabase.from('turmas').delete().match({ nome: t });
+                await db.from('alunos').delete().match({ turma: t });
+                const { error } = await db.from('turmas').delete().match({ nome: t });
                 if (error) alert("Erro: " + error.message); else { alert("✅ Turma excluída."); await carregarListaTurmasAdmin(); }
             }
         }
@@ -989,13 +985,13 @@
             const lim = parseInt(document.getElementById("select-limite-admin").value);
 
             const payload = { nome_exibicao: adminAlunoSelecionado, turma: adminTurmaSelecionada, pontuacao: xp, fase_maxima_liberada: (lim === -1 ? 0 : lim), progresso: d.progresso || [] };
-            const { error } = await supabase.from('alunos').upsert([payload]);
+            const { error } = await db.from('alunos').upsert([payload]);
             if (error) alert("Erro: " + error.message); else { document.getElementById("mensagem-admin").textContent = "✅ Salvo no Supabase!"; await carregarListaTurmasAdmin(); selecionarAlunoAdmin(adminAlunoSelecionado); }
         }
 
-        async function removerPontosAdmin() { const d = obterDadosAlunoLocal(adminTurmaSelecionada, adminAlunoSelecionado); const payload = { nome_exibicao: adminAlunoSelecionado, turma: adminTurmaSelecionada, pontuacao: Math.max(0, d.pontuacao - 100), fase_maxima_liberada: d.faseMaximaLiberada, progresso: d.progresso }; await supabase.from('alunos').upsert([payload]); await carregarListaTurmasAdmin(); selecionarAlunoAdmin(adminAlunoSelecionado); }
-        async function removerAlunoAdmin() { if (!confirm("Excluir do Supabase?")) return; await supabase.from('alunos').delete().match({ nome_exibicao: adminAlunoSelecionado, turma: adminTurmaSelecionada }); await carregarListaTurmasAdmin(); selecionarTurmaAdmin(adminTurmaSelecionada); }
-        async function liberarFaseTurmaInteiraCloud() { const num = prompt(`Liberar até qual FASE (1 a ${listaDesafios.length}):`); if (!num) return; const f = parseInt(num) - 1; if (isNaN(f)) return; await supabase.from('alunos').update({ fase_maxima_liberada: f }).match({ turma: adminTurmaSelecionada }); await carregarListaTurmasAdmin(); selecionarTurmaAdmin(adminTurmaSelecionada); }
+        async function removerPontosAdmin() { const d = obterDadosAlunoLocal(adminTurmaSelecionada, adminAlunoSelecionado); const payload = { nome_exibicao: adminAlunoSelecionado, turma: adminTurmaSelecionada, pontuacao: Math.max(0, d.pontuacao - 100), fase_maxima_liberada: d.faseMaximaLiberada, progresso: d.progresso }; await db.from('alunos').upsert([payload]); await carregarListaTurmasAdmin(); selecionarAlunoAdmin(adminAlunoSelecionado); }
+        async function removerAlunoAdmin() { if (!confirm("Excluir do Supabase?")) return; await db.from('alunos').delete().match({ nome_exibicao: adminAlunoSelecionado, turma: adminTurmaSelecionada }); await carregarListaTurmasAdmin(); selecionarTurmaAdmin(adminTurmaSelecionada); }
+        async function liberarFaseTurmaInteiraCloud() { const num = prompt(`Liberar até qual FASE (1 a ${listaDesafios.length}):`); if (!num) return; const f = parseInt(num) - 1; if (isNaN(f)) return; await db.from('alunos').update({ fase_maxima_liberada: f }).match({ turma: adminTurmaSelecionada }); await carregarListaTurmasAdmin(); selecionarTurmaAdmin(adminTurmaSelecionada); }
 
         function selecionarTurmaAdmin(t) {
             adminTurmaSelecionada = t; adminAlunoSelecionado = null;
@@ -1023,7 +1019,7 @@
         function carregarFase() { if (indiceFaseAtual >= listaDesafios.length && !modoVisualizacao) { mostrarTela("tela-vitoria"); return; } const dados = obterDadosAlunoLocal(turmaAtual, alunoAtual); let lim = dados?.faseMaximaLiberada; if (lim === 0 || lim === null || lim === -1) lim = listaDesafios.length - 1; if (indiceFaseAtual > lim && !modoVisualizacao) { alert("Fase bloqueada pelo professor!"); document.getElementById("btn-enviar").disabled = true; return; } const fase = listaDesafios[indiceFaseAtual]; const p = progresso[indiceFaseAtual] || {}; document.getElementById("titulo-desafio").textContent = fase.titulo; document.getElementById("descricao-desafio").innerHTML = fase.descricao; document.getElementById("contador-fase").textContent = `Fase ${indiceFaseAtual + 1} de ${(lim === -1 ? listaDesafios.length : lim + 1)}`; const st = document.getElementById("status-fase"); if (modoVisualizacao) { st.textContent = "👁️ Leitura"; st.style.color = "#3498db"; } else if (p.validado) { st.textContent = "✅ Validado"; st.style.color = "#27ae60"; } else if (p.xp) { st.textContent = "⏳ Aguardando validação"; st.style.color = "#f39c12"; } else { st.textContent = "⬜ Pendente"; st.style.color = "#a0b9d4"; } let cod = modoVisualizacao ? (p.codigo || fase.codigoInicial || "") : (p.xp ? p.codigo : (fase.codigoInicial || "")); if (fase.modulos) { let cods = { modulo: fase.codigoModulo || "", principal: fase.codigoPrincipal || "" }; if ((p.xp || modoVisualizacao) && p.codigo) { try { let prs = JSON.parse(p.codigo); if (prs.modulo !== undefined) cods = prs; } catch (e) { } } editorModulo.setValue(cods.modulo); editorPrincipal.setValue(cods.principal); document.getElementById("wrapper-unico").style.display = "none"; document.getElementById("wrapper-duplo").style.display = "block"; } else { editorUnico.setValue(cod); document.getElementById("wrapper-unico").style.display = "block"; document.getElementById("wrapper-duplo").style.display = "none"; } setTimeout(() => { editorUnico.refresh(); editorModulo.refresh(); editorPrincipal.refresh(); }, 50); document.getElementById("btn-enviar").disabled = false; }
         function verificarCodigo() { const btn = document.getElementById("btn-enviar"); btn.disabled = true; btn.textContent = "⏳ Processando..."; document.getElementById("output-oculto").innerHTML = ""; const fase = listaDesafios[indiceFaseAtual]; const cod = fase.modulos ? (editorModulo.getValue() + "\n" + editorPrincipal.getValue()) : editorUnico.getValue(); Sk.configure({ output: (t) => document.getElementById("output-oculto").innerHTML += t, execLimit: 3000, inputfun: (p) => new Promise(r => r(prompt(p))) }); Sk.misceval.asyncToPromise(() => Sk.importMainWithBody("<stdin>", false, cod, true)).then(() => { const res = document.getElementById("output-oculto").innerText.trim(); if (res === fase.gabarito.trim()) { if (!modoVisualizacao) { if (!progresso[indiceFaseAtual].xp) { progresso[indiceFaseAtual] = { xp: true, validado: false, codigo: cod }; pontuacaoTotal += 100; const d = { nomeExibicao: alunoAtual, progresso, pontuacao: pontuacaoTotal, turma: turmaAtual, faseMaximaLiberada: obterDadosAlunoLocal(turmaAtual, alunoAtual)?.faseMaximaLiberada }; salvarProgressoCloud(d); const b = lerBancoLocal(); b.turmas[turmaAtual].alunos[alunoAtual] = d; salvarBancoLocal(b); alert("🎉 Correto! +100 XP."); } indiceFaseAtual = calcularFaseAtual(); carregarFase(); atualizarStatus(); } else alert("Código correto!"); } else alert(`❌ Incorreto.\nSaída:\n"${res}"\nEsperado:\n"${fase.gabarito}"`); }).catch(e => alert("Erro: " + e)).finally(() => { btn.disabled = false; btn.textContent = "⚡ Executar código"; }); }
         function abrirFaseAlunoAdmin(c, idx) { if (!adminTurmaSelecionada) return; indiceFaseAtual = idx; entrarNaTurma(adminTurmaSelecionada, c, true); }
-        async function validarFaseAdmin(c, idx) { const d = obterDadosAlunoLocal(adminTurmaSelecionada, c); if (!d || !d.progresso[idx]) return; if (confirm(`Validar fase ${idx + 1}?`)) { d.progresso[idx].validado = true; await supabase.from('alunos').upsert([{ nome_exibicao: c, turma: adminTurmaSelecionada, pontuacao: d.pontuacao, fase_maxima_liberada: d.faseMaximaLiberada, progresso: d.progresso }]); await carregarListaTurmasAdmin(); selecionarAlunoAdmin(c); } }
+        async function validarFaseAdmin(c, idx) { const d = obterDadosAlunoLocal(adminTurmaSelecionada, c); if (!d || !d.progresso[idx]) return; if (confirm(`Validar fase ${idx + 1}?`)) { d.progresso[idx].validado = true; await db.from('alunos').upsert([{ nome_exibicao: c, turma: adminTurmaSelecionada, pontuacao: d.pontuacao, fase_maxima_liberada: d.faseMaximaLiberada, progresso: d.progresso }]); await carregarListaTurmasAdmin(); selecionarAlunoAdmin(c); } }
         function sairDoJogo() { if (modoVisualizacao) { mostrarTela("tela-admin"); carregarListaTurmasAdmin().then(() => { if (adminTurmaSelecionada) selecionarTurmaAdmin(adminTurmaSelecionada); if (adminAlunoSelecionado) selecionarAlunoAdmin(adminAlunoSelecionado); }); modoVisualizacao = false; document.getElementById("badge-visualizacao").style.display = "none"; return; } turmaAtual = null; alunoAtual = null; modoVisualizacao = false; document.getElementById("badge-visualizacao").style.display = "none"; mostrarTela("tela-login"); carregarTurmasParaLogin(); }
 
         async function carregarDesafios() { try { const r = await fetch('desafios.json'); listaDesafios = await r.json(); } catch (e) { } mostrarTela("tela-login"); carregarTurmasParaLogin(); }
