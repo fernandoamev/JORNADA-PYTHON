@@ -667,7 +667,7 @@
 
 <body>
     <div class="container">
-
+        <!-- TELA DE LOGIN -->
         <div class="tela tela-login ativa" id="tela-login">
             <div class="logo-python">🐍</div>
             <h1>Jornada do Mestre Python</h1>
@@ -684,6 +684,7 @@
             </div>
         </div>
 
+        <!-- TELA DO JOGO -->
         <div class="tela" id="tela-jogo">
             <div class="cabecalho-jogo">
                 <div>
@@ -720,6 +721,7 @@
             <div id="status-container"><span id="status-fase" style="color:#f39c12;">⏳ A aguardar...</span></div>
         </div>
 
+        <!-- TELA DE VITÓRIA -->
         <div class="tela tela-login" id="tela-vitoria">
             <div class="logo-python" style="font-size: 5rem; text-align: center; width: 100%;">🏆</div>
             <h1 style="color:#f7c948; text-align: center;">Parabéns, Mestre Python!</h1>
@@ -728,6 +730,7 @@
                     onclick="sairDoJogo()">↩ Voltar ao Início</button></div>
         </div>
 
+        <!-- PAINEL DO PROFESSOR -->
         <div class="tela painel-admin" id="tela-admin">
             <div class="topo-admin">
                 <div class="titulo-area">
@@ -1479,22 +1482,27 @@
         }
 
         // ====================================================================
-        // 9. CARREGAR DESAFIOS – APENAS DO ARQUIVO (SEM FALLBACK)
+        // 9. CARREGAR DESAFIOS – APENAS DO ARQUIVO (COM DIAGNÓSTICO)
         // ====================================================================
         async function carregarDesafios() {
             try {
+                console.log("🔍 Tentando carregar desafios.json...");
                 const r = await fetch('desafios.json');
-                if (!r.ok) throw new Error('Arquivo não encontrado (status ' + r.status + ')');
-                listaDesafios = await r.json();
-                if (!Array.isArray(listaDesafios) || listaDesafios.length === 0) {
-                    throw new Error('Arquivo vazio ou formato inválido');
+                if (!r.ok) {
+                    throw new Error(`HTTP ${r.status} – ${r.statusText}`);
                 }
-                console.log(`✅ ${listaDesafios.length} desafios carregados.`);
+                const dados = await r.json();
+                if (!Array.isArray(dados) || dados.length === 0) {
+                    throw new Error("Arquivo vazio ou formato inválido (deve ser um array não vazio)");
+                }
+                listaDesafios = dados;
+                console.log(`✅ ${listaDesafios.length} desafios carregados com sucesso.`);
             } catch (e) {
-                console.error("❌ Erro ao carregar desafios.json:", e);
-                alert("Erro: não foi possível carregar os desafios. Verifique se o arquivo 'desafios.json' existe na mesma pasta do index.html e tem um formato válido.");
+                console.error("❌ FALHA ao carregar desafios.json:", e);
+                alert(`Erro ao carregar os desafios:\n${e.message}\n\nVerifique se o arquivo 'desafios.json' está na mesma pasta do index.html e tem o formato correto.`);
                 listaDesafios = [];
             }
+            // Após tentar carregar, exibe a tela de login e carrega turmas
             mostrarTela("tela-login");
             carregarTurmasParaLogin();
         }
