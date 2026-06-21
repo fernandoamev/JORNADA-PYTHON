@@ -1480,23 +1480,745 @@
             carregarTurmasParaLogin();
         }
 
-        // ====================================================================
-        // 9. CARREGAR DESAFIOS (com fallback)
-        // ====================================================================
         async function carregarDesafios() {
-            try {
-                const r = await fetch('desafios.json');
-                if (!r.ok) throw new Error('Arquivo não encontrado');
-                listaDesafios = await r.json();
-            } catch (e) {
-                console.warn("⚠️ Não foi possível carregar desafios.json. Usando fallback padrão.");
-                listaDesafios = [{
+            // ================================================================
+            // 120 DESAFIOS EMBUTIDOS (do básico ao avançado)
+            // ================================================================
+            listaDesafios = [
+                // ---- NÍVEL 1: SAÍDA E VARIÁVEIS (1–20) ----
+                {
                     titulo: "Olá, Mundo!",
                     descricao: "Escreva um programa que imprima 'Olá, Mundo!'",
                     gabarito: "Olá, Mundo!",
                     codigoInicial: "print('Olá, Mundo!')"
-                }];
-            }
+                },
+                {
+                    titulo: "Meu nome",
+                    descricao: "Imprima o seu nome (use uma variável).",
+                    gabarito: "João",
+                    codigoInicial: "nome = 'João'\nprint(nome)"
+                },
+                {
+                    titulo: "Soma de dois números",
+                    descricao: "Some 10 e 20 e imprima o resultado.",
+                    gabarito: "30",
+                    codigoInicial: "a = 10\nb = 20\nprint(a + b)"
+                },
+                {
+                    titulo: "Subtração",
+                    descricao: "Subtraia 15 de 50 e imprima.",
+                    gabarito: "35",
+                    codigoInicial: "print(50 - 15)"
+                },
+                {
+                    titulo: "Multiplicação",
+                    descricao: "Multiplique 7 por 8 e imprima.",
+                    gabarito: "56",
+                    codigoInicial: "print(7 * 8)"
+                },
+                {
+                    titulo: "Divisão inteira",
+                    descricao: "Divida 20 por 3 e imprima o quociente inteiro.",
+                    gabarito: "6",
+                    codigoInicial: "print(20 // 3)"
+                },
+                {
+                    titulo: "Resto da divisão",
+                    descricao: "Calcule o resto de 20 dividido por 3.",
+                    gabarito: "2",
+                    codigoInicial: "print(20 % 3)"
+                },
+                {
+                    titulo: "Potência",
+                    descricao: "Calcule 2 elevado a 5.",
+                    gabarito: "32",
+                    codigoInicial: "print(2 ** 5)"
+                },
+                {
+                    titulo: "Média simples",
+                    descricao: "Calcule a média de 8, 9 e 10.",
+                    gabarito: "9.0",
+                    codigoInicial: "a, b, c = 8, 9, 10\nprint((a + b + c) / 3)"
+                },
+                {
+                    titulo: "Conversão de temperatura",
+                    descricao: "Converta 100°C para Fahrenheit (F = C*9/5 + 32).",
+                    gabarito: "212.0",
+                    codigoInicial: "c = 100\nf = c * 9/5 + 32\nprint(f)"
+                },
+                {
+                    titulo: "Área do quadrado",
+                    descricao: "Calcule a área de um quadrado de lado 4.",
+                    gabarito: "16",
+                    codigoInicial: "lado = 4\nprint(lado * lado)"
+                },
+                {
+                    titulo: "Perímetro do retângulo",
+                    descricao: "Calcule o perímetro de um retângulo de lados 5 e 3.",
+                    gabarito: "16",
+                    codigoInicial: "a, b = 5, 3\nprint(2 * (a + b))"
+                },
+                {
+                    titulo: "Volume do cubo",
+                    descricao: "Calcule o volume de um cubo de aresta 3.",
+                    gabarito: "27",
+                    codigoInicial: "aresta = 3\nprint(aresta ** 3)"
+                },
+                {
+                    titulo: "Troca de valores",
+                    descricao: "Troque os valores de x=10 e y=20 e imprima x e y.",
+                    gabarito: "20\n10",
+                    codigoInicial: "x, y = 10, 20\nx, y = y, x\nprint(x); print(y)"
+                },
+                {
+                    titulo: "Soma de três números",
+                    descricao: "Some 1, 2 e 3 e imprima.",
+                    gabarito: "6",
+                    codigoInicial: "a, b, c = 1, 2, 3\nprint(a + b + c)"
+                },
+                {
+                    titulo: "Média de três números",
+                    descricao: "Calcule a média de 10, 20 e 30.",
+                    gabarito: "20.0",
+                    codigoInicial: "a, b, c = 10, 20, 30\nprint((a + b + c) / 3)"
+                },
+                {
+                    titulo: "Área do círculo",
+                    descricao: "Calcule a área de um círculo de raio 3 (use pi=3.14).",
+                    gabarito: "28.26",
+                    codigoInicial: "raio = 3\npi = 3.14\nprint(pi * raio ** 2)"
+                },
+                {
+                    titulo: "Circunferência",
+                    descricao: "Calcule a circunferência de um círculo de raio 5 (use pi=3.14).",
+                    gabarito: "31.400000000000002",
+                    codigoInicial: "r = 5\npi = 3.14\nprint(2 * pi * r)"
+                },
+                {
+                    titulo: "IMC",
+                    descricao: "Calcule o IMC (peso 70 kg, altura 1.75 m). IMC = peso / altura².",
+                    gabarito: "22.857142857142858",
+                    codigoInicial: "peso = 70\naltura = 1.75\nprint(peso / altura ** 2)"
+                },
+                {
+                    titulo: "Conversão de segundos",
+                    descricao: "Converta 3665 segundos em horas, minutos e segundos.",
+                    gabarito: "1:1:5",
+                    codigoInicial: "total = 3665\nh = total // 3600\nm = (total % 3600) // 60\ns = total % 60\nprint(f'{h}:{m}:{s}')"
+                },
+
+                // ---- NÍVEL 2: CONDICIONAIS (21–40) ----
+                {
+                    titulo: "Par ou ímpar",
+                    descricao: "Verifique se o número 7 é par ou ímpar.",
+                    gabarito: "ímpar",
+                    codigoInicial: "num = 7\nif num % 2 == 0:\n    print('par')\nelse:\n    print('ímpar')"
+                },
+                {
+                    titulo: "Maior de dois",
+                    descricao: "Dados 15 e 20, imprima o maior.",
+                    gabarito: "20",
+                    codigoInicial: "a, b = 15, 20\nif a > b:\n    print(a)\nelse:\n    print(b)"
+                },
+                {
+                    titulo: "Maior de três",
+                    descricao: "Dados 5, 12, 8, imprima o maior.",
+                    gabarito: "12",
+                    codigoInicial: "a, b, c = 5, 12, 8\nif a > b and a > c:\n    print(a)\nelif b > a and b > c:\n    print(b)\nelse:\n    print(c)"
+                },
+                {
+                    titulo: "Número positivo/negativo",
+                    descricao: "Verifique se -3 é positivo, negativo ou zero.",
+                    gabarito: "negativo",
+                    codigoInicial: "num = -3\nif num > 0:\n    print('positivo')\nelif num < 0:\n    print('negativo')\nelse:\n    print('zero')"
+                },
+                {
+                    titulo: "Aprovação",
+                    descricao: "Com nota 7, verifique se está aprovado (nota >= 7).",
+                    gabarito: "Aprovado",
+                    codigoInicial: "nota = 7\nif nota >= 7:\n    print('Aprovado')\nelse:\n    print('Reprovado')"
+                },
+                {
+                    titulo: "Ano bissexto",
+                    descricao: "Verifique se 2024 é bissexto.",
+                    gabarito: "Bissexto",
+                    codigoInicial: "ano = 2024\nif (ano % 400 == 0) or (ano % 4 == 0 and ano % 100 != 0):\n    print('Bissexto')\nelse:\n    print('Não bissexto')"
+                },
+                {
+                    titulo: "Desconto",
+                    descricao: "Calcule o preço com desconto: se compra > 100, desconto 10%. Compra = 150.",
+                    gabarito: "135.0",
+                    codigoInicial: "compra = 150\nif compra > 100:\n    preco = compra * 0.9\nelse:\n    preco = compra\nprint(preco)"
+                },
+                {
+                    titulo: "Classificação de IMC",
+                    descricao: "IMC = 22.5, classifique: abaixo de 18.5 = abaixo, 18.5-24.9 = normal, 25-29.9 = sobrepeso, >=30 = obeso.",
+                    gabarito: "normal",
+                    codigoInicial: "imc = 22.5\nif imc < 18.5:\n    print('abaixo')\nelif imc < 25:\n    print('normal')\nelif imc < 30:\n    print('sobrepeso')\nelse:\n    print('obeso')"
+                },
+                {
+                    titulo: "Dia da semana",
+                    descricao: "Dado 3, imprima o dia correspondente (1=domingo, 2=segunda, ...).",
+                    gabarito: "terça",
+                    codigoInicial: "dia = 3\ndias = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado']\nprint(dias[dia - 1])"
+                },
+                {
+                    titulo: "Calculadora simples",
+                    descricao: "Dados 10, 5 e operador '+', imprima o resultado.",
+                    gabarito: "15",
+                    codigoInicial: "a, b, op = 10, 5, '+'\nif op == '+':\n    print(a + b)\nelif op == '-':\n    print(a - b)\nelif op == '*':\n    print(a * b)\nelif op == '/':\n    print(a / b)\nelse:\n    print('Operador inválido')"
+                },
+                {
+                    titulo: "Número entre 10 e 20",
+                    descricao: "Verifique se 15 está entre 10 e 20 (inclusive).",
+                    gabarito: "está",
+                    codigoInicial: "num = 15\nif 10 <= num <= 20:\n    print('está')\nelse:\n    print('não está')"
+                },
+                {
+                    titulo: "Triângulo",
+                    descricao: "Verifique se 3, 4, 5 formam um triângulo (soma de dois lados > terceiro).",
+                    gabarito: "Triângulo",
+                    codigoInicial: "a, b, c = 3, 4, 5\nif a + b > c and a + c > b and b + c > a:\n    print('Triângulo')\nelse:\n    print('Não é triângulo')"
+                },
+                {
+                    titulo: "Tipo de triângulo",
+                    descricao: "Classifique 3, 4, 5 em equilátero, isósceles ou escaleno.",
+                    gabarito: "escaleno",
+                    codigoInicial: "a, b, c = 3, 4, 5\nif a == b == c:\n    print('equilátero')\nelif a == b or b == c or a == c:\n    print('isósceles')\nelse:\n    print('escaleno')"
+                },
+                {
+                    titulo: "Vogal ou consoante",
+                    descricao: "Verifique se a letra 'a' é vogal.",
+                    gabarito: "vogal",
+                    codigoInicial: "letra = 'a'\nif letra.lower() in 'aeiou':\n    print('vogal')\nelse:\n    print('consoante')"
+                },
+                {
+                    titulo: "Ordem crescente",
+                    descricao: "Dados 3, 1, 2, imprima em ordem crescente.",
+                    gabarito: "1 2 3",
+                    codigoInicial: "a, b, c = 3, 1, 2\nlista = [a, b, c]\nlista.sort()\nprint(lista[0], lista[1], lista[2])"
+                },
+                {
+                    titulo: "Idade eleitoral",
+                    descricao: "Com 16 anos, verifique se pode votar (16 ou 17 = facultativo, >=18 = obrigatório, <16 = não).",
+                    gabarito: "facultativo",
+                    codigoInicial: "idade = 16\nif idade < 16:\n    print('não')\nelif idade < 18:\n    print('facultativo')\nelse:\n    print('obrigatório')"
+                },
+                {
+                    titulo: "Número primo (simples)",
+                    descricao: "Verifique se 7 é primo.",
+                    gabarito: "primo",
+                    codigoInicial: "num = 7\nif num < 2:\n    print('não primo')\nelse:\n    primo = True\n    for i in range(2, num):\n        if num % i == 0:\n            primo = False\n            break\n    if primo:\n        print('primo')\n    else:\n        print('não primo')"
+                },
+                {
+                    titulo: "Mês por número",
+                    descricao: "Dado 2, imprima o nome do mês.",
+                    gabarito: "Fevereiro",
+                    codigoInicial: "mes = 2\nmeses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro']\nprint(meses[mes-1])"
+                },
+                {
+                    titulo: "Dia útil ou fim de semana",
+                    descricao: "Dado 6 (sábado), imprima 'fim de semana' ou 'dia útil'.",
+                    gabarito: "fim de semana",
+                    codigoInicial: "dia = 6\nif dia in (1,2,3,4,5):\n    print('dia útil')\nelse:\n    print('fim de semana')"
+                },
+                {
+                    titulo: "Aumento salarial",
+                    descricao: "Salário 1200, aumento de 10% se < 1500, senão 5%.",
+                    gabarito: "1320.0",
+                    codigoInicial: "sal = 1200\nif sal < 1500:\n    novo = sal * 1.1\nelse:\n    novo = sal * 1.05\nprint(novo)"
+                },
+
+                // ---- NÍVEL 3: LAÇOS (41–60) ----
+                {
+                    titulo: "Contagem de 1 a 10",
+                    descricao: "Imprima os números de 1 a 10, um por linha.",
+                    gabarito: "1\n2\n3\n4\n5\n6\n7\n8\n9\n10",
+                    codigoInicial: "for i in range(1, 11):\n    print(i)"
+                },
+                {
+                    titulo: "Contagem regressiva de 10 a 1",
+                    descricao: "Imprima de 10 até 1.",
+                    gabarito: "10\n9\n8\n7\n6\n5\n4\n3\n2\n1",
+                    codigoInicial: "for i in range(10, 0, -1):\n    print(i)"
+                },
+                {
+                    titulo: "Soma de 1 a 100",
+                    descricao: "Calcule a soma de todos os números de 1 a 100.",
+                    gabarito: "5050",
+                    codigoInicial: "soma = 0\nfor i in range(1, 101):\n    soma += i\nprint(soma)"
+                },
+                {
+                    titulo: "Tabuada do 5",
+                    descricao: "Imprima a tabuada do 5 (5x1 até 5x10).",
+                    gabarito: "5\n10\n15\n20\n25\n30\n35\n40\n45\n50",
+                    codigoInicial: "for i in range(1, 11):\n    print(5 * i)"
+                },
+                {
+                    titulo: "Números pares de 1 a 20",
+                    descricao: "Imprima apenas os números pares entre 1 e 20.",
+                    gabarito: "2\n4\n6\n8\n10\n12\n14\n16\n18\n20",
+                    codigoInicial: "for i in range(1, 21):\n    if i % 2 == 0:\n        print(i)"
+                },
+                {
+                    titulo: "Fatorial de 5",
+                    descricao: "Calcule o fatorial de 5 (5!).",
+                    gabarito: "120",
+                    codigoInicial: "num = 5\nfat = 1\nfor i in range(1, num+1):\n    fat *= i\nprint(fat)"
+                },
+                {
+                    titulo: "Soma dos dígitos",
+                    descricao: "Some os dígitos de 1234.",
+                    gabarito: "10",
+                    codigoInicial: "num = 1234\nsoma = 0\nfor digito in str(num):\n    soma += int(digito)\nprint(soma)"
+                },
+                {
+                    titulo: "Inverter string",
+                    descricao: "Inverta a string 'python'.",
+                    gabarito: "nohtyp",
+                    codigoInicial: "texto = 'python'\ninvertido = ''\nfor letra in texto:\n    invertido = letra + invertido\nprint(invertido)"
+                },
+                {
+                    titulo: "Contagem de vogais",
+                    descricao: "Conte as vogais em 'programacao'.",
+                    gabarito: "5",
+                    codigoInicial: "texto = 'programacao'\nvogais = 0\nfor letra in texto:\n    if letra in 'aeiou':\n        vogais += 1\nprint(vogais)"
+                },
+                {
+                    titulo: "Múltiplos de 3 até 30",
+                    descricao: "Imprima os múltiplos de 3 até 30.",
+                    gabarito: "3\n6\n9\n12\n15\n18\n21\n24\n27\n30",
+                    codigoInicial: "for i in range(3, 31, 3):\n    print(i)"
+                },
+                {
+                    titulo: "Números ímpares de 1 a 15",
+                    descricao: "Imprima os números ímpares entre 1 e 15.",
+                    gabarito: "1\n3\n5\n7\n9\n11\n13\n15",
+                    codigoInicial: "for i in range(1, 16, 2):\n    print(i)"
+                },
+                {
+                    titulo: "Soma de quadrados",
+                    descricao: "Calcule a soma dos quadrados de 1 a 5 (1²+2²+...+5²).",
+                    gabarito: "55",
+                    codigoInicial: "soma = 0\nfor i in range(1, 6):\n    soma += i ** 2\nprint(soma)"
+                },
+                {
+                    titulo: "Produto de 1 a 5",
+                    descricao: "Calcule o produto (1*2*3*4*5).",
+                    gabarito: "120",
+                    codigoInicial: "prod = 1\nfor i in range(1, 6):\n    prod *= i\nprint(prod)"
+                },
+                {
+                    titulo: "Fibonacci até 100",
+                    descricao: "Imprima os números de Fibonacci menores que 100.",
+                    gabarito: "0\n1\n1\n2\n3\n5\n8\n13\n21\n34\n55\n89",
+                    codigoInicial: "a, b = 0, 1\nwhile a < 100:\n    print(a)\n    a, b = b, a+b"
+                },
+                {
+                    titulo: "Contagem de caracteres",
+                    descricao: "Conte o número de caracteres de 'paralelepipedo'.",
+                    gabarito: "13",
+                    codigoInicial: "palavra = 'paralelepipedo'\nprint(len(palavra))"
+                },
+                {
+                    titulo: "While: soma até 100",
+                    descricao: "Some números naturais até que a soma ultrapasse 100, imprima a soma.",
+                    gabarito: "105",
+                    codigoInicial: "soma = 0\nnum = 1\nwhile soma <= 100:\n    soma += num\n    num += 1\nprint(soma)"
+                },
+                {
+                    titulo: "Lista de quadrados",
+                    descricao: "Crie uma lista com os quadrados de 1 a 10 e imprima.",
+                    gabarito: "[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]",
+                    codigoInicial: "quadrados = []\nfor i in range(1, 11):\n    quadrados.append(i ** 2)\nprint(quadrados)"
+                },
+                {
+                    titulo: "Números primos até 20",
+                    descricao: "Imprima todos os primos menores que 20.",
+                    gabarito: "2\n3\n5\n7\n11\n13\n17\n19",
+                    codigoInicial: "for num in range(2, 20):\n    primo = True\n    for i in range(2, num):\n        if num % i == 0:\n            primo = False\n            break\n    if primo:\n        print(num)"
+                },
+                {
+                    titulo: "Soma de pares",
+                    descricao: "Calcule a soma dos números pares entre 1 e 50.",
+                    gabarito: "650",
+                    codigoInicial: "soma = 0\nfor i in range(2, 51, 2):\n    soma += i\nprint(soma)"
+                },
+                {
+                    titulo: "Progressão aritmética",
+                    descricao: "Imprima os primeiros 5 termos de uma PA com a1=2, r=3.",
+                    gabarito: "2\n5\n8\n11\n14",
+                    codigoInicial: "a = 2\nr = 3\nfor i in range(5):\n    print(a + i * r)"
+                },
+
+                // ---- NÍVEL 4: FUNÇÕES E LISTAS (61–80) ----
+                {
+                    titulo: "Função soma",
+                    descricao: "Defina uma função que some dois números e chame com 10 e 20.",
+                    gabarito: "30",
+                    codigoInicial: "def soma(a, b):\n    return a + b\n\nprint(soma(10, 20))"
+                },
+                {
+                    titulo: "Função maior",
+                    descricao: "Defina uma função que retorne o maior de dois números. Use 8 e 12.",
+                    gabarito: "12",
+                    codigoInicial: "def maior(a, b):\n    if a > b:\n        return a\n    else:\n        return b\n\nprint(maior(8, 12))"
+                },
+                {
+                    titulo: "Função fatorial",
+                    descricao: "Defina uma função fatorial(n) e calcule fatorial(6).",
+                    gabarito: "720",
+                    codigoInicial: "def fatorial(n):\n    fat = 1\n    for i in range(1, n+1):\n        fat *= i\n    return fat\n\nprint(fatorial(6))"
+                },
+                {
+                    titulo: "Função par",
+                    descricao: "Defina uma função que retorna True se o número for par. Teste com 7.",
+                    gabarito: "False",
+                    codigoInicial: "def eh_par(num):\n    return num % 2 == 0\n\nprint(eh_par(7))"
+                },
+                {
+                    titulo: "Lista: soma de elementos",
+                    descricao: "Calcule a soma da lista [10,20,30,40].",
+                    gabarito: "100",
+                    codigoInicial: "numeros = [10, 20, 30, 40]\nprint(sum(numeros))"
+                },
+                {
+                    titulo: "Lista: maior elemento",
+                    descricao: "Encontre o maior da lista [5, 2, 8, 1].",
+                    gabarito: "8",
+                    codigoInicial: "lista = [5, 2, 8, 1]\nprint(max(lista))"
+                },
+                {
+                    titulo: "Lista: média",
+                    descricao: "Calcule a média da lista [7, 8, 9, 10].",
+                    gabarito: "8.5",
+                    codigoInicial: "notas = [7, 8, 9, 10]\nmedia = sum(notas) / len(notas)\nprint(media)"
+                },
+                {
+                    titulo: "Lista: inverter",
+                    descricao: "Inverta a lista [1,2,3,4,5].",
+                    gabarito: "[5, 4, 3, 2, 1]",
+                    codigoInicial: "lista = [1, 2, 3, 4, 5]\nlista.reverse()\nprint(lista)"
+                },
+                {
+                    titulo: "Lista: ordenar",
+                    descricao: "Ordene a lista [3,1,4,1,5] em ordem crescente.",
+                    gabarito: "[1, 1, 3, 4, 5]",
+                    codigoInicial: "lista = [3, 1, 4, 1, 5]\nlista.sort()\nprint(lista)"
+                },
+                {
+                    titulo: "Lista: filtrar pares",
+                    descricao: "Crie uma nova lista apenas com os números pares de [1,2,3,4,5,6].",
+                    gabarito: "[2, 4, 6]",
+                    codigoInicial: "orig = [1, 2, 3, 4, 5, 6]\npares = []\nfor num in orig:\n    if num % 2 == 0:\n        pares.append(num)\nprint(pares)"
+                },
+                {
+                    titulo: "Função com lista",
+                    descricao: "Função que recebe uma lista e retorna o dobro de cada elemento. Use [2,4,6].",
+                    gabarito: "[4, 8, 12]",
+                    codigoInicial: "def dobrar(lista):\n    return [x*2 for x in lista]\n\nprint(dobrar([2, 4, 6]))"
+                },
+                {
+                    titulo: "Função contagem de vogais",
+                    descricao: "Função que conta vogais em uma string. Use 'python'.",
+                    gabarito: "1",
+                    codigoInicial: "def conta_vogais(texto):\n    vogais = 'aeiou'\n    cont = 0\n    for letra in texto:\n        if letra in vogais:\n            cont += 1\n    return cont\n\nprint(conta_vogais('python'))"
+                },
+                {
+                    titulo: "Função primo",
+                    descricao: "Função que verifica se um número é primo. Teste com 11.",
+                    gabarito: "True",
+                    codigoInicial: "def primo(num):\n    if num < 2:\n        return False\n    for i in range(2, num):\n        if num % i == 0:\n            return False\n    return True\n\nprint(primo(11))"
+                },
+                {
+                    titulo: "Função fatorial recursiva",
+                    descricao: "Implemente fatorial recursivo e calcule fatorial(4).",
+                    gabarito: "24",
+                    codigoInicial: "def fat(n):\n    if n <= 1:\n        return 1\n    return n * fat(n-1)\n\nprint(fat(4))"
+                },
+                {
+                    titulo: "Lista de compras",
+                    descricao: "Crie uma lista com 'maçã', 'banana', 'laranja' e imprima cada item.",
+                    gabarito: "maçã\nbanana\nlaranja",
+                    codigoInicial: "compras = ['maçã', 'banana', 'laranja']\nfor item in compras:\n    print(item)"
+                },
+                {
+                    titulo: "Soma de elementos pares",
+                    descricao: "Some apenas os números pares de [1,2,3,4,5,6,7,8,9,10].",
+                    gabarito: "30",
+                    codigoInicial: "nums = [1,2,3,4,5,6,7,8,9,10]\nsoma = 0\nfor n in nums:\n    if n % 2 == 0:\n        soma += n\nprint(soma)"
+                },
+                {
+                    titulo: "Lista de strings maiúsculas",
+                    descricao: "Converta ['a', 'b', 'c'] para maiúsculas.",
+                    gabarito: "['A', 'B', 'C']",
+                    codigoInicial: "letras = ['a', 'b', 'c']\nmaiusculas = []\nfor letra in letras:\n    maiusculas.append(letra.upper())\nprint(maiusculas)"
+                },
+                {
+                    titulo: "Função média",
+                    descricao: "Função que recebe uma lista e retorna a média. Use [8,9,7].",
+                    gabarito: "8.0",
+                    codigoInicial: "def media(lista):\n    return sum(lista) / len(lista)\n\nprint(media([8, 9, 7]))"
+                },
+                {
+                    titulo: "Lista: remover duplicatas",
+                    descricao: "Remova duplicatas de [1,2,2,3,4,4,5].",
+                    gabarito: "[1, 2, 3, 4, 5]",
+                    codigoInicial: "lista = [1,2,2,3,4,4,5]\nunica = []\nfor x in lista:\n    if x not in unica:\n        unica.append(x)\nprint(unica)"
+                },
+                {
+                    titulo: "Função soma de pares",
+                    descricao: "Função que recebe uma lista e retorna a soma dos pares. Teste com [1,2,3,4].",
+                    gabarito: "6",
+                    codigoInicial: "def soma_pares(lista):\n    return sum([x for x in lista if x % 2 == 0])\n\nprint(soma_pares([1,2,3,4]))"
+                },
+
+                // ---- NÍVEL 5: STRINGS E DICIONÁRIOS (81–100) ----
+                {
+                    titulo: "Tamanho da string",
+                    descricao: "Imprima o tamanho da string 'Python'.",
+                    gabarito: "6",
+                    codigoInicial: "s = 'Python'\nprint(len(s))"
+                },
+                {
+                    titulo: "String maiúscula",
+                    descricao: "Converta 'python' para maiúsculas.",
+                    gabarito: "PYTHON",
+                    codigoInicial: "s = 'python'\nprint(s.upper())"
+                },
+                {
+                    titulo: "String minúscula",
+                    descricao: "Converta 'PROGRAMACAO' para minúsculas.",
+                    gabarito: "programacao",
+                    codigoInicial: "s = 'PROGRAMACAO'\nprint(s.lower())"
+                },
+                {
+                    titulo: "Primeira letra maiúscula",
+                    descricao: "Coloque a primeira letra de 'python' em maiúscula.",
+                    gabarito: "Python",
+                    codigoInicial: "s = 'python'\nprint(s.capitalize())"
+                },
+                {
+                    titulo: "Contar ocorrências",
+                    descricao: "Conte quantas vezes 'a' aparece em 'banana'.",
+                    gabarito: "3",
+                    codigoInicial: "s = 'banana'\nprint(s.count('a'))"
+                },
+                {
+                    titulo: "Substituir caracteres",
+                    descricao: "Substitua 'a' por 'o' em 'casa'.",
+                    gabarito: "coso",
+                    codigoInicial: "s = 'casa'\nprint(s.replace('a', 'o'))"
+                },
+                {
+                    titulo: "Fatia de string",
+                    descricao: "Pegue os primeiros 3 caracteres de 'abcdef'.",
+                    gabarito: "abc",
+                    codigoInicial: "s = 'abcdef'\nprint(s[:3])"
+                },
+                {
+                    titulo: "Últimos 3 caracteres",
+                    descricao: "Pegue os últimos 3 caracteres de 'abcdef'.",
+                    gabarito: "def",
+                    codigoInicial: "s = 'abcdef'\nprint(s[-3:])"
+                },
+                {
+                    titulo: "Reverter string (com slice)",
+                    descricao: "Inverta 'python' usando fatiamento.",
+                    gabarito: "nohtyp",
+                    codigoInicial: "s = 'python'\nprint(s[::-1])"
+                },
+                {
+                    titulo: "Verificar palíndromo",
+                    descricao: "Verifique se 'arara' é palíndromo.",
+                    gabarito: "True",
+                    codigoInicial: "s = 'arara'\nprint(s == s[::-1])"
+                },
+                {
+                    titulo: "Dicionário: criar e acessar",
+                    descricao: "Crie um dicionário com nome='João' e idade=25, imprima o nome.",
+                    gabarito: "João",
+                    codigoInicial: "pessoa = {'nome': 'João', 'idade': 25}\nprint(pessoa['nome'])"
+                },
+                {
+                    titulo: "Dicionário: adicionar chave",
+                    descricao: "Adicione a chave 'cidade' com valor 'São Paulo' ao dicionário e imprima.",
+                    gabarito: "{'nome': 'João', 'idade': 25, 'cidade': 'São Paulo'}",
+                    codigoInicial: "pessoa = {'nome': 'João', 'idade': 25}\npessoa['cidade'] = 'São Paulo'\nprint(pessoa)"
+                },
+                {
+                    titulo: "Dicionário: atualizar valor",
+                    descricao: "Atualize a idade para 26 e imprima.",
+                    gabarito: "26",
+                    codigoInicial: "pessoa = {'nome': 'João', 'idade': 25}\npessoa['idade'] = 26\nprint(pessoa['idade'])"
+                },
+                {
+                    titulo: "Dicionário: iterar",
+                    descricao: "Imprima todas as chaves do dicionário {'a':1, 'b':2, 'c':3}.",
+                    gabarito: "a\nb\nc",
+                    codigoInicial: "d = {'a':1, 'b':2, 'c':3}\nfor chave in d:\n    print(chave)"
+                },
+                {
+                    titulo: "Dicionário: valores",
+                    descricao: "Imprima todos os valores do dicionário {'a':1, 'b':2, 'c':3}.",
+                    gabarito: "1\n2\n3",
+                    codigoInicial: "d = {'a':1, 'b':2, 'c':3}\nfor valor in d.values():\n    print(valor)"
+                },
+                {
+                    titulo: "Frequência de letras",
+                    descricao: "Conte a frequência de letras em 'abacaxi'.",
+                    gabarito: "{'a': 3, 'b': 1, 'c': 1, 'x': 1, 'i': 1}",
+                    codigoInicial: "texto = 'abacaxi'\nfreq = {}\nfor letra in texto:\n    if letra in freq:\n        freq[letra] += 1\n    else:\n        freq[letra] = 1\nprint(freq)"
+                },
+                {
+                    titulo: "Juntar lista em string",
+                    descricao: "Junte a lista ['a', 'b', 'c'] com '-'.",
+                    gabarito: "a-b-c",
+                    codigoInicial: "lista = ['a', 'b', 'c']\nprint('-'.join(lista))"
+                },
+                {
+                    titulo: "Dividir string",
+                    descricao: "Divida 'um-dois-tres' por '-'.",
+                    gabarito: "['um', 'dois', 'tres']",
+                    codigoInicial: "s = 'um-dois-tres'\nprint(s.split('-'))"
+                },
+                {
+                    titulo: "Remover espaços",
+                    descricao: "Remova os espaços extras de '  python  '.",
+                    gabarito: "python",
+                    codigoInicial: "s = '  python  '\nprint(s.strip())"
+                },
+                {
+                    titulo: "Verificar começo da string",
+                    descricao: "Verifique se 'Python' começa com 'Py'.",
+                    gabarito: "True",
+                    codigoInicial: "s = 'Python'\nprint(s.startswith('Py'))"
+                },
+
+                // ---- NÍVEL 6: DESAFIOS MAIS COMPLEXOS (101–120) ----
+                {
+                    titulo: "List comprehension: quadrados",
+                    descricao: "Use list comprehension para criar uma lista com os quadrados de 0 a 9.",
+                    gabarito: "[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]",
+                    codigoInicial: "quadrados = [i**2 for i in range(10)]\nprint(quadrados)"
+                },
+                {
+                    titulo: "List comprehension: pares",
+                    descricao: "Crie uma lista com os números pares entre 1 e 20 usando compreensão.",
+                    gabarito: "[2, 4, 6, 8, 10, 12, 14, 16, 18, 20]",
+                    codigoInicial: "pares = [i for i in range(1, 21) if i % 2 == 0]\nprint(pares)"
+                },
+                {
+                    titulo: "Filtro de strings",
+                    descricao: "Filtre palavras com mais de 3 letras: ['sol', 'lua', 'estrela', 'céu'].",
+                    gabarito: "['estrela']",
+                    codigoInicial: "palavras = ['sol', 'lua', 'estrela', 'céu']\nresultado = [p for p in palavras if len(p) > 3]\nprint(resultado)"
+                },
+                {
+                    titulo: "Soma de pares com compreensão",
+                    descricao: "Calcule a soma dos quadrados dos números ímpares de 1 a 10.",
+                    gabarito: "165",
+                    codigoInicial: "soma = sum([i**2 for i in range(1, 11) if i % 2 == 1])\nprint(soma)"
+                },
+                {
+                    titulo: "Dicionário de quadrados",
+                    descricao: "Crie um dicionário onde as chaves são números de 1 a 5 e os valores são seus quadrados.",
+                    gabarito: "{1: 1, 2: 4, 3: 9, 4: 16, 5: 25}",
+                    codigoInicial: "d = {i: i**2 for i in range(1, 6)}\nprint(d)"
+                },
+                {
+                    titulo: "Inverter dicionário",
+                    descricao: "Inverta as chaves e valores do dicionário {'a':1, 'b':2, 'c':3}.",
+                    gabarito: "{1: 'a', 2: 'b', 3: 'c'}",
+                    codigoInicial: "d = {'a':1, 'b':2, 'c':3}\ninvertido = {v: k for k, v in d.items()}\nprint(invertido)"
+                },
+                {
+                    titulo: "Função lambda: dobrar",
+                    descricao: "Use uma função lambda para dobrar uma lista [1,2,3,4].",
+                    gabarito: "[2, 4, 6, 8]",
+                    codigoInicial: "lista = [1,2,3,4]\ndobro = list(map(lambda x: x*2, lista))\nprint(dobro)"
+                },
+                {
+                    titulo: "Filter com lambda",
+                    descricao: "Use filter para pegar os números maiores que 5 de [2,8,3,10,1].",
+                    gabarito: "[8, 10]",
+                    codigoInicial: "nums = [2,8,3,10,1]\nfiltrado = list(filter(lambda x: x > 5, nums))\nprint(filtrado)"
+                },
+                {
+                    titulo: "Reduce (soma)",
+                    descricao: "Use reduce para somar [1,2,3,4,5]. Importe functools.",
+                    gabarito: "15",
+                    codigoInicial: "from functools import reduce\nnums = [1,2,3,4,5]\ntotal = reduce(lambda a, b: a + b, nums)\nprint(total)"
+                },
+                {
+                    titulo: "Mapeamento de strings",
+                    descricao: "Use map para converter ['a','b','c'] em maiúsculas.",
+                    gabarito: "['A', 'B', 'C']",
+                    codigoInicial: "letras = ['a','b','c']\nmaiusculas = list(map(str.upper, letras))\nprint(maiusculas)"
+                },
+                {
+                    titulo: "Zipper",
+                    descricao: "Combine duas listas [1,2,3] e ['a','b','c'] em pares.",
+                    gabarito: "[(1, 'a'), (2, 'b'), (3, 'c')]",
+                    codigoInicial: "nums = [1,2,3]\nletras = ['a','b','c']\ncombinado = list(zip(nums, letras))\nprint(combinado)"
+                },
+                {
+                    titulo: "Enumerate",
+                    descricao: "Use enumerate para imprimir índice e valor de ['a','b','c'].",
+                    gabarito: "0 a\n1 b\n2 c",
+                    codigoInicial: "lista = ['a','b','c']\nfor i, v in enumerate(lista):\n    print(i, v)"
+                },
+                {
+                    titulo: "Any e All",
+                    descricao: "Verifique se algum número é par em [1,3,5,7] (any) e se todos são ímpares (all).",
+                    gabarito: "False\nTrue",
+                    codigoInicial: "nums = [1,3,5,7]\nprint(any(x % 2 == 0 for x in nums))\nprint(all(x % 2 == 1 for x in nums))"
+                },
+                {
+                    titulo: "Ordenação por chave",
+                    descricao: "Ordene a lista de tuplas [(1,'c'), (2,'a'), (3,'b')] pelo segundo elemento.",
+                    gabarito: "[(2, 'a'), (3, 'b'), (1, 'c')]",
+                    codigoInicial: "tuplas = [(1,'c'), (2,'a'), (3,'b')]\nordenado = sorted(tuplas, key=lambda x: x[1])\nprint(ordenado)"
+                },
+                {
+                    titulo: "Matriz transposta",
+                    descricao: "Transponha a matriz [[1,2],[3,4],[5,6]].",
+                    gabarito: "[(1, 3, 5), (2, 4, 6)]",
+                    codigoInicial: "matriz = [[1,2],[3,4],[5,6]]\ntransposta = list(zip(*matriz))\nprint(transposta)"
+                },
+                {
+                    titulo: "Contagem de palavras",
+                    descricao: "Conte o número de palavras em 'Python é uma linguagem poderosa'.",
+                    gabarito: "5",
+                    codigoInicial: "frase = 'Python é uma linguagem poderosa'\nprint(len(frase.split()))"
+                },
+                {
+                    titulo: "Remover caracteres especiais",
+                    descricao: "Remova todos os números de 'abc123def456'.",
+                    gabarito: "abcdef",
+                    codigoInicial: "s = 'abc123def456'\nresultado = ''.join([c for c in s if not c.isdigit()])\nprint(resultado)"
+                },
+                {
+                    titulo: "Anagrama",
+                    descricao: "Verifique se 'amor' e 'roma' são anagramas.",
+                    gabarito: "True",
+                    codigoInicial: "a = 'amor'\nb = 'roma'\nprint(sorted(a) == sorted(b))"
+                },
+                {
+                    titulo: "Contador de palavras com dicionário",
+                    descricao: "Conte a frequência de palavras em 'a a b c a b'.",
+                    gabarito: "{'a': 3, 'b': 2, 'c': 1}",
+                    codigoInicial: "texto = 'a a b c a b'\npalavras = texto.split()\nfreq = {}\nfor p in palavras:\n    freq[p] = freq.get(p, 0) + 1\nprint(freq)"
+                },
+                {
+                    titulo: "Gerador de Fibonacci",
+                    descricao: "Crie um gerador que produza os primeiros 8 números de Fibonacci.",
+                    gabarito: "[0, 1, 1, 2, 3, 5, 8, 13]",
+                    codigoInicial: "def fib():\n    a, b = 0, 1\n    for _ in range(8):\n        yield a\n        a, b = b, a+b\n\nprint(list(fib()))"
+                }
+            ];
+
+            console.log(`✅ ${listaDesafios.length} desafios carregados com sucesso.`);
             mostrarTela("tela-login");
             carregarTurmasParaLogin();
         }
