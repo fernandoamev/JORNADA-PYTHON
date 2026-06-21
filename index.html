@@ -19,7 +19,7 @@
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
     <style>
-        /* ===== ESTILOS (mantidos exatamente iguais ao original) ===== */
+        /* ===== ESTILOS ORIGINAIS – NÃO ALTERADOS ===== */
         * {
             margin: 0;
             padding: 0;
@@ -84,11 +84,11 @@
 
             0%,
             100% {
-                transform: translateY(0)
+                transform: translateY(0);
             }
 
             50% {
-                transform: translateY(-12px)
+                transform: translateY(-12px);
             }
         }
 
@@ -650,7 +650,7 @@
 
         @media(max-width:640px) {
             .container {
-                padding: 20px 14px
+                padding: 20px 14px;
             }
 
             .cabecalho-jogo,
@@ -659,7 +659,7 @@
             .detalhes-turma h3,
             .area-cadastro-aluno {
                 flex-direction: column;
-                align-items: stretch
+                align-items: stretch;
             }
         }
     </style>
@@ -795,9 +795,9 @@
 
     <script>
         // ====================================================================
-        // 1. CONFIGURAÇÃO DO SUPABASE – CHAVES CORRETAS
+        // 1. CONFIGURAÇÃO DO SUPABASE – URL ORIGINAL COM /rest/v1/
         // ====================================================================
-        const SUPABASE_URL = 'https://fyfqdluxeqsryekhpnvx.supabase.co';
+        const SUPABASE_URL = 'https://fyfqdluxeqsryekhpnvx.supabase.co/rest/v1/';
         const SUPABASE_KEY = 'sb_publishable_6q0E6HGx38ChgBiro1ZBrw_Q6Yn_mV5';
 
         let db = null;
@@ -1493,7 +1493,7 @@
             } catch (e) {
                 console.error("❌ Erro ao carregar desafios.json:", e);
                 alert("Erro: não foi possível carregar os desafios. Verifique se o arquivo 'desafios.json' existe na mesma pasta do index.html e tem um formato válido.");
-                listaDesafios = []; // vazio – o jogo não funcionará sem desafios
+                listaDesafios = [];
             }
             mostrarTela("tela-login");
             carregarTurmasParaLogin();
