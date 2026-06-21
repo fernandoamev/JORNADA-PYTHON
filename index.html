@@ -19,7 +19,7 @@
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
     <style>
-        /* ===== ESTILOS (mesmos do original, mantidos) ===== */
+        /* ===== ESTILOS (mantidos exatamente iguais ao original) ===== */
         * {
             margin: 0;
             padding: 0;
@@ -795,9 +795,9 @@
 
     <script>
         // ====================================================================
-        // 1. CONFIGURAÇÃO DO SUPABASE – CHAVES CORRIGIDAS
+        // 1. CONFIGURAÇÃO DO SUPABASE – CHAVES CORRETAS
         // ====================================================================
-        const SUPABASE_URL = 'https://fyfqdluxeqsryekhpnvx.supabase.co/rest/v1/';
+        const SUPABASE_URL = 'https://fyfqdluxeqsryekhpnvx.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_6q0E6HGx38ChgBiro1ZBrw_Q6Yn_mV5';
 
         let db = null;
@@ -821,7 +821,6 @@
             }
         }
 
-        // Inicializa imediatamente
         inicializarSupabase();
 
         // ====================================================================
@@ -879,7 +878,7 @@
         }
 
         // ====================================================================
-        // 4. BANCO LOCAL (fallback)
+        // 4. BANCO LOCAL (fallback para quando offline)
         // ====================================================================
         function lerBancoLocal() {
             try { return JSON.parse(localStorage.getItem("bancoTurmaPython")) || { turmas: {} }; } catch { return { turmas: {} }; }
@@ -898,7 +897,7 @@
         }
 
         // ====================================================================
-        // 5. FUNÇÕES DO SUPABASE (COM VERIFICAÇÃO)
+        // 5. FUNÇÕES DO SUPABASE
         // ====================================================================
         async function carregarTurmasParaLogin() {
             const select = document.getElementById("select-turma-aluno");
@@ -953,7 +952,6 @@
                     progresso: (typeof data.progresso === 'string' ? JSON.parse(data.progresso || '[]') : data.progresso) || []
                 };
 
-                // Atualiza o banco local
                 const b = lerBancoLocal();
                 if (!b.turmas[turmaInput]) b.turmas[turmaInput] = { alunos: {} };
                 b.turmas[turmaInput].alunos[nome] = dadosAluno;
@@ -1481,21 +1479,21 @@
         }
 
         // ====================================================================
-        // 9. CARREGAR DESAFIOS (com fallback)
+        // 9. CARREGAR DESAFIOS – APENAS DO ARQUIVO (SEM FALLBACK)
         // ====================================================================
         async function carregarDesafios() {
             try {
                 const r = await fetch('desafios.json');
-                if (!r.ok) throw new Error('Arquivo não encontrado');
+                if (!r.ok) throw new Error('Arquivo não encontrado (status ' + r.status + ')');
                 listaDesafios = await r.json();
+                if (!Array.isArray(listaDesafios) || listaDesafios.length === 0) {
+                    throw new Error('Arquivo vazio ou formato inválido');
+                }
+                console.log(`✅ ${listaDesafios.length} desafios carregados.`);
             } catch (e) {
-                console.warn("⚠️ Não foi possível carregar desafios.json. Usando fallback padrão.");
-                listaDesafios = [{
-                    titulo: "Olá, Mundo!",
-                    descricao: "Escreva um programa que imprima 'Olá, Mundo!'",
-                    gabarito: "Olá, Mundo!",
-                    codigoInicial: "print('Olá, Mundo!')"
-                }];
+                console.error("❌ Erro ao carregar desafios.json:", e);
+                alert("Erro: não foi possível carregar os desafios. Verifique se o arquivo 'desafios.json' existe na mesma pasta do index.html e tem um formato válido.");
+                listaDesafios = []; // vazio – o jogo não funcionará sem desafios
             }
             mostrarTela("tela-login");
             carregarTurmasParaLogin();
