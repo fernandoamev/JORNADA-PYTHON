@@ -16,7 +16,7 @@
     <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
     <style>
         * {
@@ -794,13 +794,33 @@
 
     <script>
         // ====================================================================
-        // 1. CREDENCIAIS DO SUPABASE (COLE AS SUAS AQUI ABAIXO)
+        // 1. CONFIGURAÇÃO DO SUPABASE (COLE SUAS CHAVES REAIS ABAIXO)
         // ====================================================================
-        const supabaseUrl = 'COLE_SUA_URL_DO_SUPABASE_AQUI';
-        const supabaseKey = 'COLE_SUA_CHAVE_ANON_PUBLIC_AQUI';
+        const SUPABASE_URL = 'COLE_SUA_URL_DO_SUPABASE_AQUI';
+        const SUPABASE_KEY = 'COLE_SUA_CHAVE_ANON_PUBLIC_AQUI';
 
-        // MUDANÇA VITAL: Batizamos a instância de "db", protegendo a palavra "supabase"
-        const db = window.supabase.createClient(supabaseUrl, supabaseKey);
+        let db = null;
+
+        function inicializarSupabase() {
+            try {
+                if (!window.supabase) {
+                    console.error("A biblioteca do Supabase falhou ao carregar da internet.");
+                    return false;
+                }
+                if (!SUPABASE_URL || SUPABASE_URL.includes('COLE_SUA_URL')) {
+                    console.warn("⚠️ Chaves do Supabase ainda não foram preenchidas no código.");
+                    return false;
+                }
+                db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                return true;
+            } catch (erro) {
+                console.error("Falha técnica ao instanciar Supabase:", erro);
+                return false;
+            }
+        }
+
+        // Tenta conectar imediatamente sem travar a thread
+        inicializarSupabase();
 
         let listaDesafios = [];
         let turmaAtual = null, alunoAtual = null, progresso = [], indiceFaseAtual = 0, modoVisualizacao = false;
@@ -827,73 +847,94 @@
         function listarAlunosLocal(t) { return Object.keys(lerBancoLocal().turmas[t]?.alunos || {}); }
 
         // ====================================================================
-        // MOTORES DE COMUNICAÇÃO BLINDADOS COM O SUPABASE
+        // MOTORES DE COMUNICAÇÃO BLINDADOS
         // ====================================================================
 
         async function carregarTurmasParaLogin() {
             const select = document.getElementById("select-turma-aluno");
-            const { data, error } = await db.from('turmas').select('nome');
 
-            if (error) {
-                console.error(error);
-                select.innerHTML = '<option value="">⚠️ Erro ao conectar ao Supabase</option>';
+            if (!db) {
+                select.innerHTML = '<option value="">⚠️ Erro: Cole as chaves do Supabase no código</option>';
                 return;
             }
-            select.innerHTML = '<option value="">Selecione a sua Turma</option>';
-            if (data && data.length > 0) {
-                data.forEach(t => select.innerHTML += `<option value="${t.nome}">${t.nome}</option>`);
-            } else {
-                select.innerHTML = '<option value="">Nenhuma turma cadastrada</option>';
+
+            try {
+                const { data, error } = await db.from('turmas').select('nome');
+                if (error) throw error;
+
+                select.innerHTML = '<option value="">Selecione a sua Turma</option>';
+                if (data && data.length > 0) {
+                    data.forEach(t => select.innerHTML += `<option value="${t.nome}">${t.nome}</option>`);
+                } else {
+                    select.innerHTML = '<option value="">Nenhuma turma cadastrada</option>';
+                }
+            } catch (err) {
+                select.innerHTML = `<option value="">❌ Falha de leitura: ${err.message}</option>`;
             }
         }
 
         async function entrarComNomeTurma() {
+            if (!db) { alert("⚠️ O Supabase não está configurado."); return; }
             const nome = document.getElementById("nome-aluno").value.trim().toUpperCase();
             const turmaInput = document.getElementById("select-turma-aluno").value.toUpperCase();
             if (!nome || !turmaInput) { alert("Preencha seu nome e selecione a turma."); return; }
 
             const btn = document.getElementById("btn-login-principal"); const txtOrig = btn.innerHTML;
-            btn.innerHTML = "⏳ Buscando no Supabase..."; btn.disabled = true;
+            btn.innerHTML = "⏳ A consultar Supabase..."; btn.disabled = true;
 
-            const { data, error } = await db.from('alunos').select('*').eq('nome_exibicao', nome).eq('turma', turmaInput).maybeSingle();
+            try {
+                const { data, error } = await db.from('alunos').select('*').eq('nome_exibicao', nome).eq('turma', turmaInput).maybeSingle();
+                if (error) throw error;
 
-            btn.innerHTML = txtOrig; btn.disabled = false;
+                if (!data) {
+                    alert(`❌ O aluno "${nome}" não foi encontrado na turma "${turmaInput}". Peça ao professor para cadastrá-lo.`);
+                    return;
+                }
 
-            if (error) { alert("Erro de rede ao consultar Supabase: " + error.message); return; }
-
-            let dadosAluno;
-            if (!data) {
-                alert(`O aluno "${nome}" não foi encontrado na turma "${turmaInput}". Peça ao professor para cadastrá-lo.`);
-                return;
-            } else {
-                dadosAluno = {
-                    nomeExibicao: data.nome_exibicao, turma: data.turma, pontuacao: data.pontuacao,
-                    faseMaximaLiberada: data.fase_maxima_liberada,
+                const dadosAluno = {
+                    nomeExibicao: data.nome_exibicao, turma: data.turma, pontuacao: data.pontuacao || 0,
+                    faseMaximaLiberada: data.fase_maxima_liberada || 0,
                     progresso: (typeof data.progresso === 'string' ? JSON.parse(data.progresso || '[]') : data.progresso) || []
                 };
-            }
 
-            const b = lerBancoLocal(); if (!b.turmas[turmaInput]) b.turmas[turmaInput] = { alunos: {} };
-            b.turmas[turmaInput].alunos[nome] = dadosAluno; salvarBancoLocal(b);
-            entrarNaTurma(turmaInput, nome, false);
+                const b = lerBancoLocal(); if (!b.turmas[turmaInput]) b.turmas[turmaInput] = { alunos: {} };
+                b.turmas[turmaInput].alunos[nome] = dadosAluno; salvarBancoLocal(b);
+                entrarNaTurma(turmaInput, nome, false);
+            } catch (err) {
+                alert("❌ Erro ao buscar aluno: " + err.message);
+            } finally {
+                btn.innerHTML = txtOrig; btn.disabled = false;
+            }
         }
 
         async function salvarProgressoCloud(dadosAluno) {
+            if (!db) return;
             const payload = {
                 nome_exibicao: dadosAluno.nomeExibicao, turma: dadosAluno.turma,
                 pontuacao: dadosAluno.pontuacao, fase_maxima_liberada: dadosAluno.faseMaximaLiberada || 0,
                 progresso: dadosAluno.progresso
             };
-            const { error } = await db.from('alunos').upsert([payload]);
-            if (error) alert("❌ Supabase recusou salvar seu XP: " + error.message);
+            try {
+                const { error } = await db.from('alunos').upsert([payload]);
+                if (error) throw error;
+            } catch (err) { alert("❌ Erro ao salvar progresso na nuvem: " + err.message); }
         }
 
         // ====================================================================
-        // PAINEL DO PROFESSOR
+        // PAINEL DO PROFESSOR (COM DIAGNÓSTICO VISUAL)
         // ====================================================================
 
         async function mostrarPainelAdmin() {
-            if (!professorLogado) { if (prompt("Senha:") === "Gilvana_Python2026") professorLogado = true; else { alert("Senha incorreta."); return; } }
+            if (!db) {
+                alert("🛑 ACESSO INTERROMPIDO!\n\nO Supabase não foi instanciado corretamente.\nVerifique no arquivo index.html (linhas 333 e 334) se você colou a URL e a Chave pública entre as aspas simples.");
+                return;
+            }
+
+            if (!professorLogado) {
+                const s = prompt("Senha do professor:");
+                if (s === "Gilvana_Python2026") professorLogado = true;
+                else { if (s !== null) alert("Senha incorreta."); return; }
+            }
             mostrarTela("tela-admin"); await carregarListaTurmasAdmin();
             if (adminTurmaSelecionada) selecionarTurmaAdmin(adminTurmaSelecionada);
         }
@@ -902,96 +943,107 @@
 
         async function carregarListaTurmasAdmin() {
             const container = document.getElementById("lista-turmas-admin");
+            if (!db) return;
 
-            const { data: turmasData, error: errT } = await db.from('turmas').select('nome');
-            if (errT) {
-                alert("🚨 SUPABASE BLOQUEOU A LEITURA!\nMotivo: Você não executou o comando SQL do Passo 1 para desativar o RLS.\nErro técnico: " + errT.message);
-                container.innerHTML = "<span style='color:#e74c3c;'>Bloqueado pelo Supabase.</span>"; return;
-            }
+            try {
+                const { data: turmasData, error: errT } = await db.from('turmas').select('nome');
+                if (errT) throw errT;
 
-            const { data: alunosData } = await db.from('alunos').select('*');
+                const { data: alunosData } = await db.from('alunos').select('*');
 
-            let bancoNuvem = { turmas: {} };
-            (turmasData || []).forEach(t => bancoNuvem.turmas[t.nome] = { alunos: {} });
-            (alunosData || []).forEach(a => {
-                if (bancoNuvem.turmas[a.turma]) {
-                    bancoNuvem.turmas[a.turma].alunos[a.nome_exibicao] = {
-                        nomeExibicao: a.nome_exibicao, turma: a.turma, pontuacao: a.pontuacao || 0,
-                        faseMaximaLiberada: a.fase_maxima_liberada || 0,
-                        progresso: (typeof a.progresso === 'string' ? JSON.parse(a.progresso || '[]') : a.progresso) || []
-                    };
-                }
-            });
-
-            salvarBancoLocal(bancoNuvem); container.innerHTML = "";
-            const nomes = Object.keys(bancoNuvem.turmas);
-            if (nomes.length > 0) {
-                nomes.forEach(t => {
-                    const btn = document.createElement("button"); btn.className = "btn-turma-admin";
-                    if (t === adminTurmaSelecionada) btn.classList.add("ativo");
-                    btn.textContent = `📚 ${t}`; btn.onclick = () => selecionarTurmaAdmin(t); container.appendChild(btn);
+                let bancoNuvem = { turmas: {} };
+                (turmasData || []).forEach(t => bancoNuvem.turmas[t.nome] = { alunos: {} });
+                (alunosData || []).forEach(a => {
+                    if (bancoNuvem.turmas[a.turma]) {
+                        bancoNuvem.turmas[a.turma].alunos[a.nome_exibicao] = {
+                            nomeExibicao: a.nome_exibicao, turma: a.turma, pontuacao: a.pontuacao || 0,
+                            faseMaximaLiberada: a.fase_maxima_liberada || 0,
+                            progresso: (typeof a.progresso === 'string' ? JSON.parse(a.progresso || '[]') : a.progresso) || []
+                        };
+                    }
                 });
-            } else container.innerHTML = "<span style='color:#a0b9d4;'>Nenhuma turma no Supabase.</span>";
+
+                salvarBancoLocal(bancoNuvem); container.innerHTML = "";
+                const nomes = Object.keys(bancoNuvem.turmas);
+                if (nomes.length > 0) {
+                    nomes.forEach(t => {
+                        const btn = document.createElement("button"); btn.className = "btn-turma-admin";
+                        if (t === adminTurmaSelecionada) btn.classList.add("ativo");
+                        btn.textContent = `📚 ${t}`; btn.onclick = () => selecionarTurmaAdmin(t); container.appendChild(btn);
+                    });
+                } else container.innerHTML = "<span style='color:#a0b9d4;'>Nenhuma turma no Supabase.</span>";
+            } catch (err) {
+                container.innerHTML = `<span style='color:#e74c3c;'>Bloqueado pelo Supabase: ${err.message}</span>`;
+                alert("🚨 O Supabase recusou entregar a lista de turmas.\n\nMotivo mais provável: A regra de segurança RLS da tabela 'turmas' ainda está ativa no painel da web.");
+            }
         }
 
         async function criarTurma() {
+            if (!db) return;
             const nome = document.getElementById("input-nova-turma").value.trim().toUpperCase(); if (!nome) return;
-            const btn = document.querySelector(".area-turmas .btn-criar"); const txt = btn.innerText; btn.innerText = "⏳ Gravando..."; btn.disabled = true;
+            const btn = document.querySelector(".area-turmas .btn-criar"); const txt = btn.innerText; btn.innerText = "⏳ A gravar..."; btn.disabled = true;
 
-            const { error } = await db.from('turmas').insert([{ nome: nome }]);
-            btn.innerText = txt; btn.disabled = false;
+            try {
+                const { error } = await db.from('turmas').insert([{ nome: nome }]);
+                if (error) throw error;
 
-            if (error) {
-                if (error.code === '23505') alert("⚠️ Esta turma já existe no Supabase.");
-                else alert("❌ Supabase rejeitou criar a turma: " + error.message);
-                return;
-            }
-
-            document.getElementById("input-nova-turma").value = ""; alert(`✅ Turma "${nome}" criada no Supabase!`);
-            await carregarListaTurmasAdmin(); selecionarTurmaAdmin(nome);
+                document.getElementById("input-nova-turma").value = ""; alert(`✅ Turma "${nome}" criada no Supabase!`);
+                await carregarListaTurmasAdmin(); selecionarTurmaAdmin(nome);
+            } catch (err) {
+                if (err.code === '23505') alert("⚠️ Esta turma já existe no Supabase.");
+                else alert("❌ Erro ao criar a turma: " + err.message);
+            } finally { btn.innerText = txt; btn.disabled = false; }
         }
 
         async function cadastrarAluno() {
-            if (!adminTurmaSelecionada) return; const nome = document.getElementById("input-novo-aluno").value.trim().toUpperCase(); if (!nome) return;
-            const btn = document.querySelector(".area-cadastro-aluno .btn-criar"); const txt = btn.innerText; btn.innerText = "⏳ Gravando..."; btn.disabled = true;
+            if (!db || !adminTurmaSelecionada) return; const nome = document.getElementById("input-novo-aluno").value.trim().toUpperCase(); if (!nome) return;
+            const btn = document.querySelector(".area-cadastro-aluno .btn-criar"); const txt = btn.innerText; btn.innerText = "⏳ A gravar..."; btn.disabled = true;
 
             const novoReg = {
                 nome_exibicao: nome, turma: adminTurmaSelecionada, pontuacao: 0, fase_maxima_liberada: 0,
                 progresso: listaDesafios.map(() => ({ xp: false, validado: false, codigo: "" }))
             };
 
-            const { error } = await db.from('alunos').upsert([novoReg]);
-            btn.innerText = txt; btn.disabled = false;
+            try {
+                const { error } = await db.from('alunos').upsert([novoReg]);
+                if (error) throw error;
 
-            if (error) { alert("❌ Supabase rejeitou o aluno: " + error.message); return; }
-
-            document.getElementById("input-novo-aluno").value = ""; alert(`✅ Aluno "${nome}" salvo no Supabase!`);
-            await carregarListaTurmasAdmin(); selecionarTurmaAdmin(adminTurmaSelecionada);
+                document.getElementById("input-novo-aluno").value = ""; alert(`✅ Aluno "${nome}" salvo no Supabase!`);
+                await carregarListaTurmasAdmin(); selecionarTurmaAdmin(adminTurmaSelecionada);
+            } catch (err) { alert("❌ Erro ao cadastrar aluno: " + err.message); }
+            finally { btn.innerText = txt; btn.disabled = false; }
         }
 
         async function excluirTurma() {
-            if (!adminTurmaSelecionada) return;
-            if (confirm(`🚨 Excluir a turma "${adminTurmaSelecionada}" e todos os alunos no Supabase?`)) {
+            if (!db || !adminTurmaSelecionada) return;
+            if (confirm(`🚨 Deseja mesmo EXCLUIR a turma "${adminTurmaSelecionada}" e todos os alunos do Supabase?`)) {
                 const t = adminTurmaSelecionada; adminTurmaSelecionada = null; document.getElementById("detalhes-turma").style.display = "none";
-                await db.from('alunos').delete().match({ turma: t });
-                const { error } = await db.from('turmas').delete().match({ nome: t });
-                if (error) alert("Erro: " + error.message); else { alert("✅ Turma excluída."); await carregarListaTurmasAdmin(); }
+                try {
+                    await db.from('alunos').delete().eq('turma', t);
+                    const { error } = await db.from('turmas').delete().eq('nome', t);
+                    if (error) throw error;
+                    alert("✅ Turma excluída."); await carregarListaTurmasAdmin();
+                } catch (err) { alert("❌ Erro ao excluir: " + err.message); }
             }
         }
 
         async function aplicarAlteracoesAdmin() {
+            if (!db || !adminTurmaSelecionada || !adminAlunoSelecionado) return;
             const d = obterDadosAlunoLocal(adminTurmaSelecionada, adminAlunoSelecionado); if (!d) return;
             const xp = parseInt(document.getElementById("input-xp-admin").value) || 0;
             const lim = parseInt(document.getElementById("select-limite-admin").value);
 
             const payload = { nome_exibicao: adminAlunoSelecionado, turma: adminTurmaSelecionada, pontuacao: xp, fase_maxima_liberada: (lim === -1 ? 0 : lim), progresso: d.progresso || [] };
-            const { error } = await db.from('alunos').upsert([payload]);
-            if (error) alert("Erro: " + error.message); else { document.getElementById("mensagem-admin").textContent = "✅ Salvo no Supabase!"; await carregarListaTurmasAdmin(); selecionarAlunoAdmin(adminAlunoSelecionado); }
+            try {
+                const { error } = await db.from('alunos').upsert([payload]);
+                if (error) throw error;
+                document.getElementById("mensagem-admin").textContent = "✅ Salvo no Supabase!"; await carregarListaTurmasAdmin(); selecionarAlunoAdmin(adminAlunoSelecionado);
+            } catch (err) { alert("❌ Erro ao salvar: " + err.message); }
         }
 
-        async function removerPontosAdmin() { const d = obterDadosAlunoLocal(adminTurmaSelecionada, adminAlunoSelecionado); const payload = { nome_exibicao: adminAlunoSelecionado, turma: adminTurmaSelecionada, pontuacao: Math.max(0, d.pontuacao - 100), fase_maxima_liberada: d.faseMaximaLiberada, progresso: d.progresso }; await db.from('alunos').upsert([payload]); await carregarListaTurmasAdmin(); selecionarAlunoAdmin(adminAlunoSelecionado); }
-        async function removerAlunoAdmin() { if (!confirm("Excluir do Supabase?")) return; await db.from('alunos').delete().match({ nome_exibicao: adminAlunoSelecionado, turma: adminTurmaSelecionada }); await carregarListaTurmasAdmin(); selecionarTurmaAdmin(adminTurmaSelecionada); }
-        async function liberarFaseTurmaInteiraCloud() { const num = prompt(`Liberar até qual FASE (1 a ${listaDesafios.length}):`); if (!num) return; const f = parseInt(num) - 1; if (isNaN(f)) return; await db.from('alunos').update({ fase_maxima_liberada: f }).match({ turma: adminTurmaSelecionada }); await carregarListaTurmasAdmin(); selecionarTurmaAdmin(adminTurmaSelecionada); }
+        async function removerPontosAdmin() { if (!db) return; const d = obterDadosAlunoLocal(adminTurmaSelecionada, adminAlunoSelecionado); const payload = { nome_exibicao: adminAlunoSelecionado, turma: adminTurmaSelecionada, pontuacao: Math.max(0, d.pontuacao - 100), fase_maxima_liberada: d.faseMaximaLiberada, progresso: d.progresso }; await db.from('alunos').upsert([payload]); await carregarListaTurmasAdmin(); selecionarAlunoAdmin(adminAlunoSelecionado); }
+        async function removerAlunoAdmin() { if (!db || !confirm("Excluir do Supabase?")) return; await db.from('alunos').delete().eq('nome_exibicao', adminAlunoSelecionado).eq('turma', adminTurmaSelecionada); await carregarListaTurmasAdmin(); selecionarTurmaAdmin(adminTurmaSelecionada); }
+        async function liberarFaseTurmaInteiraCloud() { if (!db) return; const num = prompt(`Liberar até qual FASE (1 a ${listaDesafios.length}):`); if (!num) return; const f = parseInt(num) - 1; if (isNaN(f)) return; await db.from('alunos').update({ fase_maxima_liberada: f }).eq('turma', adminTurmaSelecionada); await carregarListaTurmasAdmin(); selecionarTurmaAdmin(adminTurmaSelecionada); }
 
         function selecionarTurmaAdmin(t) {
             adminTurmaSelecionada = t; adminAlunoSelecionado = null;
@@ -1018,8 +1070,8 @@
         function calcularFaseAtual() { if (modoVisualizacao) return indiceFaseAtual; const dados = obterDadosAlunoLocal(turmaAtual, alunoAtual); let lim = dados?.faseMaximaLiberada; if (lim === 0 || lim === null || lim === -1) lim = listaDesafios.length - 1; else lim = Math.min(lim, listaDesafios.length - 1); for (let i = 0; i <= lim; i++) { if (!progresso[i]?.xp) return i; } return Math.min(lim + 1, listaDesafios.length); }
         function carregarFase() { if (indiceFaseAtual >= listaDesafios.length && !modoVisualizacao) { mostrarTela("tela-vitoria"); return; } const dados = obterDadosAlunoLocal(turmaAtual, alunoAtual); let lim = dados?.faseMaximaLiberada; if (lim === 0 || lim === null || lim === -1) lim = listaDesafios.length - 1; if (indiceFaseAtual > lim && !modoVisualizacao) { alert("Fase bloqueada pelo professor!"); document.getElementById("btn-enviar").disabled = true; return; } const fase = listaDesafios[indiceFaseAtual]; const p = progresso[indiceFaseAtual] || {}; document.getElementById("titulo-desafio").textContent = fase.titulo; document.getElementById("descricao-desafio").innerHTML = fase.descricao; document.getElementById("contador-fase").textContent = `Fase ${indiceFaseAtual + 1} de ${(lim === -1 ? listaDesafios.length : lim + 1)}`; const st = document.getElementById("status-fase"); if (modoVisualizacao) { st.textContent = "👁️ Leitura"; st.style.color = "#3498db"; } else if (p.validado) { st.textContent = "✅ Validado"; st.style.color = "#27ae60"; } else if (p.xp) { st.textContent = "⏳ Aguardando validação"; st.style.color = "#f39c12"; } else { st.textContent = "⬜ Pendente"; st.style.color = "#a0b9d4"; } let cod = modoVisualizacao ? (p.codigo || fase.codigoInicial || "") : (p.xp ? p.codigo : (fase.codigoInicial || "")); if (fase.modulos) { let cods = { modulo: fase.codigoModulo || "", principal: fase.codigoPrincipal || "" }; if ((p.xp || modoVisualizacao) && p.codigo) { try { let prs = JSON.parse(p.codigo); if (prs.modulo !== undefined) cods = prs; } catch (e) { } } editorModulo.setValue(cods.modulo); editorPrincipal.setValue(cods.principal); document.getElementById("wrapper-unico").style.display = "none"; document.getElementById("wrapper-duplo").style.display = "block"; } else { editorUnico.setValue(cod); document.getElementById("wrapper-unico").style.display = "block"; document.getElementById("wrapper-duplo").style.display = "none"; } setTimeout(() => { editorUnico.refresh(); editorModulo.refresh(); editorPrincipal.refresh(); }, 50); document.getElementById("btn-enviar").disabled = false; }
         function verificarCodigo() { const btn = document.getElementById("btn-enviar"); btn.disabled = true; btn.textContent = "⏳ Processando..."; document.getElementById("output-oculto").innerHTML = ""; const fase = listaDesafios[indiceFaseAtual]; const cod = fase.modulos ? (editorModulo.getValue() + "\n" + editorPrincipal.getValue()) : editorUnico.getValue(); Sk.configure({ output: (t) => document.getElementById("output-oculto").innerHTML += t, execLimit: 3000, inputfun: (p) => new Promise(r => r(prompt(p))) }); Sk.misceval.asyncToPromise(() => Sk.importMainWithBody("<stdin>", false, cod, true)).then(() => { const res = document.getElementById("output-oculto").innerText.trim(); if (res === fase.gabarito.trim()) { if (!modoVisualizacao) { if (!progresso[indiceFaseAtual].xp) { progresso[indiceFaseAtual] = { xp: true, validado: false, codigo: cod }; pontuacaoTotal += 100; const d = { nomeExibicao: alunoAtual, progresso, pontuacao: pontuacaoTotal, turma: turmaAtual, faseMaximaLiberada: obterDadosAlunoLocal(turmaAtual, alunoAtual)?.faseMaximaLiberada }; salvarProgressoCloud(d); const b = lerBancoLocal(); b.turmas[turmaAtual].alunos[alunoAtual] = d; salvarBancoLocal(b); alert("🎉 Correto! +100 XP."); } indiceFaseAtual = calcularFaseAtual(); carregarFase(); atualizarStatus(); } else alert("Código correto!"); } else alert(`❌ Incorreto.\nSaída:\n"${res}"\nEsperado:\n"${fase.gabarito}"`); }).catch(e => alert("Erro: " + e)).finally(() => { btn.disabled = false; btn.textContent = "⚡ Executar código"; }); }
+        async function validarFaseAdmin(c, idx) { if (!db || !adminTurmaSelecionada) return; const d = obterDadosAlunoLocal(adminTurmaSelecionada, c); if (!d || !d.progresso[idx]) return; if (confirm(`Validar fase ${idx + 1}?`)) { d.progresso[idx].validado = true; await db.from('alunos').upsert([{ nome_exibicao: c, turma: adminTurmaSelecionada, pontuacao: d.pontuacao, fase_maxima_liberada: d.faseMaximaLiberada, progresso: d.progresso }]); await carregarListaTurmasAdmin(); selecionarAlunoAdmin(c); } }
         function abrirFaseAlunoAdmin(c, idx) { if (!adminTurmaSelecionada) return; indiceFaseAtual = idx; entrarNaTurma(adminTurmaSelecionada, c, true); }
-        async function validarFaseAdmin(c, idx) { const d = obterDadosAlunoLocal(adminTurmaSelecionada, c); if (!d || !d.progresso[idx]) return; if (confirm(`Validar fase ${idx + 1}?`)) { d.progresso[idx].validado = true; await db.from('alunos').upsert([{ nome_exibicao: c, turma: adminTurmaSelecionada, pontuacao: d.pontuacao, fase_maxima_liberada: d.faseMaximaLiberada, progresso: d.progresso }]); await carregarListaTurmasAdmin(); selecionarAlunoAdmin(c); } }
         function sairDoJogo() { if (modoVisualizacao) { mostrarTela("tela-admin"); carregarListaTurmasAdmin().then(() => { if (adminTurmaSelecionada) selecionarTurmaAdmin(adminTurmaSelecionada); if (adminAlunoSelecionado) selecionarAlunoAdmin(adminAlunoSelecionado); }); modoVisualizacao = false; document.getElementById("badge-visualizacao").style.display = "none"; return; } turmaAtual = null; alunoAtual = null; modoVisualizacao = false; document.getElementById("badge-visualizacao").style.display = "none"; mostrarTela("tela-login"); carregarTurmasParaLogin(); }
 
         async function carregarDesafios() { try { const r = await fetch('desafios.json'); listaDesafios = await r.json(); } catch (e) { } mostrarTela("tela-login"); carregarTurmasParaLogin(); }
