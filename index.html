@@ -19,7 +19,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        /* (mantido exatamente igual ao que você já tem – omitido para não repetir) */
+        /* ===== ESTILOS (MANTIDOS) ===== */
         * {
             margin: 0;
             padding: 0;
@@ -692,28 +692,23 @@
 <body>
     <div class="container">
 
-        <!-- ===== TELA DE LOGIN ===== -->
+        <!-- TELA DE LOGIN -->
         <div class="tela tela-login ativa" id="tela-login">
             <div class="logo-python">🐍</div>
             <h1>Jornada do Mestre Python</h1>
             <p>Selecione a sua turma e insira o seu nome para aceder ao progresso</p>
-
             <div class="caixa-inputs">
                 <input type="text" id="nome-aluno" class="input-nome" placeholder="Seu nome (ex: João)" />
-
                 <select id="select-turma-aluno" class="input-nome">
                     <option value="">A carregar turmas...</option>
                 </select>
-
                 <button class="btn" onclick="entrarComNomeTurma()" id="btn-login-principal">▶ Entrar</button>
-
                 <hr style="width:80%;max-width:420px;border:none;border-top:2px solid #2c4055;margin:10px auto;" />
-
                 <button class="btn btn-secundario" onclick="mostrarPainelAdmin()">👨‍🏫 Professor</button>
             </div>
         </div>
 
-        <!-- ===== TELA DO JOGO ===== -->
+        <!-- TELA DO JOGO -->
         <div class="tela" id="tela-jogo">
             <div class="cabecalho-jogo">
                 <div>
@@ -730,32 +725,27 @@
                     <button class="btn btn-sair" id="botao-sair" onclick="sairDoJogo()">✕ Sair</button>
                 </div>
             </div>
-
             <div class="area-desafio" id="area-desafio">
                 <h2 id="titulo-desafio">A carregar...</h2>
                 <p id="descricao-desafio">Aguarde.</p>
             </div>
-
             <div class="editor-wrapper editor-unico" id="wrapper-unico">
                 <label>📝 Código</label>
                 <textarea id="editor-codigo"></textarea>
             </div>
-
             <div class="editor-wrapper editor-duplo" id="wrapper-duplo" style="display:none;">
                 <label>📦 Módulo (célula 1)</label>
                 <textarea id="editor-modulo"></textarea>
                 <label style="margin-top:10px;">🚀 Programa principal (célula 2)</label>
                 <textarea id="editor-principal"></textarea>
             </div>
-
             <button class="btn btn-enviar" onclick="verificarCodigo()" id="btn-enviar">⚡ Executar código</button>
-
             <div id="status-container">
                 <span id="status-fase" style="color:#f39c12;">⏳ A aguardar...</span>
             </div>
         </div>
 
-        <!-- ===== TELA DE VITÓRIA ===== -->
+        <!-- TELA DE VITÓRIA -->
         <div class="tela" id="tela-vitoria">
             <div class="logo-python" style="font-size: 5rem; text-align: center; width: 100%;">🏆</div>
             <h1 style="color:#f7c948; text-align: center;">Parabéns, Mestre Python!</h1>
@@ -766,7 +756,7 @@
             </div>
         </div>
 
-        <!-- ===== PAINEL DO ADMIN ===== -->
+        <!-- PAINEL ADMIN -->
         <div class="tela painel-admin" id="tela-admin">
             <div class="topo-admin">
                 <div class="titulo-area">
@@ -777,7 +767,6 @@
                     <button class="btn btn-secundario" onclick="fecharPainelAdmin()">↩ Sair</button>
                 </div>
             </div>
-
             <div class="area-turmas">
                 <div class="criar-turma">
                     <input type="text" id="input-nova-turma" placeholder="Nome da nova turma" />
@@ -785,28 +774,23 @@
                 </div>
                 <div class="lista-turmas-admin" id="lista-turmas-admin"></div>
             </div>
-
             <div class="detalhes-turma" id="detalhes-turma" style="display:none;">
                 <h3>
                     <span id="turma-selecionada-nome">📚 Turma</span>
                 </h3>
-
                 <div class="area-cadastro-aluno">
                     <input type="text" id="input-novo-aluno" placeholder="Nome do aluno para cadastrar" />
                     <button class="btn-criar" onclick="cadastrarAluno()">➕ Adicionar Aluno</button>
                     <span style="color:#6a7f94;font-size:.85rem;">(Obriga a turma a surgir na planilha e no
                         login)</span>
                 </div>
-
                 <div class="lista-alunos-admin" id="lista-alunos-turma">
                     <div style="padding:16px;color:#6a7f94;text-align:center;">Nenhum aluno cadastrado.</div>
                 </div>
-
                 <div class="detalhes-aluno" id="detalhes-aluno-admin" style="display:none;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
                         <h4 id="detalhe-nome-admin" style="color:#f0f4fa; font-size:1.2rem; margin:0;">👤 Aluno</h4>
                     </div>
-
                     <div class="card-controles">
                         <div class="campo">
                             <label>🏆 XP</label>
@@ -832,9 +816,7 @@
                                 onclick="removerAlunoAdmin()">🗑 Remover aluno</button>
                         </div>
                     </div>
-
                     <div id="mensagem-admin" class="mensagem-admin"></div>
-
                     <div class="lista-fases-container">
                         <h4>📋 Fases do aluno (Auditoria de Código)</h4>
                         <div class="lista-fases" id="lista-fases-aluno-admin"></div>
@@ -850,11 +832,10 @@
         // ==========================================
         // CONFIGURAÇÃO DO SUPABASE
         // ==========================================
-        // 🔴 SUBSTITUA PELAS SUAS CREDENCIAIS
-        const SUPABASE_URL = 'https://SEU_PROJETO.supabase.co';
-        const SUPABASE_ANON_KEY = 'SUA_CHAVE_ANON_PUBLICA';
+        const SUPABASE_URL = 'https://fyfqdluxeqsryekhpnvx.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_6q0E6HGx38ChgBiro1ZBrw_Q6Yn_mV5';
 
-        // Cria o cliente Supabase
+        console.log("🔑 Inicializando Supabase com URL:", SUPABASE_URL);
         const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ==========================================
@@ -875,7 +856,7 @@
         let pontuacaoTotal = 0,
             cargoAtual = "",
             professorLogado = false;
-        let ultimoLimite = null; // armazena o limite de fases do aluno atual
+        let ultimoLimite = null;
 
         const tabelaCargos = [
             { xp: 0, nome: "Estagiário", cor: "#7f8c8d" },
@@ -912,27 +893,33 @@
         }
 
         // ==========================================
-        // FUNÇÕES DE BANCO (SUPABASE)
+        // FUNÇÕES DE BANCO (SUPABASE) COM LOGS
         // ==========================================
 
-        // Busca todas as turmas disponíveis (distinct)
+        // Busca todas as turmas
         async function carregarTurmasCloud() {
+            console.log("📡 Buscando turmas no Supabase...");
             try {
                 const { data, error } = await supabase
                     .from('alunos')
                     .select('turma')
                     .order('turma');
-                if (error) throw error;
+                if (error) {
+                    console.error("❌ Erro ao buscar turmas:", error);
+                    throw error;
+                }
                 const turmas = [...new Set(data.map(item => item.turma))];
+                console.log("✅ Turmas carregadas:", turmas);
                 return turmas;
             } catch (e) {
-                console.warn("Erro ao buscar turmas:", e);
+                console.error("❌ Exceção ao buscar turmas:", e);
                 return [];
             }
         }
 
-        // Busca um aluno específico por nome e turma
+        // Busca um aluno
         async function carregarAlunoCloud(nome, turma) {
+            console.log(`📡 Buscando aluno ${nome} da turma ${turma}...`);
             try {
                 const { data, error } = await supabase
                     .from('alunos')
@@ -940,88 +927,124 @@
                     .eq('nome', nome)
                     .eq('turma', turma)
                     .maybeSingle();
-                if (error) throw error;
+                if (error) {
+                    console.error("❌ Erro ao buscar aluno:", error);
+                    throw error;
+                }
+                console.log("✅ Aluno encontrado:", data);
                 return data;
             } catch (e) {
-                console.warn("Erro ao buscar aluno:", e);
+                console.error("❌ Exceção ao buscar aluno:", e);
                 return null;
             }
         }
 
         // Salva/atualiza um aluno (upsert)
         async function salvarAlunoCloud(dados) {
+            console.log("📤 Salvando aluno no Supabase:", dados);
             try {
-                const { error } = await supabase
+                // Garantir que os campos obrigatórios existam
+                const payload = {
+                    nome: dados.nomeExibicao,
+                    turma: dados.turma,
+                    xp: dados.pontuacao || 0,
+                    fase_maxima_liberada: dados.faseMaximaLiberada || null,
+                    progresso: dados.progresso || []
+                };
+                console.log("📤 Payload:", payload);
+
+                const { data, error } = await supabase
                     .from('alunos')
-                    .upsert({
-                        nome: dados.nomeExibicao,
-                        turma: dados.turma,
-                        xp: dados.pontuacao,
-                        fase_maxima_liberada: dados.faseMaximaLiberada,
-                        progresso: dados.progresso
-                    }, { onConflict: 'nome, turma' });
-                if (error) throw error;
+                    .upsert(payload, { onConflict: 'nome, turma' });
+
+                if (error) {
+                    console.error("❌ Erro ao salvar aluno:", error);
+                    throw error;
+                }
+                console.log("✅ Aluno salvo com sucesso:", data);
+                return data;
             } catch (e) {
-                console.error("Erro ao salvar aluno:", e);
+                console.error("❌ Exceção ao salvar aluno:", e);
+                alert("Erro ao salvar na nuvem: " + e.message);
                 throw e;
             }
         }
 
         // Busca todos os alunos de uma turma
         async function listarAlunosCloud(turma) {
+            console.log(`📡 Listando alunos da turma ${turma}...`);
             try {
                 const { data, error } = await supabase
                     .from('alunos')
                     .select('*')
                     .eq('turma', turma)
                     .order('nome');
-                if (error) throw error;
+                if (error) {
+                    console.error("❌ Erro ao listar alunos:", error);
+                    throw error;
+                }
+                console.log(`✅ ${data.length} alunos encontrados.`);
                 return data;
             } catch (e) {
-                console.warn("Erro ao listar alunos:", e);
+                console.error("❌ Exceção ao listar alunos:", e);
                 return [];
             }
         }
 
         // Deleta um aluno
         async function deletarAlunoCloud(nome, turma) {
+            console.log(`🗑 Deletando aluno ${nome} da turma ${turma}...`);
             try {
                 const { error } = await supabase
                     .from('alunos')
                     .delete()
                     .eq('nome', nome)
                     .eq('turma', turma);
-                if (error) throw error;
+                if (error) {
+                    console.error("❌ Erro ao deletar aluno:", error);
+                    throw error;
+                }
+                console.log("✅ Aluno deletado.");
             } catch (e) {
-                console.error("Erro ao deletar aluno:", e);
+                console.error("❌ Exceção ao deletar aluno:", e);
                 throw e;
             }
         }
 
-        // Atualiza o limite de fase para todos os alunos de uma turma
+        // Atualiza limite de fase para todos os alunos de uma turma
         async function atualizarLimiteTurmaCloud(turma, limite) {
+            console.log(`📤 Atualizando limite da turma ${turma} para ${limite}...`);
             try {
                 const { error } = await supabase
                     .from('alunos')
                     .update({ fase_maxima_liberada: limite })
                     .eq('turma', turma);
-                if (error) throw error;
+                if (error) {
+                    console.error("❌ Erro ao atualizar limite:", error);
+                    throw error;
+                }
+                console.log("✅ Limite atualizado.");
             } catch (e) {
-                console.error("Erro ao atualizar limite da turma:", e);
+                console.error("❌ Exceção ao atualizar limite:", e);
                 throw e;
             }
         }
 
         // Deleta todos os alunos de uma turma
         async function deletarTurmaCloud(turma) {
+            console.log(`🗑 Deletando turma ${turma}...`);
             try {
                 const { error } = await supabase
                     .from('alunos')
                     .delete()
                     .eq('turma', turma);
-                if (error) throw error;
+                if (error) {
+                    console.error("❌ Erro ao deletar turma:", error);
+                    throw error;
+                }
+                console.log("✅ Turma deletada.");
             } catch (e) {
-                console.error("Erro ao deletar turma:", e);
+                console.error("❌ Exceção ao deletar turma:", e);
                 throw e;
             }
         }
@@ -1069,7 +1092,7 @@
                 let dadosServer = await carregarAlunoCloud(nome, turmaInput);
 
                 if (!dadosServer) {
-                    // Aluno não encontrado → criar novo
+                    console.log("🆕 Aluno não encontrado. Criando novo...");
                     dadosServer = {
                         nome: nome,
                         turma: turmaInput,
@@ -1086,16 +1109,19 @@
                     });
                 }
 
-                // Entrar na turma com os dados carregados
                 entrarNaTurma(turmaInput, nome, false, dadosServer);
             } catch (e) {
-                alert("Erro ao conectar à nuvem. Verifique a sua internet.");
+                alert("Erro ao conectar à nuvem. Verifique a sua internet e console (F12).");
                 console.error(e);
             } finally {
                 btnEntrar.innerHTML = textoOriginal;
                 btnEntrar.disabled = false;
             }
         }
+
+        // ==========================================
+        // DEMAIS FUNÇÕES (com logs nas operações críticas)
+        // ==========================================
 
         function entrarNaTurma(turma, nome, vis, dadosAluno) {
             turmaAtual = turma;
@@ -1245,7 +1271,7 @@
         }
 
         // ==========================================
-        // VERIFICAR CÓDIGO
+        // VERIFICAR CÓDIGO (com salvamento na nuvem)
         // ==========================================
         function verificarCodigo() {
             const btn = document.getElementById("btn-enviar");
@@ -1297,10 +1323,10 @@
                                     turma: turmaAtual,
                                     faseMaximaLiberada: novoLimite
                                 };
-                                // Salvar na nuvem (sem esperar)
+                                // Salvar na nuvem
                                 salvarAlunoCloud(dadosCloud).then(() => {
-                                    console.log("Progresso salvo na nuvem.");
-                                }).catch(e => console.error("Erro ao salvar:", e));
+                                    console.log("✅ Progresso salvo na nuvem.");
+                                }).catch(e => console.error("❌ Erro ao salvar:", e));
 
                                 alert("🎉 Correto! +100 XP.");
                             }
@@ -1351,7 +1377,7 @@
         }
 
         // ==========================================
-        // PAINEL DO PROFESSOR
+        // PAINEL DO PROFESSOR (com logs)
         // ==========================================
         async function mostrarPainelAdmin() {
             if (!professorLogado) {
@@ -1706,7 +1732,7 @@
         }
 
         // ==========================================
-        // CARREGAR DESAFIOS DO JSON EXTERNO
+        // CARREGAR DESAFIOS E INICIAR
         // ==========================================
         async function carregarDesafios() {
             try {
@@ -1728,9 +1754,6 @@
             carregarTurmasParaLogin();
         }
 
-        // ==========================================
-        // INICIALIZAÇÃO
-        // ==========================================
         document.addEventListener('DOMContentLoaded', () => {
             carregarDesafios();
         });
