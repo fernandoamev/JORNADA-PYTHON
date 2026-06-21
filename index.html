@@ -19,6 +19,7 @@
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
     <style>
+        /* ===== ESTILOS (mesmos do original, mantidos) ===== */
         * {
             margin: 0;
             padding: 0;
@@ -794,9 +795,9 @@
 
     <script>
         // ====================================================================
-        // 1. CONFIGURAÇÃO DO SUPABASE (COLE SUAS CHAVES REAIS ABAIXO)
+        // 1. CONFIGURAÇÃO DO SUPABASE – CHAVES CORRIGIDAS
         // ====================================================================
-        const SUPABASE_URL = 'https://fyfqdluxeqsryekhpnvx.supabase.co/rest/v1/';
+        const SUPABASE_URL = 'https://fyfqdluxeqsryekhpnvx.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_6q0E6HGx38ChgBiro1ZBrw_Q6Yn_mV5';
 
         let db = null;
@@ -804,32 +805,47 @@
         function inicializarSupabase() {
             try {
                 if (!window.supabase) {
-                    console.error("A biblioteca do Supabase falhou ao carregar da internet.");
+                    console.error("A biblioteca do Supabase não foi carregada.");
                     return false;
                 }
                 if (!SUPABASE_URL || SUPABASE_URL.includes('COLE_SUA_URL')) {
-                    console.warn("⚠️ Chaves do Supabase ainda não foram preenchidas no código.");
+                    console.warn("⚠️ As chaves do Supabase ainda não foram configuradas.");
                     return false;
                 }
                 db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                console.log("✅ Supabase inicializado com sucesso.");
                 return true;
             } catch (erro) {
-                console.error("Falha técnica ao instanciar Supabase:", erro);
+                console.error("Falha ao instanciar Supabase:", erro);
                 return false;
             }
         }
 
-        // Tenta conectar imediatamente sem travar a thread
+        // Inicializa imediatamente
         inicializarSupabase();
 
+        // ====================================================================
+        // 2. VARIÁVEIS GLOBAIS
+        // ====================================================================
         let listaDesafios = [];
-        let turmaAtual = null, alunoAtual = null, progresso = [], indiceFaseAtual = 0, modoVisualizacao = false;
-        let adminTurmaSelecionada = null, adminAlunoSelecionado = null, pontuacaoTotal = 0, cargoAtual = "", professorLogado = false;
+        let turmaAtual = null,
+            alunoAtual = null,
+            progresso = [],
+            indiceFaseAtual = 0,
+            modoVisualizacao = false;
+        let adminTurmaSelecionada = null,
+            adminAlunoSelecionado = null,
+            pontuacaoTotal = 0,
+            cargoAtual = "",
+            professorLogado = false;
 
         const tabelaCargos = [
-            { xp: 0, nome: "Estagiário", cor: "#7f8c8d" }, { xp: 1000, nome: "Dev Júnior", cor: "#27ae60" },
-            { xp: 3000, nome: "Dev Pleno", cor: "#2980b9" }, { xp: 6000, nome: "Dev Sênior", cor: "#f39c12" },
-            { xp: 9000, nome: "Tech Lead", cor: "#8e44ad" }, { xp: 12000, nome: "Mestre Python", cor: "#e74c3c" }
+            { xp: 0, nome: "Estagiário", cor: "#7f8c8d" },
+            { xp: 1000, nome: "Dev Júnior", cor: "#27ae60" },
+            { xp: 3000, nome: "Dev Pleno", cor: "#2980b9" },
+            { xp: 6000, nome: "Dev Sênior", cor: "#f39c12" },
+            { xp: 9000, nome: "Tech Lead", cor: "#8e44ad" },
+            { xp: 12000, nome: "Mestre Python", cor: "#e74c3c" }
         ];
 
         const configCM = { mode: "python", theme: "dracula", lineNumbers: true, indentUnit: 4, tabSize: 4 };
@@ -837,31 +853,62 @@
         const editorModulo = CodeMirror.fromTextArea(document.getElementById("editor-modulo"), configCM);
         const editorPrincipal = CodeMirror.fromTextArea(document.getElementById("editor-principal"), configCM);
 
-        function mostrarTela(id) { document.querySelectorAll('.tela').forEach(e => e.classList.remove('ativa')); document.getElementById(id).classList.add('ativa'); }
-        function obterCargo(xp) { let c = tabelaCargos[0]; for (const item of tabelaCargos) { if (xp >= item.xp) c = item; } return c; }
-        function atualizarStatus() { document.getElementById("pontos").textContent = pontuacaoTotal; const cargo = obterCargo(pontuacaoTotal); const el = document.getElementById("cargo-aluno"); el.textContent = cargo.nome; el.style.background = cargo.cor; cargoAtual = cargo.nome; }
+        // ====================================================================
+        // 3. FUNÇÕES AUXILIARES
+        // ====================================================================
+        function mostrarTela(id) {
+            document.querySelectorAll('.tela').forEach(e => e.classList.remove('ativa'));
+            document.getElementById(id).classList.add('ativa');
+        }
 
-        function lerBancoLocal() { try { return JSON.parse(localStorage.getItem("bancoTurmaPython")) || { turmas: {} }; } catch { return { turmas: {} }; } }
-        function salvarBancoLocal(b) { localStorage.setItem("bancoTurmaPython", JSON.stringify(b)); }
-        function obterDadosAlunoLocal(t, c) { return lerBancoLocal().turmas[t]?.alunos[c] || null; }
-        function listarAlunosLocal(t) { return Object.keys(lerBancoLocal().turmas[t]?.alunos || {}); }
+        function obterCargo(xp) {
+            let c = tabelaCargos[0];
+            for (const item of tabelaCargos) {
+                if (xp >= item.xp) c = item;
+            }
+            return c;
+        }
+
+        function atualizarStatus() {
+            document.getElementById("pontos").textContent = pontuacaoTotal;
+            const cargo = obterCargo(pontuacaoTotal);
+            const el = document.getElementById("cargo-aluno");
+            el.textContent = cargo.nome;
+            el.style.background = cargo.cor;
+            cargoAtual = cargo.nome;
+        }
 
         // ====================================================================
-        // MOTORES DE COMUNICAÇÃO BLINDADOS
+        // 4. BANCO LOCAL (fallback)
         // ====================================================================
+        function lerBancoLocal() {
+            try { return JSON.parse(localStorage.getItem("bancoTurmaPython")) || { turmas: {} }; } catch { return { turmas: {} }; }
+        }
 
+        function salvarBancoLocal(b) {
+            localStorage.setItem("bancoTurmaPython", JSON.stringify(b));
+        }
+
+        function obterDadosAlunoLocal(t, c) {
+            return lerBancoLocal().turmas[t]?.alunos[c] || null;
+        }
+
+        function listarAlunosLocal(t) {
+            return Object.keys(lerBancoLocal().turmas[t]?.alunos || {});
+        }
+
+        // ====================================================================
+        // 5. FUNÇÕES DO SUPABASE (COM VERIFICAÇÃO)
+        // ====================================================================
         async function carregarTurmasParaLogin() {
             const select = document.getElementById("select-turma-aluno");
-
             if (!db) {
-                select.innerHTML = '<option value="">⚠️ Erro: Cole as chaves do Supabase no código</option>';
+                select.innerHTML = '<option value="">⚠️ Supabase não configurado</option>';
                 return;
             }
-
             try {
                 const { data, error } = await db.from('turmas').select('nome');
                 if (error) throw error;
-
                 select.innerHTML = '<option value="">Selecione a sua Turma</option>';
                 if (data && data.length > 0) {
                     data.forEach(t => select.innerHTML += `<option value="${t.nome}">${t.nome}</option>`);
@@ -869,64 +916,81 @@
                     select.innerHTML = '<option value="">Nenhuma turma cadastrada</option>';
                 }
             } catch (err) {
-                select.innerHTML = `<option value="">❌ Falha de leitura: ${err.message}</option>`;
+                select.innerHTML = `<option value="">❌ Erro: ${err.message}</option>`;
             }
         }
 
         async function entrarComNomeTurma() {
-            if (!db) { alert("⚠️ O Supabase não está configurado."); return; }
+            if (!db) { alert("⚠️ Supabase não está disponível. Verifique as chaves."); return; }
             const nome = document.getElementById("nome-aluno").value.trim().toUpperCase();
             const turmaInput = document.getElementById("select-turma-aluno").value.toUpperCase();
             if (!nome || !turmaInput) { alert("Preencha seu nome e selecione a turma."); return; }
 
-            const btn = document.getElementById("btn-login-principal"); const txtOrig = btn.innerHTML;
-            btn.innerHTML = "⏳ A consultar Supabase..."; btn.disabled = true;
+            const btn = document.getElementById("btn-login-principal");
+            const txtOrig = btn.innerHTML;
+            btn.innerHTML = "⏳ A consultar...";
+            btn.disabled = true;
 
             try {
-                const { data, error } = await db.from('alunos').select('*').eq('nome_exibicao', nome).eq('turma', turmaInput).maybeSingle();
+                const { data, error } = await db.from('alunos')
+                    .select('*')
+                    .eq('nome_exibicao', nome)
+                    .eq('turma', turmaInput)
+                    .maybeSingle();
+
                 if (error) throw error;
 
                 if (!data) {
-                    alert(`❌ O aluno "${nome}" não foi encontrado na turma "${turmaInput}". Peça ao professor para cadastrá-lo.`);
+                    alert(`❌ Aluno "${nome}" não encontrado na turma "${turmaInput}". Peça ao professor para cadastrá-lo.`);
                     return;
                 }
 
                 const dadosAluno = {
-                    nomeExibicao: data.nome_exibicao, turma: data.turma, pontuacao: data.pontuacao || 0,
+                    nomeExibicao: data.nome_exibicao,
+                    turma: data.turma,
+                    pontuacao: data.pontuacao || 0,
                     faseMaximaLiberada: data.fase_maxima_liberada || 0,
                     progresso: (typeof data.progresso === 'string' ? JSON.parse(data.progresso || '[]') : data.progresso) || []
                 };
 
-                const b = lerBancoLocal(); if (!b.turmas[turmaInput]) b.turmas[turmaInput] = { alunos: {} };
-                b.turmas[turmaInput].alunos[nome] = dadosAluno; salvarBancoLocal(b);
+                // Atualiza o banco local
+                const b = lerBancoLocal();
+                if (!b.turmas[turmaInput]) b.turmas[turmaInput] = { alunos: {} };
+                b.turmas[turmaInput].alunos[nome] = dadosAluno;
+                salvarBancoLocal(b);
+
                 entrarNaTurma(turmaInput, nome, false);
             } catch (err) {
                 alert("❌ Erro ao buscar aluno: " + err.message);
             } finally {
-                btn.innerHTML = txtOrig; btn.disabled = false;
+                btn.innerHTML = txtOrig;
+                btn.disabled = false;
             }
         }
 
         async function salvarProgressoCloud(dadosAluno) {
             if (!db) return;
             const payload = {
-                nome_exibicao: dadosAluno.nomeExibicao, turma: dadosAluno.turma,
-                pontuacao: dadosAluno.pontuacao, fase_maxima_liberada: dadosAluno.faseMaximaLiberada || 0,
+                nome_exibicao: dadosAluno.nomeExibicao,
+                turma: dadosAluno.turma,
+                pontuacao: dadosAluno.pontuacao,
+                fase_maxima_liberada: dadosAluno.faseMaximaLiberada || 0,
                 progresso: dadosAluno.progresso
             };
             try {
                 const { error } = await db.from('alunos').upsert([payload]);
                 if (error) throw error;
-            } catch (err) { alert("❌ Erro ao salvar progresso na nuvem: " + err.message); }
+            } catch (err) {
+                alert("❌ Erro ao salvar progresso na nuvem: " + err.message);
+            }
         }
 
         // ====================================================================
-        // PAINEL DO PROFESSOR (COM DIAGNÓSTICO VISUAL)
+        // 6. PAINEL DO PROFESSOR
         // ====================================================================
-
         async function mostrarPainelAdmin() {
             if (!db) {
-                alert("🛑 ACESSO INTERROMPIDO!\n\nO Supabase não foi instanciado corretamente.\nVerifique no arquivo index.html (linhas 333 e 334) se você colou a URL e a Chave pública entre as aspas simples.");
+                alert("🛑 Supabase não inicializado.\nVerifique a URL e a chave no código.");
                 return;
             }
 
@@ -935,11 +999,20 @@
                 if (s === "Gilvana_Python2026") professorLogado = true;
                 else { if (s !== null) alert("Senha incorreta."); return; }
             }
-            mostrarTela("tela-admin"); await carregarListaTurmasAdmin();
+            mostrarTela("tela-admin");
+            await carregarListaTurmasAdmin();
             if (adminTurmaSelecionada) selecionarTurmaAdmin(adminTurmaSelecionada);
         }
 
-        function fecharPainelAdmin() { adminTurmaSelecionada = null; adminAlunoSelecionado = null; document.getElementById("detalhes-turma").style.display = "none"; professorLogado = false; if (modoVisualizacao) modoVisualizacao = false; mostrarTela("tela-login"); carregarTurmasParaLogin(); }
+        function fecharPainelAdmin() {
+            adminTurmaSelecionada = null;
+            adminAlunoSelecionado = null;
+            document.getElementById("detalhes-turma").style.display = "none";
+            professorLogado = false;
+            if (modoVisualizacao) modoVisualizacao = false;
+            mostrarTela("tela-login");
+            carregarTurmasParaLogin();
+        }
 
         async function carregarListaTurmasAdmin() {
             const container = document.getElementById("lista-turmas-admin");
@@ -956,125 +1029,478 @@
                 (alunosData || []).forEach(a => {
                     if (bancoNuvem.turmas[a.turma]) {
                         bancoNuvem.turmas[a.turma].alunos[a.nome_exibicao] = {
-                            nomeExibicao: a.nome_exibicao, turma: a.turma, pontuacao: a.pontuacao || 0,
+                            nomeExibicao: a.nome_exibicao,
+                            turma: a.turma,
+                            pontuacao: a.pontuacao || 0,
                             faseMaximaLiberada: a.fase_maxima_liberada || 0,
                             progresso: (typeof a.progresso === 'string' ? JSON.parse(a.progresso || '[]') : a.progresso) || []
                         };
                     }
                 });
 
-                salvarBancoLocal(bancoNuvem); container.innerHTML = "";
+                salvarBancoLocal(bancoNuvem);
+                container.innerHTML = "";
                 const nomes = Object.keys(bancoNuvem.turmas);
                 if (nomes.length > 0) {
                     nomes.forEach(t => {
-                        const btn = document.createElement("button"); btn.className = "btn-turma-admin";
+                        const btn = document.createElement("button");
+                        btn.className = "btn-turma-admin";
                         if (t === adminTurmaSelecionada) btn.classList.add("ativo");
-                        btn.textContent = `📚 ${t}`; btn.onclick = () => selecionarTurmaAdmin(t); container.appendChild(btn);
+                        btn.textContent = `📚 ${t}`;
+                        btn.onclick = () => selecionarTurmaAdmin(t);
+                        container.appendChild(btn);
                     });
-                } else container.innerHTML = "<span style='color:#a0b9d4;'>Nenhuma turma no Supabase.</span>";
+                } else {
+                    container.innerHTML = "<span style='color:#a0b9d4;'>Nenhuma turma no Supabase.</span>";
+                }
             } catch (err) {
-                container.innerHTML = `<span style='color:#e74c3c;'>Bloqueado pelo Supabase: ${err.message}</span>`;
-                alert("🚨 O Supabase recusou entregar a lista de turmas.\n\nMotivo mais provável: A regra de segurança RLS da tabela 'turmas' ainda está ativa no painel da web.");
+                container.innerHTML = `<span style='color:#e74c3c;'>Erro: ${err.message}</span>`;
+                alert("🚨 Falha ao carregar turmas: " + err.message);
             }
         }
 
         async function criarTurma() {
             if (!db) return;
-            const nome = document.getElementById("input-nova-turma").value.trim().toUpperCase(); if (!nome) return;
-            const btn = document.querySelector(".area-turmas .btn-criar"); const txt = btn.innerText; btn.innerText = "⏳ A gravar..."; btn.disabled = true;
+            const nome = document.getElementById("input-nova-turma").value.trim().toUpperCase();
+            if (!nome) return;
+            const btn = document.querySelector(".area-turmas .btn-criar");
+            const txt = btn.innerText;
+            btn.innerText = "⏳ A gravar...";
+            btn.disabled = true;
 
             try {
                 const { error } = await db.from('turmas').insert([{ nome: nome }]);
                 if (error) throw error;
-
-                document.getElementById("input-nova-turma").value = ""; alert(`✅ Turma "${nome}" criada no Supabase!`);
-                await carregarListaTurmasAdmin(); selecionarTurmaAdmin(nome);
+                document.getElementById("input-nova-turma").value = "";
+                alert(`✅ Turma "${nome}" criada!`);
+                await carregarListaTurmasAdmin();
+                selecionarTurmaAdmin(nome);
             } catch (err) {
-                if (err.code === '23505') alert("⚠️ Esta turma já existe no Supabase.");
-                else alert("❌ Erro ao criar a turma: " + err.message);
-            } finally { btn.innerText = txt; btn.disabled = false; }
+                if (err.code === '23505') alert("⚠️ Esta turma já existe.");
+                else alert("❌ Erro ao criar turma: " + err.message);
+            } finally {
+                btn.innerText = txt;
+                btn.disabled = false;
+            }
         }
 
         async function cadastrarAluno() {
-            if (!db || !adminTurmaSelecionada) return; const nome = document.getElementById("input-novo-aluno").value.trim().toUpperCase(); if (!nome) return;
-            const btn = document.querySelector(".area-cadastro-aluno .btn-criar"); const txt = btn.innerText; btn.innerText = "⏳ A gravar..."; btn.disabled = true;
+            if (!db || !adminTurmaSelecionada) return;
+            const nome = document.getElementById("input-novo-aluno").value.trim().toUpperCase();
+            if (!nome) return;
+            const btn = document.querySelector(".area-cadastro-aluno .btn-criar");
+            const txt = btn.innerText;
+            btn.innerText = "⏳ A gravar...";
+            btn.disabled = true;
 
             const novoReg = {
-                nome_exibicao: nome, turma: adminTurmaSelecionada, pontuacao: 0, fase_maxima_liberada: 0,
+                nome_exibicao: nome,
+                turma: adminTurmaSelecionada,
+                pontuacao: 0,
+                fase_maxima_liberada: 0,
                 progresso: listaDesafios.map(() => ({ xp: false, validado: false, codigo: "" }))
             };
 
             try {
                 const { error } = await db.from('alunos').upsert([novoReg]);
                 if (error) throw error;
-
-                document.getElementById("input-novo-aluno").value = ""; alert(`✅ Aluno "${nome}" salvo no Supabase!`);
-                await carregarListaTurmasAdmin(); selecionarTurmaAdmin(adminTurmaSelecionada);
-            } catch (err) { alert("❌ Erro ao cadastrar aluno: " + err.message); }
-            finally { btn.innerText = txt; btn.disabled = false; }
+                document.getElementById("input-novo-aluno").value = "";
+                alert(`✅ Aluno "${nome}" salvo!`);
+                await carregarListaTurmasAdmin();
+                selecionarTurmaAdmin(adminTurmaSelecionada);
+            } catch (err) {
+                alert("❌ Erro ao cadastrar aluno: " + err.message);
+            } finally {
+                btn.innerText = txt;
+                btn.disabled = false;
+            }
         }
 
         async function excluirTurma() {
             if (!db || !adminTurmaSelecionada) return;
-            if (confirm(`🚨 Deseja mesmo EXCLUIR a turma "${adminTurmaSelecionada}" e todos os alunos do Supabase?`)) {
-                const t = adminTurmaSelecionada; adminTurmaSelecionada = null; document.getElementById("detalhes-turma").style.display = "none";
+            if (confirm(`🚨 Deseja EXCLUIR a turma "${adminTurmaSelecionada}" e todos os seus alunos?`)) {
+                const t = adminTurmaSelecionada;
+                adminTurmaSelecionada = null;
+                document.getElementById("detalhes-turma").style.display = "none";
                 try {
                     await db.from('alunos').delete().eq('turma', t);
                     const { error } = await db.from('turmas').delete().eq('nome', t);
                     if (error) throw error;
-                    alert("✅ Turma excluída."); await carregarListaTurmasAdmin();
-                } catch (err) { alert("❌ Erro ao excluir: " + err.message); }
+                    alert("✅ Turma excluída.");
+                    await carregarListaTurmasAdmin();
+                } catch (err) {
+                    alert("❌ Erro ao excluir: " + err.message);
+                }
             }
         }
 
         async function aplicarAlteracoesAdmin() {
             if (!db || !adminTurmaSelecionada || !adminAlunoSelecionado) return;
-            const d = obterDadosAlunoLocal(adminTurmaSelecionada, adminAlunoSelecionado); if (!d) return;
+            const d = obterDadosAlunoLocal(adminTurmaSelecionada, adminAlunoSelecionado);
+            if (!d) return;
             const xp = parseInt(document.getElementById("input-xp-admin").value) || 0;
             const lim = parseInt(document.getElementById("select-limite-admin").value);
 
-            const payload = { nome_exibicao: adminAlunoSelecionado, turma: adminTurmaSelecionada, pontuacao: xp, fase_maxima_liberada: (lim === -1 ? 0 : lim), progresso: d.progresso || [] };
+            const payload = {
+                nome_exibicao: adminAlunoSelecionado,
+                turma: adminTurmaSelecionada,
+                pontuacao: xp,
+                fase_maxima_liberada: (lim === -1 ? 0 : lim),
+                progresso: d.progresso || []
+            };
             try {
                 const { error } = await db.from('alunos').upsert([payload]);
                 if (error) throw error;
-                document.getElementById("mensagem-admin").textContent = "✅ Salvo no Supabase!"; await carregarListaTurmasAdmin(); selecionarAlunoAdmin(adminAlunoSelecionado);
-            } catch (err) { alert("❌ Erro ao salvar: " + err.message); }
+                document.getElementById("mensagem-admin").textContent = "✅ Salvo no Supabase!";
+                await carregarListaTurmasAdmin();
+                selecionarAlunoAdmin(adminAlunoSelecionado);
+            } catch (err) {
+                alert("❌ Erro ao salvar: " + err.message);
+            }
         }
 
-        async function removerPontosAdmin() { if (!db) return; const d = obterDadosAlunoLocal(adminTurmaSelecionada, adminAlunoSelecionado); const payload = { nome_exibicao: adminAlunoSelecionado, turma: adminTurmaSelecionada, pontuacao: Math.max(0, d.pontuacao - 100), fase_maxima_liberada: d.faseMaximaLiberada, progresso: d.progresso }; await db.from('alunos').upsert([payload]); await carregarListaTurmasAdmin(); selecionarAlunoAdmin(adminAlunoSelecionado); }
-        async function removerAlunoAdmin() { if (!db || !confirm("Excluir do Supabase?")) return; await db.from('alunos').delete().eq('nome_exibicao', adminAlunoSelecionado).eq('turma', adminTurmaSelecionada); await carregarListaTurmasAdmin(); selecionarTurmaAdmin(adminTurmaSelecionada); }
-        async function liberarFaseTurmaInteiraCloud() { if (!db) return; const num = prompt(`Liberar até qual FASE (1 a ${listaDesafios.length}):`); if (!num) return; const f = parseInt(num) - 1; if (isNaN(f)) return; await db.from('alunos').update({ fase_maxima_liberada: f }).eq('turma', adminTurmaSelecionada); await carregarListaTurmasAdmin(); selecionarTurmaAdmin(adminTurmaSelecionada); }
+        async function removerPontosAdmin() {
+            if (!db) return;
+            const d = obterDadosAlunoLocal(adminTurmaSelecionada, adminAlunoSelecionado);
+            const payload = {
+                nome_exibicao: adminAlunoSelecionado,
+                turma: adminTurmaSelecionada,
+                pontuacao: Math.max(0, d.pontuacao - 100),
+                fase_maxima_liberada: d.faseMaximaLiberada,
+                progresso: d.progresso
+            };
+            await db.from('alunos').upsert([payload]);
+            await carregarListaTurmasAdmin();
+            selecionarAlunoAdmin(adminAlunoSelecionado);
+        }
 
+        async function removerAlunoAdmin() {
+            if (!db || !confirm("Excluir este aluno do Supabase?")) return;
+            await db.from('alunos').delete().eq('nome_exibicao', adminAlunoSelecionado).eq('turma', adminTurmaSelecionada);
+            await carregarListaTurmasAdmin();
+            selecionarTurmaAdmin(adminTurmaSelecionada);
+        }
+
+        async function liberarFaseTurmaInteiraCloud() {
+            if (!db) return;
+            const num = prompt(`Liberar até qual FASE (1 a ${listaDesafios.length}):`);
+            if (!num) return;
+            const f = parseInt(num) - 1;
+            if (isNaN(f)) return;
+            await db.from('alunos').update({ fase_maxima_liberada: f }).eq('turma', adminTurmaSelecionada);
+            await carregarListaTurmasAdmin();
+            selecionarTurmaAdmin(adminTurmaSelecionada);
+        }
+
+        // ====================================================================
+        // 7. SELEÇÃO DE TURMA E ALUNO NO PAINEL
+        // ====================================================================
         function selecionarTurmaAdmin(t) {
-            adminTurmaSelecionada = t; adminAlunoSelecionado = null;
-            document.querySelectorAll(".btn-turma-admin").forEach(b => b.classList.toggle("ativo", b.textContent === `📚 ${t}`));
+            adminTurmaSelecionada = t;
+            adminAlunoSelecionado = null;
+            document.querySelectorAll(".btn-turma-admin").forEach(b =>
+                b.classList.toggle("ativo", b.textContent === `📚 ${t}`)
+            );
             document.getElementById("detalhes-turma").style.display = "block";
-            document.getElementById("turma-selecionada-nome").innerHTML = `📚 ${t} <div style="display:inline-flex; gap:8px; margin-left:15px;"><button class="btn-pequeno" style="background:#3498db;color:#fff;" onclick="liberarFaseTurmaInteiraCloud()">🚀 Liberar Fase p/ Turma</button><button class="btn-pequeno" style="background:#e74c3c;color:#fff;" onclick="excluirTurma()">🗑 Excluir Turma</button></div>`;
-            const alunos = listarAlunosLocal(t); const cont = document.getElementById("lista-alunos-turma"); cont.innerHTML = "";
-            if (alunos.length === 0) { cont.innerHTML = "<div style='padding:16px;color:#6a7f94;text-align:center;'>Nenhum aluno.</div>"; document.getElementById("detalhes-aluno-admin").style.display = "none"; return; }
-            alunos.forEach(c => { const d = obterDadosAlunoLocal(t, c); if (!d) return; const val = (d.progresso || []).filter(p => p.validado).length; const div = document.createElement("div"); div.className = "aluno-item-admin"; div.dataset.chave = c; div.innerHTML = `<span class="nome">${d.nomeExibicao}</span><span>🏆 ${d.pontuacao} XP • ${val}/${listaDesafios.length} valid.</span><button class="btn-pequeno" onclick="selecionarAlunoAdmin('${c}')">Detalhes</button>`; div.onclick = () => selecionarAlunoAdmin(c); cont.appendChild(div); }); document.getElementById("detalhes-aluno-admin").style.display = "none";
+            document.getElementById("turma-selecionada-nome").innerHTML =
+                `📚 ${t} <div style="display:inline-flex; gap:8px; margin-left:15px;">
+                    <button class="btn-pequeno" style="background:#3498db;color:#fff;" onclick="liberarFaseTurmaInteiraCloud()">🚀 Liberar Fase p/ Turma</button>
+                    <button class="btn-pequeno" style="background:#e74c3c;color:#fff;" onclick="excluirTurma()">🗑 Excluir Turma</button>
+                </div>`;
+
+            const alunos = listarAlunosLocal(t);
+            const cont = document.getElementById("lista-alunos-turma");
+            cont.innerHTML = "";
+            if (alunos.length === 0) {
+                cont.innerHTML = "<div style='padding:16px;color:#6a7f94;text-align:center;'>Nenhum aluno.</div>";
+                document.getElementById("detalhes-aluno-admin").style.display = "none";
+                return;
+            }
+            alunos.forEach(c => {
+                const d = obterDadosAlunoLocal(t, c);
+                if (!d) return;
+                const val = (d.progresso || []).filter(p => p.validado).length;
+                const div = document.createElement("div");
+                div.className = "aluno-item-admin";
+                div.dataset.chave = c;
+                div.innerHTML =
+                    `<span class="nome">${d.nomeExibicao}</span><span>🏆 ${d.pontuacao} XP • ${val}/${listaDesafios.length} valid.</span><button class="btn-pequeno" onclick="selecionarAlunoAdmin('${c}')">Detalhes</button>`;
+                div.onclick = () => selecionarAlunoAdmin(c);
+                cont.appendChild(div);
+            });
+            document.getElementById("detalhes-aluno-admin").style.display = "none";
         }
 
         function selecionarAlunoAdmin(c) {
-            if (!adminTurmaSelecionada) return; adminAlunoSelecionado = c;
-            document.querySelectorAll(".aluno-item-admin").forEach(el => el.classList.toggle("selecionado", el.dataset.chave === c));
-            const d = obterDadosAlunoLocal(adminTurmaSelecionada, c); if (!d) return;
-            document.getElementById("detalhes-aluno-admin").style.display = "block"; document.getElementById("detalhe-nome-admin").textContent = `👤 ${d.nomeExibicao}`; document.getElementById("input-xp-admin").value = d.pontuacao || 0; document.getElementById("mensagem-admin").textContent = "";
-            const sFase = document.getElementById("select-fase-admin"), sLim = document.getElementById("select-limite-admin"); sFase.innerHTML = ""; sLim.innerHTML = "";
-            listaDesafios.forEach((ld, i) => { let oF = document.createElement("option"); oF.value = i; oF.textContent = `Fase ${i + 1}: ${ld.titulo.substring(0, 25)}...`; if (i === (d.fase || 0)) oF.selected = true; sFase.appendChild(oF); let oL = document.createElement("option"); oL.value = i; oL.textContent = `Até fase ${i + 1}`; if (d.faseMaximaLiberada === i) oL.selected = true; sLim.appendChild(oL); }); let oT = document.createElement("option"); oT.value = -1; oT.textContent = "Todas"; if (d.faseMaximaLiberada === 0 || d.faseMaximaLiberada === null || d.faseMaximaLiberada === -1) oT.selected = true; sLim.appendChild(oT);
-            const prg = d.progresso || []; const cFas = document.getElementById("lista-fases-aluno-admin"); cFas.innerHTML = "";
-            listaDesafios.forEach((ld, i) => { const p = prg[i] || {}; const div = document.createElement("div"); div.className = "fase-item"; div.innerHTML = `<span class="status">${p.validado ? '✅' : (p.xp ? '⏳' : '❌')} Fase ${i + 1}: ${ld.titulo.substring(0, 25)}</span><div class="acoes"><button class="btn-pequeno" onclick="abrirFaseAlunoAdmin('${c}', ${i})">Ver Código</button>${p.xp && !p.validado ? `<button class="btn-pequeno validar" onclick="validarFaseAdmin('${c}', ${i})">Validar</button>` : ''}</div>`; cFas.appendChild(div); });
+            if (!adminTurmaSelecionada) return;
+            adminAlunoSelecionado = c;
+            document.querySelectorAll(".aluno-item-admin").forEach(el =>
+                el.classList.toggle("selecionado", el.dataset.chave === c)
+            );
+            const d = obterDadosAlunoLocal(adminTurmaSelecionada, c);
+            if (!d) return;
+            document.getElementById("detalhes-aluno-admin").style.display = "block";
+            document.getElementById("detalhe-nome-admin").textContent = `👤 ${d.nomeExibicao}`;
+            document.getElementById("input-xp-admin").value = d.pontuacao || 0;
+            document.getElementById("mensagem-admin").textContent = "";
+
+            const sFase = document.getElementById("select-fase-admin");
+            const sLim = document.getElementById("select-limite-admin");
+            sFase.innerHTML = "";
+            sLim.innerHTML = "";
+
+            listaDesafios.forEach((ld, i) => {
+                let oF = document.createElement("option");
+                oF.value = i;
+                oF.textContent = `Fase ${i + 1}: ${ld.titulo.substring(0, 25)}...`;
+                if (i === (d.fase || 0)) oF.selected = true;
+                sFase.appendChild(oF);
+
+                let oL = document.createElement("option");
+                oL.value = i;
+                oL.textContent = `Até fase ${i + 1}`;
+                if (d.faseMaximaLiberada === i) oL.selected = true;
+                sLim.appendChild(oL);
+            });
+            let oT = document.createElement("option");
+            oT.value = -1;
+            oT.textContent = "Todas";
+            if (d.faseMaximaLiberada === 0 || d.faseMaximaLiberada === null || d.faseMaximaLiberada === -1) oT.selected = true;
+            sLim.appendChild(oT);
+
+            const prg = d.progresso || [];
+            const cFas = document.getElementById("lista-fases-aluno-admin");
+            cFas.innerHTML = "";
+            listaDesafios.forEach((ld, i) => {
+                const p = prg[i] || {};
+                const div = document.createElement("div");
+                div.className = "fase-item";
+                div.innerHTML =
+                    `<span class="status">${p.validado ? '✅' : (p.xp ? '⏳' : '❌')} Fase ${i + 1}: ${ld.titulo.substring(0, 25)}</span>
+                    <div class="acoes">
+                        <button class="btn-pequeno" onclick="abrirFaseAlunoAdmin('${c}', ${i})">Ver Código</button>
+                        ${p.xp && !p.validado ? `<button class="btn-pequeno validar" onclick="validarFaseAdmin('${c}', ${i})">Validar</button>` : ''}
+                    </div>`;
+                cFas.appendChild(div);
+            });
         }
 
-        function entrarNaTurma(t, n, vis) { turmaAtual = t; alunoAtual = n; modoVisualizacao = vis; const btnSair = document.getElementById("botao-sair"); if (vis) { btnSair.textContent = "↩ Voltar ao Painel"; document.getElementById("badge-visualizacao").style.display = "inline-block"; } else { btnSair.textContent = "✕ Sair"; document.getElementById("badge-visualizacao").style.display = "none"; } const dados = obterDadosAlunoLocal(t, n); pontuacaoTotal = dados?.pontuacao || 0; const progSalvo = dados?.progresso || []; progresso = listaDesafios.map((_, i) => progSalvo[i] || { xp: false, validado: false, codigo: "" }); if (!vis) indiceFaseAtual = calcularFaseAtual(); else indiceFaseAtual = Math.min(indiceFaseAtual, listaDesafios.length - 1); document.getElementById("nome-exibicao").textContent = n; document.getElementById("turma-exibicao").textContent = t; atualizarStatus(); if (indiceFaseAtual >= listaDesafios.length && !vis) { mostrarTela("tela-vitoria"); return; } mostrarTela("tela-jogo"); carregarFase(); }
-        function calcularFaseAtual() { if (modoVisualizacao) return indiceFaseAtual; const dados = obterDadosAlunoLocal(turmaAtual, alunoAtual); let lim = dados?.faseMaximaLiberada; if (lim === 0 || lim === null || lim === -1) lim = listaDesafios.length - 1; else lim = Math.min(lim, listaDesafios.length - 1); for (let i = 0; i <= lim; i++) { if (!progresso[i]?.xp) return i; } return Math.min(lim + 1, listaDesafios.length); }
-        function carregarFase() { if (indiceFaseAtual >= listaDesafios.length && !modoVisualizacao) { mostrarTela("tela-vitoria"); return; } const dados = obterDadosAlunoLocal(turmaAtual, alunoAtual); let lim = dados?.faseMaximaLiberada; if (lim === 0 || lim === null || lim === -1) lim = listaDesafios.length - 1; if (indiceFaseAtual > lim && !modoVisualizacao) { alert("Fase bloqueada pelo professor!"); document.getElementById("btn-enviar").disabled = true; return; } const fase = listaDesafios[indiceFaseAtual]; const p = progresso[indiceFaseAtual] || {}; document.getElementById("titulo-desafio").textContent = fase.titulo; document.getElementById("descricao-desafio").innerHTML = fase.descricao; document.getElementById("contador-fase").textContent = `Fase ${indiceFaseAtual + 1} de ${(lim === -1 ? listaDesafios.length : lim + 1)}`; const st = document.getElementById("status-fase"); if (modoVisualizacao) { st.textContent = "👁️ Leitura"; st.style.color = "#3498db"; } else if (p.validado) { st.textContent = "✅ Validado"; st.style.color = "#27ae60"; } else if (p.xp) { st.textContent = "⏳ Aguardando validação"; st.style.color = "#f39c12"; } else { st.textContent = "⬜ Pendente"; st.style.color = "#a0b9d4"; } let cod = modoVisualizacao ? (p.codigo || fase.codigoInicial || "") : (p.xp ? p.codigo : (fase.codigoInicial || "")); if (fase.modulos) { let cods = { modulo: fase.codigoModulo || "", principal: fase.codigoPrincipal || "" }; if ((p.xp || modoVisualizacao) && p.codigo) { try { let prs = JSON.parse(p.codigo); if (prs.modulo !== undefined) cods = prs; } catch (e) { } } editorModulo.setValue(cods.modulo); editorPrincipal.setValue(cods.principal); document.getElementById("wrapper-unico").style.display = "none"; document.getElementById("wrapper-duplo").style.display = "block"; } else { editorUnico.setValue(cod); document.getElementById("wrapper-unico").style.display = "block"; document.getElementById("wrapper-duplo").style.display = "none"; } setTimeout(() => { editorUnico.refresh(); editorModulo.refresh(); editorPrincipal.refresh(); }, 50); document.getElementById("btn-enviar").disabled = false; }
-        function verificarCodigo() { const btn = document.getElementById("btn-enviar"); btn.disabled = true; btn.textContent = "⏳ Processando..."; document.getElementById("output-oculto").innerHTML = ""; const fase = listaDesafios[indiceFaseAtual]; const cod = fase.modulos ? (editorModulo.getValue() + "\n" + editorPrincipal.getValue()) : editorUnico.getValue(); Sk.configure({ output: (t) => document.getElementById("output-oculto").innerHTML += t, execLimit: 3000, inputfun: (p) => new Promise(r => r(prompt(p))) }); Sk.misceval.asyncToPromise(() => Sk.importMainWithBody("<stdin>", false, cod, true)).then(() => { const res = document.getElementById("output-oculto").innerText.trim(); if (res === fase.gabarito.trim()) { if (!modoVisualizacao) { if (!progresso[indiceFaseAtual].xp) { progresso[indiceFaseAtual] = { xp: true, validado: false, codigo: cod }; pontuacaoTotal += 100; const d = { nomeExibicao: alunoAtual, progresso, pontuacao: pontuacaoTotal, turma: turmaAtual, faseMaximaLiberada: obterDadosAlunoLocal(turmaAtual, alunoAtual)?.faseMaximaLiberada }; salvarProgressoCloud(d); const b = lerBancoLocal(); b.turmas[turmaAtual].alunos[alunoAtual] = d; salvarBancoLocal(b); alert("🎉 Correto! +100 XP."); } indiceFaseAtual = calcularFaseAtual(); carregarFase(); atualizarStatus(); } else alert("Código correto!"); } else alert(`❌ Incorreto.\nSaída:\n"${res}"\nEsperado:\n"${fase.gabarito}"`); }).catch(e => alert("Erro: " + e)).finally(() => { btn.disabled = false; btn.textContent = "⚡ Executar código"; }); }
-        async function validarFaseAdmin(c, idx) { if (!db || !adminTurmaSelecionada) return; const d = obterDadosAlunoLocal(adminTurmaSelecionada, c); if (!d || !d.progresso[idx]) return; if (confirm(`Validar fase ${idx + 1}?`)) { d.progresso[idx].validado = true; await db.from('alunos').upsert([{ nome_exibicao: c, turma: adminTurmaSelecionada, pontuacao: d.pontuacao, fase_maxima_liberada: d.faseMaximaLiberada, progresso: d.progresso }]); await carregarListaTurmasAdmin(); selecionarAlunoAdmin(c); } }
-        function abrirFaseAlunoAdmin(c, idx) { if (!adminTurmaSelecionada) return; indiceFaseAtual = idx; entrarNaTurma(adminTurmaSelecionada, c, true); }
-        function sairDoJogo() { if (modoVisualizacao) { mostrarTela("tela-admin"); carregarListaTurmasAdmin().then(() => { if (adminTurmaSelecionada) selecionarTurmaAdmin(adminTurmaSelecionada); if (adminAlunoSelecionado) selecionarAlunoAdmin(adminAlunoSelecionado); }); modoVisualizacao = false; document.getElementById("badge-visualizacao").style.display = "none"; return; } turmaAtual = null; alunoAtual = null; modoVisualizacao = false; document.getElementById("badge-visualizacao").style.display = "none"; mostrarTela("tela-login"); carregarTurmasParaLogin(); }
+        // ====================================================================
+        // 8. FUNÇÕES DO JOGO
+        // ====================================================================
+        function entrarNaTurma(t, n, vis) {
+            turmaAtual = t;
+            alunoAtual = n;
+            modoVisualizacao = vis;
+            const btnSair = document.getElementById("botao-sair");
+            if (vis) {
+                btnSair.textContent = "↩ Voltar ao Painel";
+                document.getElementById("badge-visualizacao").style.display = "inline-block";
+            } else {
+                btnSair.textContent = "✕ Sair";
+                document.getElementById("badge-visualizacao").style.display = "none";
+            }
+            const dados = obterDadosAlunoLocal(t, n);
+            pontuacaoTotal = dados?.pontuacao || 0;
+            const progSalvo = dados?.progresso || [];
+            progresso = listaDesafios.map((_, i) => progSalvo[i] || { xp: false, validado: false, codigo: "" });
+            if (!vis) indiceFaseAtual = calcularFaseAtual();
+            else indiceFaseAtual = Math.min(indiceFaseAtual, listaDesafios.length - 1);
+            document.getElementById("nome-exibicao").textContent = n;
+            document.getElementById("turma-exibicao").textContent = t;
+            atualizarStatus();
+            if (indiceFaseAtual >= listaDesafios.length && !vis) {
+                mostrarTela("tela-vitoria");
+                return;
+            }
+            mostrarTela("tela-jogo");
+            carregarFase();
+        }
 
-        async function carregarDesafios() { try { const r = await fetch('desafios.json'); listaDesafios = await r.json(); } catch (e) { } mostrarTela("tela-login"); carregarTurmasParaLogin(); }
+        function calcularFaseAtual() {
+            if (modoVisualizacao) return indiceFaseAtual;
+            const dados = obterDadosAlunoLocal(turmaAtual, alunoAtual);
+            let lim = dados?.faseMaximaLiberada;
+            if (lim === 0 || lim === null || lim === -1) lim = listaDesafios.length - 1;
+            else lim = Math.min(lim, listaDesafios.length - 1);
+            for (let i = 0; i <= lim; i++) {
+                if (!progresso[i]?.xp) return i;
+            }
+            return Math.min(lim + 1, listaDesafios.length);
+        }
+
+        function carregarFase() {
+            if (indiceFaseAtual >= listaDesafios.length && !modoVisualizacao) {
+                mostrarTela("tela-vitoria");
+                return;
+            }
+            const dados = obterDadosAlunoLocal(turmaAtual, alunoAtual);
+            let lim = dados?.faseMaximaLiberada;
+            if (lim === 0 || lim === null || lim === -1) lim = listaDesafios.length - 1;
+            if (indiceFaseAtual > lim && !modoVisualizacao) {
+                alert("Fase bloqueada pelo professor!");
+                document.getElementById("btn-enviar").disabled = true;
+                return;
+            }
+            const fase = listaDesafios[indiceFaseAtual];
+            const p = progresso[indiceFaseAtual] || {};
+            document.getElementById("titulo-desafio").textContent = fase.titulo;
+            document.getElementById("descricao-desafio").innerHTML = fase.descricao;
+            document.getElementById("contador-fase").textContent = `Fase ${indiceFaseAtual + 1} de ${(lim === -1 ? listaDesafios.length : lim + 1)}`;
+            const st = document.getElementById("status-fase");
+            if (modoVisualizacao) {
+                st.textContent = "👁️ Leitura";
+                st.style.color = "#3498db";
+            } else if (p.validado) {
+                st.textContent = "✅ Validado";
+                st.style.color = "#27ae60";
+            } else if (p.xp) {
+                st.textContent = "⏳ Aguardando validação";
+                st.style.color = "#f39c12";
+            } else {
+                st.textContent = "⬜ Pendente";
+                st.style.color = "#a0b9d4";
+            }
+            let cod = modoVisualizacao ? (p.codigo || fase.codigoInicial || "") : (p.xp ? p.codigo : (fase.codigoInicial || ""));
+            if (fase.modulos) {
+                let cods = { modulo: fase.codigoModulo || "", principal: fase.codigoPrincipal || "" };
+                if ((p.xp || modoVisualizacao) && p.codigo) {
+                    try {
+                        let prs = JSON.parse(p.codigo);
+                        if (prs.modulo !== undefined) cods = prs;
+                    } catch (e) { }
+                }
+                editorModulo.setValue(cods.modulo);
+                editorPrincipal.setValue(cods.principal);
+                document.getElementById("wrapper-unico").style.display = "none";
+                document.getElementById("wrapper-duplo").style.display = "block";
+            } else {
+                editorUnico.setValue(cod);
+                document.getElementById("wrapper-unico").style.display = "block";
+                document.getElementById("wrapper-duplo").style.display = "none";
+            }
+            setTimeout(() => {
+                editorUnico.refresh();
+                editorModulo.refresh();
+                editorPrincipal.refresh();
+            }, 50);
+            document.getElementById("btn-enviar").disabled = false;
+        }
+
+        function verificarCodigo() {
+            const btn = document.getElementById("btn-enviar");
+            btn.disabled = true;
+            btn.textContent = "⏳ Processando...";
+            document.getElementById("output-oculto").innerHTML = "";
+            const fase = listaDesafios[indiceFaseAtual];
+            const cod = fase.modulos ? (editorModulo.getValue() + "\n" + editorPrincipal.getValue()) : editorUnico.getValue();
+            Sk.configure({
+                output: (t) => document.getElementById("output-oculto").innerHTML += t,
+                execLimit: 3000,
+                inputfun: (p) => new Promise(r => r(prompt(p)))
+            });
+            Sk.misceval.asyncToPromise(() => Sk.importMainWithBody("<stdin>", false, cod, true))
+                .then(() => {
+                    const res = document.getElementById("output-oculto").innerText.trim();
+                    if (res === fase.gabarito.trim()) {
+                        if (!modoVisualizacao) {
+                            if (!progresso[indiceFaseAtual].xp) {
+                                progresso[indiceFaseAtual] = { xp: true, validado: false, codigo: cod };
+                                pontuacaoTotal += 100;
+                                const d = {
+                                    nomeExibicao: alunoAtual,
+                                    progresso,
+                                    pontuacao: pontuacaoTotal,
+                                    turma: turmaAtual,
+                                    faseMaximaLiberada: obterDadosAlunoLocal(turmaAtual, alunoAtual)?.faseMaximaLiberada
+                                };
+                                salvarProgressoCloud(d);
+                                const b = lerBancoLocal();
+                                b.turmas[turmaAtual].alunos[alunoAtual] = d;
+                                salvarBancoLocal(b);
+                                alert("🎉 Correto! +100 XP.");
+                            }
+                            indiceFaseAtual = calcularFaseAtual();
+                            carregarFase();
+                            atualizarStatus();
+                        } else {
+                            alert("Código correto!");
+                        }
+                    } else {
+                        alert(`❌ Incorreto.\nSaída:\n"${res}"\nEsperado:\n"${fase.gabarito}"`);
+                    }
+                })
+                .catch(e => alert("Erro: " + e))
+                .finally(() => {
+                    btn.disabled = false;
+                    btn.textContent = "⚡ Executar código";
+                });
+        }
+
+        async function validarFaseAdmin(c, idx) {
+            if (!db || !adminTurmaSelecionada) return;
+            const d = obterDadosAlunoLocal(adminTurmaSelecionada, c);
+            if (!d || !d.progresso[idx]) return;
+            if (confirm(`Validar fase ${idx + 1}?`)) {
+                d.progresso[idx].validado = true;
+                await db.from('alunos').upsert([{
+                    nome_exibicao: c,
+                    turma: adminTurmaSelecionada,
+                    pontuacao: d.pontuacao,
+                    fase_maxima_liberada: d.faseMaximaLiberada,
+                    progresso: d.progresso
+                }]);
+                await carregarListaTurmasAdmin();
+                selecionarAlunoAdmin(c);
+            }
+        }
+
+        function abrirFaseAlunoAdmin(c, idx) {
+            if (!adminTurmaSelecionada) return;
+            indiceFaseAtual = idx;
+            entrarNaTurma(adminTurmaSelecionada, c, true);
+        }
+
+        function sairDoJogo() {
+            if (modoVisualizacao) {
+                mostrarTela("tela-admin");
+                carregarListaTurmasAdmin().then(() => {
+                    if (adminTurmaSelecionada) selecionarTurmaAdmin(adminTurmaSelecionada);
+                    if (adminAlunoSelecionado) selecionarAlunoAdmin(adminAlunoSelecionado);
+                });
+                modoVisualizacao = false;
+                document.getElementById("badge-visualizacao").style.display = "none";
+                return;
+            }
+            turmaAtual = null;
+            alunoAtual = null;
+            modoVisualizacao = false;
+            document.getElementById("badge-visualizacao").style.display = "none";
+            mostrarTela("tela-login");
+            carregarTurmasParaLogin();
+        }
+
+        // ====================================================================
+        // 9. CARREGAR DESAFIOS (com fallback)
+        // ====================================================================
+        async function carregarDesafios() {
+            try {
+                const r = await fetch('desafios.json');
+                if (!r.ok) throw new Error('Arquivo não encontrado');
+                listaDesafios = await r.json();
+            } catch (e) {
+                console.warn("⚠️ Não foi possível carregar desafios.json. Usando fallback padrão.");
+                listaDesafios = [{
+                    titulo: "Olá, Mundo!",
+                    descricao: "Escreva um programa que imprima 'Olá, Mundo!'",
+                    gabarito: "Olá, Mundo!",
+                    codigoInicial: "print('Olá, Mundo!')"
+                }];
+            }
+            mostrarTela("tela-login");
+            carregarTurmasParaLogin();
+        }
+
         document.addEventListener('DOMContentLoaded', carregarDesafios);
     </script>
 </body>
