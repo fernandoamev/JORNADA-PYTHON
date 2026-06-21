@@ -1,1 +1,866 @@
-Gilvana_Python2026
+[
+    // ============================================================
+    // MÓDULO 1: FUNDAMENTOS DA PROGRAMAÇÃO (1–15)
+    // ============================================================
+    {
+        "titulo": "Fase 1: O Sistema da Loja",
+        "descricao": "A variável <code>cliente</code> já contém 'Roberto'. Use <code>print()</code> para exibir a mensagem de boas-vindas exata: <b>Olá, Roberto! Bem-vindo ao autoatendimento.</b>",
+        "codigoInicial": "cliente = 'Roberto'\n# Escreva seu print aqui",
+        "gabarito": "Olá, Roberto! Bem-vindo ao autoatendimento.",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 2: Fechamento de Caixa",
+        "descricao": "O faturamento do dia foi R$ 1200.50 e os custos foram R$ 850.00. Calcule o lucro (faturamento - custos) e exiba a mensagem exata: <b>O lucro do dia foi de R$ 350.5</b> (com uma casa decimal).",
+        "codigoInicial": "faturamento = 1200.50\ncustos = 850.00\n# Calcule o lucro e printe a mensagem",
+        "gabarito": "O lucro do dia foi de R$ 350.5",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 3: Automação na Clínica",
+        "descricao": "Paciente 'Carlos' tem 35 anos. Calcule a idade dele daqui a 10 anos e exiba: <b>Carlos terá 45 anos em 10 anos.</b>",
+        "codigoInicial": "paciente = 'Carlos'\nidade = 35\n# Calcule a idade futura e printe",
+        "gabarito": "Carlos terá 45 anos em 10 anos.",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 4: Caixa Eletrônico",
+        "descricao": "Uma compra de R$ 87,00 foi paga com R$ 100,00. Calcule o troco e quantas cédulas de 10, 5, 2 e 1 são necessárias (priorize as de maior valor). Exiba no formato: <b>10:1 5:0 2:1 1:1</b>",
+        "codigoInicial": "compra = 87\npagamento = 100\n# Calcule o troco e as cédulas",
+        "gabarito": "10:1 5:0 2:1 1:1",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 5: Padronização de Cadastros",
+        "descricao": "O nome 'joão silva' está em minúsculo. Padronize para 'João Silva' usando <code>.title()</code> e printe.",
+        "codigoInicial": "nome = 'joão silva'\n# Padronize e printe",
+        "gabarito": "João Silva",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 6: Calculadora de Gorjeta",
+        "descricao": "A conta de um restaurante foi R$ 150,00 e a gorjeta é 10%. Calcule o valor da gorjeta e o total (conta + gorjeta) e exiba: <b>Gorjeta: R$ 15.0 | Total: R$ 165.0</b> (com uma casa decimal).",
+        "codigoInicial": "conta = 150.0\nporcentagem_gorjeta = 10\n# Calcule e printe",
+        "gabarito": "Gorjeta: R$ 15.0 | Total: R$ 165.0",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 7: Controle de Estoque",
+        "descricao": "O estoque de um produto é de 50 unidades. Foram vendidas 18 unidades. Calcule quantas unidades restam e exiba: <b>Restam 32 unidades.</b>",
+        "codigoInicial": "estoque_inicial = 50\nvendas = 18\n# Calcule e printe",
+        "gabarito": "Restam 32 unidades.",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 8: Conversão de Moeda",
+        "descricao": "Converta 100 dólares para reais, sabendo que 1 dólar = R$ 5.25. Exiba: <b>100 USD = R$ 525.0</b> (com uma casa decimal).",
+        "codigoInicial": "dolar = 100\ncotacao = 5.25\n# Converta e printe",
+        "gabarito": "100 USD = R$ 525.0",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 9: Média de Idades",
+        "descricao": "As idades de três irmãos são 12, 15 e 18. Calcule a média e exiba: <b>A média das idades é 15.0 anos</b> (com uma casa decimal).",
+        "codigoInicial": "idade1 = 12\nidade2 = 15\nidade3 = 18\n# Calcule e printe",
+        "gabarito": "A média das idades é 15.0 anos",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 10: Formatação de Data",
+        "descricao": "As variáveis <code>dia=15</code>, <code>mes=8</code> e <code>ano=2025</code>. Exiba a data no formato: <b>15/08/2025</b>.",
+        "codigoInicial": "dia = 15\nmes = 8\nano = 2025\n# Formate e printe",
+        "gabarito": "15/08/2025",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 11: Operações com Números",
+        "descricao": "Dado <code>numero = 42</code>, calcule o dobro, a metade e o quadrado. Exiba: <b>Dobro: 84 | Metade: 21.0 | Quadrado: 1764</b>.",
+        "codigoInicial": "numero = 42\n# Calcule e printe",
+        "gabarito": "Dobro: 84 | Metade: 21.0 | Quadrado: 1764",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 12: Área de um Retângulo",
+        "descricao": "Calcule a área de um retângulo com <code>largura=12</code> e <code>altura=8</code> e exiba: <b>A área do retângulo é 96</b>.",
+        "codigoInicial": "largura = 12\naltura = 8\n# Calcule e printe",
+        "gabarito": "A área do retângulo é 96",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 13: Perímetro de um Quadrado",
+        "descricao": "Calcule o perímetro de um quadrado com <code>lado=7</code> e exiba: <b>O perímetro do quadrado é 28</b>.",
+        "codigoInicial": "lado = 7\n# Calcule e printe",
+        "gabarito": "O perímetro do quadrado é 28",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 14: Volume de um Cubo",
+        "descricao": "Calcule o volume de um cubo com <code>aresta=5</code> e exiba: <b>O volume do cubo é 125</b>.",
+        "codigoInicial": "aresta = 5\n# Calcule e printe",
+        "gabarito": "O volume do cubo é 125",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 15: Cálculo de Juros Simples",
+        "descricao": "Calcule os juros simples para um capital de R$ 1000,00 com taxa de 5% ao ano durante 3 anos. Fórmula: J = C * i * t. Exiba: <b>Juros: R$ 150.0 | Montante: R$ 1150.0</b>.",
+        "codigoInicial": "capital = 1000\ntaxa = 5\ntempo = 3\n# Calcule e printe",
+        "gabarito": "Juros: R$ 150.0 | Montante: R$ 1150.0",
+        "modulos": false
+    },
+    // ============================================================
+    // MÓDULO 2: ESTRUTURAS DE CONTROLE (16–30)
+    // ============================================================
+    {
+        "titulo": "Fase 16: Sistema de Votação",
+        "descricao": "Um aluno pode votar se tiver 16 anos ou mais. A variável <code>idade = 17</code>. Verifique e printe <code>True</code> se pode votar, senão <code>False</code>.",
+        "codigoInicial": "idade = 17\n# Verifique e printe",
+        "gabarito": "True",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 17: Desconto Progressivo",
+        "descricao": "Para compras acima de R$ 100,00, o desconto é de 10%. A variável <code>compra = 150</code>. Calcule o valor com desconto (10% de desconto) e printe: <b>Valor com desconto: R$ 135.0</b>.",
+        "codigoInicial": "compra = 150\n# Calcule e printe",
+        "gabarito": "Valor com desconto: R$ 135.0",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 18: Classificador de Temperatura",
+        "descricao": "Dada a variável <code>temperatura = 30</code>, classifique como 'Quente' se for > 28, 'Agradável' se estiver entre 18 e 28, e 'Frio' se for < 18. Printe a classificação.",
+        "codigoInicial": "temperatura = 30\n# Classifique e printe",
+        "gabarito": "Quente",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 19: Contador de 1 a 10",
+        "descricao": "Use um laço <code>for</code> para contar de 1 a 10 e printe cada número em uma linha separada.",
+        "codigoInicial": "# Use um loop for de 1 a 10",
+        "gabarito": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 20: Tabuada do 5",
+        "descricao": "Gere a tabuada do 5 de 1 a 10, cada linha no formato '5 x 1 = 5'. Use um laço <code>for</code>.",
+        "codigoInicial": "# Exiba a tabuada do 5",
+        "gabarito": "5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 21: Soma com While",
+        "descricao": "Use um laço <code>while</code> para somar os números de 1 a 100 e printe o resultado.",
+        "codigoInicial": "# Some os números de 1 a 100 com while",
+        "gabarito": "5050",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 22: Números Pares",
+        "descricao": "Use um laço <code>for</code> para printe todos os números pares de 1 a 20 (cada um em uma linha).",
+        "codigoInicial": "# Printe os pares de 1 a 20",
+        "gabarito": "2\n4\n6\n8\n10\n12\n14\n16\n18\n20",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 23: Fatorial (loop)",
+        "descricao": "Calcule o fatorial de 6 (6!) usando um laço <code>for</code> ou <code>while</code> e printe o resultado.",
+        "codigoInicial": "# Calcule 6!",
+        "gabarito": "720",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 24: Validação de Senha",
+        "descricao": "A senha correta é '1234'. A variável <code>senha = '1234'</code> já está definida. Use um <code>if</code> para verificar e printe 'Acesso permitido' se correta, senão 'Acesso negado'.",
+        "codigoInicial": "senha = '1234'\n# Verifique e printe",
+        "gabarito": "Acesso permitido",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 25: Estação do Ano",
+        "descricao": "Dado o mês (1 a 12), classifique a estação: Dez, Jan, Fev = 'Verão'; Mar, Abr, Mai = 'Outono'; Jun, Jul, Ago = 'Inverno'; Set, Out, Nov = 'Primavera'. A variável <code>mes = 6</code>. Printe a estação.",
+        "codigoInicial": "mes = 6\n# Classifique e printe",
+        "gabarito": "Inverno",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 26: Números Ímpares com While",
+        "descricao": "Use um laço <code>while</code> para printe todos os números ímpares de 1 a 19 (cada um em uma linha).",
+        "codigoInicial": "# Printe os ímpares de 1 a 19 com while",
+        "gabarito": "1\n3\n5\n7\n9\n11\n13\n15\n17\n19",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 27: Múltiplos de 3",
+        "descricao": "Use um laço <code>for</code> para printe todos os múltiplos de 3 entre 1 e 30 (cada um em uma linha).",
+        "codigoInicial": "# Printe os múltiplos de 3",
+        "gabarito": "3\n6\n9\n12\n15\n18\n21\n24\n27\n30",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 28: Soma dos Ímpares",
+        "descricao": "Calcule a soma de todos os números ímpares de 1 a 99 e printe o resultado.",
+        "codigoInicial": "# Calcule a soma dos ímpares",
+        "gabarito": "2500",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 29: Contagem Regressiva",
+        "descricao": "Use um laço <code>for</code> ou <code>while</code> para fazer uma contagem regressiva de 10 a 1 e printe cada número em uma linha separada.",
+        "codigoInicial": "# Contagem regressiva de 10 a 1",
+        "gabarito": "10\n9\n8\n7\n6\n5\n4\n3\n2\n1",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 30: Validação de Nota",
+        "descricao": "Uma nota entre 0 e 10 é válida. A variável <code>nota = 7.5</code>. Verifique se está dentro do intervalo e printe 'Nota válida' ou 'Nota inválida'.",
+        "codigoInicial": "nota = 7.5\n# Verifique e printe",
+        "gabarito": "Nota válida",
+        "modulos": false
+    },
+    // ============================================================
+    // MÓDULO 3: STRINGS E LISTAS (31–45)
+    // ============================================================
+    {
+        "titulo": "Fase 31: Inversor de Palavras",
+        "descricao": "Inverta a string 'python' (sem usar <code>[::-1]</code>) e printe o resultado.",
+        "codigoInicial": "palavra = 'python'\n# Inverta manualmente e printe",
+        "gabarito": "nohtyp",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 32: Contador de Vogais",
+        "descricao": "Conte as vogais (a, e, i, o, u) na frase 'Aprender Python é divertido' e printe a quantidade.",
+        "codigoInicial": "frase = 'Aprender Python é divertido'\n# Conte as vogais e printe",
+        "gabarito": "9",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 33: Primeiro e Último",
+        "descricao": "Dada a lista <code>numeros = [10, 20, 30, 40, 50]</code>, printe o primeiro e o último elemento no formato: <b>Primeiro: 10, Último: 50</b>.",
+        "codigoInicial": "numeros = [10, 20, 30, 40, 50]\n# Printe o primeiro e o último",
+        "gabarito": "Primeiro: 10, Último: 50",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 34: Adicionar e Remover",
+        "descricao": "Dada a lista <code>frutas = ['maçã', 'banana']</code>, adicione 'laranja' ao final e remova 'banana' usando os métodos <code>.append()</code> e <code>.remove()</code>. Printe a lista final.",
+        "codigoInicial": "frutas = ['maçã', 'banana']\n# Adicione e remova, printe",
+        "gabarito": "['maçã', 'laranja']",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 35: Soma de Lista",
+        "descricao": "Dada a lista <code>valores = [5, 10, 15, 20]</code>, calcule a soma usando um laço <code>for</code> e printe o resultado.",
+        "codigoInicial": "valores = [5, 10, 15, 20]\n# Calcule a soma e printe",
+        "gabarito": "50",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 36: Maior e Menor",
+        "descricao": "Dada a lista <code>numeros = [45, 12, 78, 23, 90]</code>, use as funções <code>max()</code> e <code>min()</code> e printe: <b>Maior: 90, Menor: 12</b>.",
+        "codigoInicial": "numeros = [45, 12, 78, 23, 90]\n# Encontre e printe",
+        "gabarito": "Maior: 90, Menor: 12",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 37: Lista de Compras",
+        "descricao": "Dada a lista <code>compras = ['feijão', 'arroz', 'leite', 'pão']</code>, printe o terceiro elemento (índice 2) e o último elemento (índice -1).",
+        "codigoInicial": "compras = ['feijão', 'arroz', 'leite', 'pão']\n# Printe o índice 2 e -1",
+        "gabarito": "leite\npão",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 38: Fatiamento de Strings",
+        "descricao": "Dada a string <code>texto = 'Bem-vindo ao Python'</code>, extraia a palavra 'Python' usando fatiamento (slicing) e printe.",
+        "codigoInicial": "texto = 'Bem-vindo ao Python'\n# Extraia 'Python' e printe",
+        "gabarito": "Python",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 39: Substituir na String",
+        "descricao": "Substitua 'azul' por 'verde' na string <code>texto = 'O céu é azul'</code> usando <code>.replace()</code> e printe o novo texto.",
+        "codigoInicial": "texto = 'O céu é azul'\n# Substitua e printe",
+        "gabarito": "O céu é verde",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 40: Juntar Lista com Separador",
+        "descricao": "Dada a lista <code>palavras = ['Python', 'é', 'incrível']</code>, use <code>' '.join()</code> para juntar com um espaço entre elas e printe.",
+        "codigoInicial": "palavras = ['Python', 'é', 'incrível']\n# Junte e printe",
+        "gabarito": "Python é incrível",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 41: Verificar Elemento na Lista",
+        "descricao": "Verifique se o número 7 está na lista <code>numeros = [1, 2, 3, 4, 5]</code> usando o operador <code>in</code> e printe <code>True</code> ou <code>False</code>.",
+        "codigoInicial": "numeros = [1, 2, 3, 4, 5]\n# Verifique e printe",
+        "gabarito": "False",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 42: Contar Elementos",
+        "descricao": "Conte quantas vezes o número 3 aparece na lista <code>numeros = [1, 3, 5, 3, 7, 3]</code> usando o método <code>.count()</code> e printe.",
+        "codigoInicial": "numeros = [1, 3, 5, 3, 7, 3]\n# Conte e printe",
+        "gabarito": "3",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 43: Ordenação de Lista",
+        "descricao": "Ordene a lista <code>numeros = [5, 2, 9, 1, 5, 6]</code> usando o método <code>.sort()</code> e printe a lista ordenada.",
+        "codigoInicial": "numeros = [5, 2, 9, 1, 5, 6]\n# Ordene e printe",
+        "gabarito": "[1, 2, 5, 5, 6, 9]",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 44: String para Lista",
+        "descricao": "Converta a string <code>palavras = 'maçã,banana,laranja'</code> em uma lista usando <code>.split(',')</code> e printe a lista.",
+        "codigoInicial": "palavras = 'maçã,banana,laranja'\n# Converta e printe",
+        "gabarito": "['maçã', 'banana', 'laranja']",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 45: Lista de Números ao Quadrado",
+        "descricao": "Dada a lista <code>numeros = [1, 2, 3, 4]</code>, crie uma nova lista com o quadrado de cada número usando um laço <code>for</code> e printe a nova lista.",
+        "codigoInicial": "numeros = [1, 2, 3, 4]\n# Crie a lista de quadrados e printe",
+        "gabarito": "[1, 4, 9, 16]",
+        "modulos": false
+    },
+    // ============================================================
+    // MÓDULO 4: FUNÇÕES E MÓDULOS (46–60)
+    // ============================================================
+    {
+        "titulo": "Fase 46: Função de Soma",
+        "descricao": "Defina uma função <code>soma(a, b)</code> que retorna a soma de a e b. Em seguida, printe o resultado de <code>soma(8, 12)</code>.",
+        "codigoInicial": "def soma(a, b):\n    # retorne a soma\n\nprint(soma(8, 12))",
+        "gabarito": "20",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 47: Função Par ou Ímpar",
+        "descricao": "Crie uma função <code>par_impar(n)</code> que retorna 'par' ou 'ímpar'. Printe o resultado para <code>n = 7</code>.",
+        "codigoInicial": "def par_impar(n):\n    # retorne 'par' ou 'ímpar'\n\nprint(par_impar(7))",
+        "gabarito": "ímpar",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 48: Validador de E-mail",
+        "descricao": "Crie uma função <code>email_valido(email)</code> que retorna <code>True</code> se o e-mail contém '@' e '.' , senão <code>False</code>. Teste com 'joao@email.com'.",
+        "codigoInicial": "def email_valido(email):\n    # verifique '@' and '.'\n\nprint(email_valido('joao@email.com'))",
+        "gabarito": "True",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 49: Fibonacci Recursivo",
+        "descricao": "Implemente uma função recursiva <code>fib(n)</code> que retorna o n‑ésimo termo da sequência (fib(0)=0, fib(1)=1). Printe <code>fib(7)</code>.",
+        "codigoInicial": "def fib(n):\n    # recursão\n\nprint(fib(7))",
+        "gabarito": "13",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 50: Fatorial com Função",
+        "descricao": "Defina uma função <code>fatorial(n)</code> que calcula o fatorial de forma iterativa. Printe <code>fatorial(6)</code>.",
+        "codigoInicial": "def fatorial(n):\n    # calcule e retorne\n\nprint(fatorial(6))",
+        "gabarito": "720",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 51: Função com Múltiplos Retornos",
+        "descricao": "Defina uma função <code>operacoes(a, b)</code> que retorna a soma, subtração, multiplicação e divisão. Printe os resultados para <code>operacoes(10, 5)</code> no formato: <b>Soma: 15, Subtração: 5, Multiplicação: 50, Divisão: 2.0</b>.",
+        "codigoInicial": "def operacoes(a, b):\n    # retorne uma tupla\n\nprint(operacoes(10, 5))",
+        "gabarito": "Soma: 15, Subtração: 5, Multiplicação: 50, Divisão: 2.0",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 52: Função com Parâmetro Padrão",
+        "descricao": "Defina uma função <code>saudacao(nome, mensagem='Olá')</code> que retorna a saudação. Printe <code>saudacao('Maria')</code> e <code>saudacao('João', 'Bem-vindo')</code> em linhas separadas.",
+        "codigoInicial": "def saudacao(nome, mensagem='Olá'):\n    # retorne a saudação\n\nprint(saudacao('Maria'))\nprint(saudacao('João', 'Bem-vindo'))",
+        "gabarito": "Olá, Maria!\nBem-vindo, João!",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 53: Função com *args",
+        "descricao": "Defina uma função <code>soma_varios(*args)</code> que soma todos os números recebidos. Printe <code>soma_varios(1, 2, 3, 4)</code>.",
+        "codigoInicial": "def soma_varios(*args):\n    # some todos\n\nprint(soma_varios(1, 2, 3, 4))",
+        "gabarito": "10",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 54: Função com **kwargs",
+        "descricao": "Defina uma função <code>dados_pessoa(**kwargs)</code> que imprime os dados recebidos. Chame com <code>dados_pessoa(nome='Ana', idade=25, cidade='SP')</code>. A saída deve ser: <b>nome: Ana, idade: 25, cidade: SP</b>.",
+        "codigoInicial": "def dados_pessoa(**kwargs):\n    # printe os dados\n\ndados_pessoa(nome='Ana', idade=25, cidade='SP')",
+        "gabarito": "nome: Ana, idade: 25, cidade: SP",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 55: Função Lambda (map)",
+        "descricao": "Dada a lista <code>numeros = [1, 2, 3, 4, 5]</code>, use <code>map()</code> com uma função lambda para dobrar cada número e printe a nova lista.",
+        "codigoInicial": "numeros = [1, 2, 3, 4, 5]\n# Use map e lambda para dobrar",
+        "gabarito": "[2, 4, 6, 8, 10]",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 56: Função Lambda (filter)",
+        "descricao": "Dada a lista <code>numeros = [1, 2, 3, 4, 5, 6]</code>, use <code>filter()</code> com uma função lambda para filtrar números pares e printe a nova lista.",
+        "codigoInicial": "numeros = [1, 2, 3, 4, 5, 6]\n# Use filter e lambda para pares",
+        "gabarito": "[2, 4, 6]",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 57: Função com List Comprehension",
+        "descricao": "Use list comprehension para criar uma lista com os quadrados dos números de 1 a 10. Printe a lista.",
+        "codigoInicial": "# Use list comprehension para quadrados",
+        "gabarito": "[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 58: Função com Gerador",
+        "descricao": "Crie uma função geradora <code>quadrados(n)</code> que gera os quadrados dos números de 1 a n. Use um <code>for</code> para printe os 5 primeiros quadrados.",
+        "codigoInicial": "def quadrados(n):\n    # yield os quadrados\n\nfor q in quadrados(5):\n    print(q)",
+        "gabarito": "1\n4\n9\n16\n25",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 59: Decorador Simples",
+        "descricao": "Crie um decorador <code>log</code> que imprime 'Executando...' antes de chamar a função. Aplique-o à função <code>ola()</code> que imprime 'Olá mundo!'.",
+        "codigoInicial": "# Defina o decorador e a função\n\n@log\ndef ola():\n    print('Olá mundo!')\n\nola()",
+        "gabarito": "Executando...\nOlá mundo!",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 60: Módulos e Importações",
+        "descricao": "Crie um módulo chamado <code>util.py</code> com uma função <code>saudacao(nome)</code> que retorna 'Olá, [nome]!'. Em seguida, importe e use-a. (No navegador, crie uma função separada para simular.)",
+        "codigoInicial": "# Simule a criação e importação de um módulo\ndef saudacao(nome):\n    return f'Olá, {nome}!'\n\nprint(saudacao('Ana'))",
+        "gabarito": "Olá, Ana!",
+        "modulos": false
+    },
+    // ============================================================
+    // MÓDULO 5: DICIONÁRIOS E CONJUNTOS (61–75)
+    // ============================================================
+    {
+        "titulo": "Fase 61: Agenda Telefônica",
+        "descricao": "Dado o dicionário <code>agenda = {'Ana':'9999', 'Carlos':'8888'}</code>, printe o telefone da 'Ana'.",
+        "codigoInicial": "agenda = {'Ana':'9999', 'Carlos':'8888'}\n# Printe o telefone da Ana",
+        "gabarito": "9999",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 62: Adicionar ao Dicionário",
+        "descricao": "Dado o dicionário <code>aluno = {'nome': 'João', 'idade': 20}</code>, adicione a chave 'nota' com valor 8.5 e printe o dicionário atualizado.",
+        "codigoInicial": "aluno = {'nome': 'João', 'idade': 20}\n# Adicione 'nota' e printe",
+        "gabarito": "{'nome': 'João', 'idade': 20, 'nota': 8.5}",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 63: Remover do Dicionário",
+        "descricao": "Dado o dicionário <code>produto = {'nome': 'notebook', 'preco': 2500, 'estoque': 10}</code>, remova a chave 'estoque' usando <code>del</code> e printe o dicionário.",
+        "codigoInicial": "produto = {'nome': 'notebook', 'preco': 2500, 'estoque': 10}\n# Remova 'estoque' e printe",
+        "gabarito": "{'nome': 'notebook', 'preco': 2500}",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 64: Iterar sobre Dicionário",
+        "descricao": "Dado o dicionário <code>pessoa = {'nome': 'Maria', 'idade': 30, 'cidade': 'SP'}</code>, printe todas as chaves e valores no formato 'chave: valor' em linhas separadas.",
+        "codigoInicial": "pessoa = {'nome': 'Maria', 'idade': 30, 'cidade': 'SP'}\n# Printe chave: valor",
+        "gabarito": "nome: Maria\nidade: 30\ncidade: SP",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 65: Interseção de Conjuntos",
+        "descricao": "Dados os conjuntos <code>A = {1,2,3,4}</code> e <code>B = {3,4,5,6}</code>, printe a interseção (elementos em comum).",
+        "codigoInicial": "A = {1,2,3,4}\nB = {3,4,5,6}\n# Calcule e printe",
+        "gabarito": "{3, 4}",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 66: União de Conjuntos",
+        "descricao": "Dados os conjuntos <code>A = {1,2,3}</code> e <code>B = {3,4,5}</code>, printe a união (todos os elementos sem duplicatas).",
+        "codigoInicial": "A = {1,2,3}\nB = {3,4,5}\n# Calcule e printe",
+        "gabarito": "{1, 2, 3, 4, 5}",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 67: Diferença de Conjuntos",
+        "descricao": "Dados os conjuntos <code>A = {1,2,3,4}</code> e <code>B = {3,4,5,6}</code>, printe a diferença (elementos em A que não estão em B).",
+        "codigoInicial": "A = {1,2,3,4}\nB = {3,4,5,6}\n# Calcule e printe",
+        "gabarito": "{1, 2}",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 68: Anagramas",
+        "descricao": "Verifique se 'amor' e 'roma' são anagramas (possuem as mesmas letras). Printe <code>True</code> ou <code>False</code>.",
+        "codigoInicial": "palavra1 = 'amor'\npalavra2 = 'roma'\n# Verifique e printe",
+        "gabarito": "True",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 69: Sistema de Votos",
+        "descricao": "Dado o dicionário de votos <code>votos = {'João': 45, 'Maria': 38, 'José': 22}</code>, determine o vencedor (maior votos) e printe o nome.",
+        "codigoInicial": "votos = {'João': 45, 'Maria': 38, 'José': 22}\n# Encontre o vencedor e printe",
+        "gabarito": "João",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 70: Contar Frequência de Palavras",
+        "descricao": "Conte a frequência de cada palavra na frase 'python é bom python é divertido' e printe o dicionário resultante.",
+        "codigoInicial": "frase = 'python é bom python é divertido'\n# Conte as palavras e printe",
+        "gabarito": "{'python': 2, 'é': 2, 'bom': 1, 'divertido': 1}",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 71: Verificar Chave no Dicionário",
+        "descricao": "Verifique se a chave 'nome' existe no dicionário <code>dados = {'idade': 25, 'cidade': 'RJ'}</code> usando <code>in</code> e printe <code>True</code> ou <code>False</code>.",
+        "codigoInicial": "dados = {'idade': 25, 'cidade': 'RJ'}\n# Verifique e printe",
+        "gabarito": "False",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 72: Transformar Lista em Dicionário",
+        "descricao": "Dadas as listas <code>chaves = ['a', 'b', 'c']</code> e <code>valores = [1, 2, 3]</code>, crie um dicionário usando <code>zip()</code> e printe.",
+        "codigoInicial": "chaves = ['a', 'b', 'c']\nvalores = [1, 2, 3]\n# Crie e printe o dicionário",
+        "gabarito": "{'a': 1, 'b': 2, 'c': 3}",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 73: Dicionário com Comprehension",
+        "descricao": "Use dict comprehension para criar um dicionário onde as chaves são números de 1 a 5 e os valores são seus quadrados. Printe o dicionário.",
+        "codigoInicial": "# Use dict comprehension",
+        "gabarito": "{1: 1, 2: 4, 3: 9, 4: 16, 5: 25}",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 74: Juntar Dicionários",
+        "descricao": "Combine os dicionários <code>d1 = {'a': 1, 'b': 2}</code> e <code>d2 = {'c': 3, 'd': 4}</code> em um único dicionário e printe.",
+        "codigoInicial": "d1 = {'a': 1, 'b': 2}\nd2 = {'c': 3, 'd': 4}\n# Combine e printe",
+        "gabarito": "{'a': 1, 'b': 2, 'c': 3, 'd': 4}",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 75: Conjunto de Números Primos",
+        "descricao": "Crie um conjunto com os números primos entre 1 e 20 e printe o conjunto.",
+        "codigoInicial": "# Crie o conjunto e printe",
+        "gabarito": "{2, 3, 5, 7, 11, 13, 17, 19}",
+        "modulos": false
+    },
+    // ============================================================
+    // MÓDULO 6: ORIENTAÇÃO A OBJETOS (76–90)
+    // ============================================================
+    {
+        "titulo": "Fase 76: Classe Pessoa",
+        "descricao": "Crie a classe <code>Pessoa</code> com atributo <code>nome</code> e método <code>apresentar()</code> que retorna 'Olá, sou [nome]'. Instancie com 'Maria' e printe o resultado.",
+        "codigoInicial": "class Pessoa:\n    # def __init__ e apresentar\n\np = Pessoa('Maria')\nprint(p.apresentar())",
+        "gabarito": "Olá, sou Maria",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 77: Classe Conta Bancária",
+        "descricao": "Crie a classe <code>Conta</code> com atributo <code>saldo</code> e métodos <code>depositar(valor)</code> e <code>sacar(valor)</code>. Comece com saldo 100, deposite 50, saque 30 e printe o saldo final.",
+        "codigoInicial": "class Conta:\n    # métodos\n\nc = Conta(100)\nc.depositar(50)\nc.sacar(30)\nprint(c.saldo)",
+        "gabarito": "120",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 78: Herança – Veículo",
+        "descricao": "Crie a classe <code>Veiculo</code> com método <code>mover()</code> que retorna 'Veículo se movendo'. Crie <code>Carro</code> herdando e sobrescrevendo para 'Carro acelerando'. Instancie e printe o método.",
+        "codigoInicial": "class Veiculo:\n    def mover(self): return 'Veículo se movendo'\n\nclass Carro(Veiculo):\n    # sobrescreva\n\nc = Carro()\nprint(c.mover())",
+        "gabarito": "Carro acelerando",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 79: Polimorfismo – Animais",
+        "descricao": "Crie classes <code>Cachorro</code> e <code>Gato</code>, ambas com método <code>emitir_som()</code> (cachorro: 'Au au', gato: 'Miau'). Instancie um gato e printe seu som.",
+        "codigoInicial": "# Defina as classes e printe o som do gato",
+        "gabarito": "Miau",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 80: Classe Livro",
+        "descricao": "Crie a classe <code>Livro</code> com atributos <code>titulo</code> e <code>autor</code>, e método <code>info()</code> que retorna 'Título: [titulo], Autor: [autor]'. Teste com 'Python 101' e 'Ana'.",
+        "codigoInicial": "class Livro:\n    # def __init__ e info\n\nl = Livro('Python 101', 'Ana')\nprint(l.info())",
+        "gabarito": "Título: Python 101, Autor: Ana",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 81: Propriedades (getter/setter)",
+        "descricao": "Crie uma classe <code>Produto</code> com atributo privado <code>_preco</code> e propriedades <code>preco</code> (getter/setter) que validam se o preço é positivo. Teste com <code>p = Produto(50)</code> e printe <code>p.preco</code>.",
+        "codigoInicial": "class Produto:\n    # def __init__ e propriedade preco\n\np = Produto(50)\nprint(p.preco)",
+        "gabarito": "50",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 82: Método de Classe",
+        "descricao": "Crie uma classe <code>Config</code> com um atributo de classe <code>versao = '1.0'</code> e um método de classe <code>mostrar_versao()</code> que printe a versão. Chame o método.",
+        "codigoInicial": "class Config:\n    # atributo e método de classe\n\nConfig.mostrar_versao()",
+        "gabarito": "1.0",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 83: Método Estático",
+        "descricao": "Crie uma classe <code>Math</code> com um método estático <code>dobro(n)</code> que retorna o dobro. Teste com <code>Math.dobro(10)</code>.",
+        "codigoInicial": "class Math:\n    # método estático\n\nprint(Math.dobro(10))",
+        "gabarito": "20",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 84: Herança Múltipla",
+        "descricao": "Crie classes <code>A</code> com método <code>metodo_a()</code> e <code>B</code> com <code>metodo_b()</code>. Crie a classe <code>C(A, B)</code> que herda de ambas. Instancie e chame ambos os métodos.",
+        "codigoInicial": "# Defina as classes e chame os métodos",
+        "gabarito": "A\nB",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 85: Classe com Encapsulamento",
+        "descricao": "Crie uma classe <code>Banco</code> com atributo privado <code>__saldo</code> e métodos <code>depositar()</code> e <code>mostrar_saldo()</code>. Teste com depósito de 200 e printe o saldo.",
+        "codigoInicial": "class Banco:\n    # def __init__ e métodos\n\nb = Banco(100)\nb.depositar(200)\nprint(b.mostrar_saldo())",
+        "gabarito": "300",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 86: Classe Abstrata",
+        "descricao": "Crie uma classe abstrata <code>Animal</code> com método abstrato <code>falar()</code>. Crie a classe <code>Cachorro</code> que implementa <code>falar()</code> retornando 'Au au'. Instancie e printe o resultado.",
+        "codigoInicial": "# Use a biblioteca abc para criar a classe abstrata\n\nc = Cachorro()\nprint(c.falar())",
+        "gabarito": "Au au",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 87: Sobrecarga de Operadores",
+        "descricao": "Crie uma classe <code>Ponto</code> com atributos x e y. Sobrecarregue o operador <code>+</code> para somar dois pontos. Teste com <code>p1 = Ponto(1, 2)</code> e <code>p2 = Ponto(3, 4)</code> e printe <code>p1 + p2</code>.",
+        "codigoInicial": "class Ponto:\n    # def __init__ e __add__\n\np1 = Ponto(1, 2)\np2 = Ponto(3, 4)\nprint(p1 + p2)",
+        "gabarito": "(4, 6)",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 88: Classe com Context Manager",
+        "descricao": "Crie uma classe <code>Arquivo</code> que implementa <code>__enter__</code> e <code>__exit__</code> para simular abertura e fechamento de arquivo. Teste com um bloco <code>with</code>.",
+        "codigoInicial": "class Arquivo:\n    # implemente __enter__ e __exit__\n\nwith Arquivo('teste.txt', 'w') as f:\n    f.escrever('Hello')\nprint('Arquivo fechado')",
+        "gabarito": "Arquivo fechado",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 89: Classe com Iterator",
+        "descricao": "Crie uma classe <code>Fibonacci</code> que implementa <code>__iter__</code> e <code>__next__</code> para gerar números de Fibonacci. Teste com um loop que printe os 5 primeiros.",
+        "codigoInicial": "class Fibonacci:\n    # implemente __iter__ e __next__\n\nfib = Fibonacci()\nfor i, num in enumerate(fib):\n    if i >= 5: break\n    print(num)",
+        "gabarito": "0\n1\n1\n2\n3",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 90: Projeto – Sistema de Biblioteca",
+        "descricao": "Crie classes <code>Livro</code>, <code>Usuario</code> e <code>Emprestimo</code> para um sistema simples de biblioteca. Implemente métodos para emprestar e devolver livros. Teste o fluxo completo.",
+        "codigoInicial": "# Crie as classes e teste o fluxo",
+        "gabarito": "Empréstimo realizado com sucesso!",
+        "modulos": false
+    },
+    // ============================================================
+    // MÓDULO 7: TÓPICOS AVANÇADOS (91–105)
+    // ============================================================
+    {
+        "titulo": "Fase 91: Decorador com Parâmetros",
+        "descricao": "Crie um decorador <code>repetir(n)</code> que repete a execução da função n vezes. Aplique à função <code>ola()</code> com <code>@repetir(3)</code> e printe 3 vezes.",
+        "codigoInicial": "# Defina o decorador e a função\n\n@repetir(3)\ndef ola():\n    print('Olá!')\n\nola()",
+        "gabarito": "Olá!\nOlá!\nOlá!",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 92: Gerador de Senhas",
+        "descricao": "Crie um gerador <code>senhas()</code> que produza senhas aleatórias de 8 caracteres (letras e números). Obtenha a primeira senha e printe.",
+        "codigoInicial": "# Crie o gerador e printe a primeira senha",
+        "gabarito": "",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 93: Expressões Regulares",
+        "descricao": "Use <code>re</code> para extrair todos os números de uma string <code>texto = 'Idade: 25, Peso: 70.5'</code> e printe a lista de números.",
+        "codigoInicial": "import re\ntexto = 'Idade: 25, Peso: 70.5'\n# Extraia e printe",
+        "gabarito": "['25', '70.5']",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 94: Context Manager com Generator",
+        "descricao": "Use <code>contextlib.contextmanager</code> para criar um context manager que imprime 'Entrando' antes e 'Saindo' depois. Teste com um bloco <code>with</code>.",
+        "codigoInicial": "from contextlib import contextmanager\n\n@contextmanager\ndef entrar_sair():\n    # yield\n\nwith entrar_sair():\n    print('Dentro do bloco')",
+        "gabarito": "Entrando\nDentro do bloco\nSaindo",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 95: Programação Funcional (reduce)",
+        "descricao": "Use <code>functools.reduce</code> para calcular o produto de todos os elementos da lista <code>[1, 2, 3, 4, 5]</code> e printe.",
+        "codigoInicial": "from functools import reduce\nnumeros = [1, 2, 3, 4, 5]\n# Use reduce para produto",
+        "gabarito": "120",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 96: Programação Funcional (partial)",
+        "descricao": "Use <code>functools.partial</code> para criar uma função <code>dobro</code> que sempre multiplica por 2. Teste com <code>dobro(10)</code>.",
+        "codigoInicial": "from functools import partial\n# Crie a função dobro",
+        "gabarito": "20",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 97: Programação Assíncrona (async/await)",
+        "descricao": "Crie uma função assíncrona <code>async tarefa()</code> que imprime 'Iniciando', espera 1 segundo com <code>asyncio.sleep()</code>, e imprime 'Finalizando'. Rode com <code>asyncio.run()</code>.",
+        "codigoInicial": "import asyncio\n\nasync def tarefa():\n    # imprime e espera\n\nasyncio.run(tarefa())",
+        "gabarito": "Iniciando\nFinalizando",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 98: Threading Básico",
+        "descricao": "Crie uma thread que imprime 'Olá da thread!' e a thread principal que imprime 'Olá do main!'. Inicie a thread e depois printe a mensagem do main.",
+        "codigoInicial": "import threading\n\ndef tarefa():\n    print('Olá da thread!')\n\nthread = threading.Thread(target=tarefa)\nthread.start()\nprint('Olá do main!')",
+        "gabarito": "Olá da thread!\nOlá do main!",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 99: Manipulação de Arquivos CSV",
+        "descricao": "Leia o arquivo <code>dados.csv</code> (simule com uma string) e printe o conteúdo linha por linha.",
+        "codigoInicial": "import csv\n\n# Simule a leitura de um CSV",
+        "gabarito": "",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 100: Manipulação de JSON",
+        "descricao": "Converta o dicionário <code>pessoa = {'nome': 'Ana', 'idade': 30}</code> para JSON usando <code>json.dumps()</code> e printe o resultado.",
+        "codigoInicial": "import json\npessoa = {'nome': 'Ana', 'idade': 30}\n# Converta e printe",
+        "gabarito": "{\"nome\": \"Ana\", \"idade\": 30}",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 101: Testes com assert",
+        "descricao": "Escreva uma função <code>soma(a, b)</code> e um teste com <code>assert</code> para verificar se 2+2=4. Se passar, printe 'Teste passou'.",
+        "codigoInicial": "def soma(a, b):\n    return a + b\n\n# Teste com assert",
+        "gabarito": "Teste passou",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 102: Logging Básico",
+        "descricao": "Configure o módulo <code>logging</code> para exibir mensagens de nível INFO. Registre uma mensagem 'Aplicação iniciada'.",
+        "codigoInicial": "import logging\n# Configure e registre",
+        "gabarito": "INFO:root:Aplicação iniciada",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 103: Envio de E-mail",
+        "descricao": "Simule o envio de um e-mail usando uma função <code>enviar_email(destino, assunto, corpo)</code> que apenas printe os dados. Teste com um exemplo.",
+        "codigoInicial": "def enviar_email(destino, assunto, corpo):\n    # printe os dados\n\nenviar_email('teste@email.com', 'Assunto', 'Corpo do e-mail')",
+        "gabarito": "Enviando e-mail para teste@email.com\nAssunto: Assunto\nCorpo: Corpo do e-mail",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 104: API REST (requests)",
+        "descricao": "Use a biblioteca <code>requests</code> para fazer uma requisição GET para <code>https://api.github.com</code> e printe o status code.",
+        "codigoInicial": "import requests\n# Faça a requisição e printe o status",
+        "gabarito": "200",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 105: Projeto Final – Sistema de Tarefas",
+        "descricao": "Crie uma classe <code>Tarefa</code> com atributos <code>titulo</code>, <code>descricao</code> e <code>concluida</code>. Crie uma classe <code>GerenciadorTarefas</code> que permite adicionar, listar e concluir tarefas. Teste o fluxo completo.",
+        "codigoInicial": "# Crie as classes e teste o fluxo",
+        "gabarito": "Tarefa adicionada\nTarefas: [...]",
+        "modulos": false
+    },
+    // ============================================================
+    // MÓDULO 8: PROJETOS PRÁTICOS (106–120)
+    // ============================================================
+    {
+        "titulo": "Fase 106: Jogo da Velha – Tabuleiro",
+        "descricao": "Implemente uma função <code>criar_tabuleiro()</code> que retorna uma matriz 3x3 preenchida com espaços vazios (' '). Printe o tabuleiro.",
+        "codigoInicial": "def criar_tabuleiro():\n    # retorne a matriz\n\nprint(criar_tabuleiro())",
+        "gabarito": "[[' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']]",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 107: Jogo da Velha – Exibir Tabuleiro",
+        "descricao": "Crie uma função <code>exibir_tabuleiro(tab)</code> que imprime o tabuleiro formatado. Use o tabuleiro de exemplo <code>tab = [['X','O','X'], ['O','X','O'], ['X','O','X']]</code>.",
+        "codigoInicial": "def exibir_tabuleiro(tab):\n    # imprima formatado\n\ntab = [['X','O','X'], ['O','X','O'], ['X','O','X']]\nexibir_tabuleiro(tab)",
+        "gabarito": "X | O | X\n---------\nO | X | O\n---------\nX | O | X",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 108: Jogo da Velha – Verificar Vencedor",
+        "descricao": "Implemente uma função <code>vencedor(tab)</code> que recebe um tabuleiro 3x3 e retorna 'X', 'O' ou None. Teste com <code>tab = [['X','X','X'], ['O','O',' '], [' ', ' ', ' ']]</code>.",
+        "codigoInicial": "def vencedor(tab):\n    # verifique linhas, colunas e diagonais\n\ntab = [['X','X','X'], ['O','O',' '], [' ', ' ', ' ']]\nprint(vencedor(tab))",
+        "gabarito": "X",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 109: Jogo da Velha – Jogada",
+        "descricao": "Crie uma função <code>fazer_jogada(tab, linha, coluna, jogador)</code> que coloca a marca no tabuleiro e retorna <code>True</code> se a posição estiver vazia. Teste.",
+        "codigoInicial": "def fazer_jogada(tab, linha, coluna, jogador):\n    # coloque a marca\n\ntab = [[' ',' ',' '], [' ',' ',' '], [' ',' ',' ']]\nfazer_jogada(tab, 0, 0, 'X')\nprint(tab)",
+        "gabarito": "[['X', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']]",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 110: Jogo da Velha – Jogo Completo",
+        "descricao": "Implemente o jogo completo com alternância de jogadores, exibição do tabuleiro a cada jogada e verificação de vencedor.",
+        "codigoInicial": "# Implemente o jogo completo",
+        "gabarito": "",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 111: Calculadora com Interface (simulada)",
+        "descricao": "Crie uma função <code>calculadora(operacao, a, b)</code> que realiza a operação (soma, subtração, multiplicação, divisão). Teste com <code>calculadora('soma', 5, 3)</code>.",
+        "codigoInicial": "def calculadora(operacao, a, b):\n    # realize a operação\n\nprint(calculadora('soma', 5, 3))",
+        "gabarito": "8",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 112: Lista de Tarefas (CLI)",
+        "descricao": "Crie um programa de linha de comando simples que permite adicionar, listar e remover tarefas de uma lista. Use um loop <code>while</code>.",
+        "codigoInicial": "# Crie o programa de tarefas",
+        "gabarito": "",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 113: Sistema de Notas",
+        "descricao": "Crie um dicionário para armazenar notas de alunos. Permita adicionar notas, calcular média e exibir aprovados (>7).",
+        "codigoInicial": "# Crie o sistema de notas",
+        "gabarito": "",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 114: Gerador de QR Code",
+        "descricao": "Use a biblioteca <code>qrcode</code> (simule) para gerar um QR Code a partir de uma string. Printe a string codificada.",
+        "codigoInicial": "# Simule a geração de QR Code",
+        "gabarito": "",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 115: Web Scraping (simulado)",
+        "descricao": "Simule a extração de títulos de um site usando <code>requests</code> e <code>BeautifulSoup</code> (use uma string HTML de exemplo).",
+        "codigoInicial": "from bs4 import BeautifulSoup\nhtml = '<html><body><h1>Título1</h1><h1>Título2</h1></body></html>'\n# Extraia e printe os títulos",
+        "gabarito": "Título1\nTítulo2",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 116: Gráficos Simples (matplotlib)",
+        "descricao": "Crie um gráfico de barras simples com <code>matplotlib</code> para os dados <code>x = [1,2,3]</code> e <code>y = [10, 20, 15]</code>. Salve a figura.",
+        "codigoInicial": "import matplotlib.pyplot as plt\n# Crie o gráfico",
+        "gabarito": "",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 117: Interface Gráfica (tkinter)",
+        "descricao": "Crie uma janela simples com tkinter que exibe 'Olá, mundo!' em um label.",
+        "codigoInicial": "import tkinter as tk\n# Crie a janela e o label",
+        "gabarito": "",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 118: Banco de Dados SQLite",
+        "descricao": "Crie uma tabela 'alunos' com colunas id, nome, idade em SQLite. Insira um registro e consulte todos os registros.",
+        "codigoInicial": "import sqlite3\n# Crie a tabela e insira",
+        "gabarito": "",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 119: API com Flask (simulado)",
+        "descricao": "Simule uma API Flask com uma rota '/saudacao/<nome>' que retorna um JSON. Teste com um cliente simulado.",
+        "codigoInicial": "from flask import Flask\n# Crie a API",
+        "gabarito": "",
+        "modulos": false
+    },
+    {
+        "titulo": "Fase 120: Projeto Integrador – Sistema de Estoque",
+        "descricao": "Crie um sistema completo de gestão de estoque com classes para <code>Produto</code>, <code>Estoque</code> e funções para adicionar, remover e listar produtos. Teste o fluxo completo.",
+        "codigoInicial": "# Crie as classes e teste o fluxo",
+        "gabarito": "",
+        "modulos": false
+    }
+]
